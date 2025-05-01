@@ -1,0 +1,10 @@
+1.Scraper Modificaions
+# scraper.py: multiple websites scrapers
+# Build a list of Dictionary that will contain possible common HTML tags, classes, ids on multiples websites.
+# Build an AI tool: that could search the dict_List_HTML_Tag[{}], by comparing this list with the website HTML tags, class, and id. 
+
+#   
+
+
+
+# URL_SOURCE = ["https://example.com/"] # Make this a list that can contain multiples URLs
