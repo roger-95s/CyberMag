@@ -11,7 +11,7 @@ https://www.darkreading.com/,
 , 'ListPreview-Title'
 """
 # Global Dict/List 
-web_sites = {
+list_of_sites = {
         'name': 'Hacker News',
         'url': 'https://thehackernews.com/',
         'selectors': {
@@ -56,18 +56,36 @@ def scraper() -> dict:
         }
 
 def fetch_html(url: str) -> str:
-        url = web_sites
         response = requests.get(url)
         response.raise_for_status()
-        extract_data(response)
         
-        return response
+        return response.text
 
 def extract_data(html: str, selectors: dict) -> dict:
-        selectors = BeautifulSoup(html.text, 'html.parser')
 
-        url_selector = selectors.find_all()
+        soup = BeautifulSoup(html, 'html.parser')
 
-        title_selector = selectors.find_all() 
+        # Extract urls
+        url_tag = selectors['url_selector']['tag']
+        url_class = selectors['url_selector']['class']
+        url_items = soup.find_all(url_tag, class_=url_class, href=True)
+        
+        story_links = [link['href'] for link in url_items]
+        if not story_links:
+                print("❌ No story-link found")
 
-        pass
+        # Extract titles
+        title_tag = selectors['title_selector']['tag']
+        title_class = selectors['title_selector']['class']
+        titles = soup.find_all(title_tag, class_=title_class)
+
+        story_title = [title.text.strip() for title in titles]
+        if not story_title:
+                print("❌ No story-title found")
+
+                
+
+        return {
+                'url': story_links,
+                'title': story_title
+        }
