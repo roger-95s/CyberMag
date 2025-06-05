@@ -11,14 +11,14 @@ https://www.darkreading.com/,
 , 'ListPreview-Title'
 """
 # Global Dict/List 
-list_of_sites = {
+list_of_sites = [{
         'name': 'Hacker News',
         'url': 'https://thehackernews.com/',
         'selectors': {
                 'url_selector': {'tag': 'a', 'class': 'story-link'},
                 'title_selector': {'tag': 'h2', 'class': 'home-title'},
         }
-}
+}]
 
 WEB_URL = "https://thehackernews.com/"  
         
