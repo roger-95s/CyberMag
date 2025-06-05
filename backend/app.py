@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from .models import get_all_reports, save_report
-from .scraper import scraper
+from .scraper import fetch_html, extract_data, list_of_sites
 
 # Create Flask app
 app = Flask(__name__)
@@ -11,8 +11,13 @@ CORS(app)
 #  Api router: fetch and analyze latest cyber news
 @app.route("/api/new", methods=["GET"])
 def get_news():
-    
-    return scraper()
+    all_data = []
+    for site in list_of_sites:
+        html = fetch_html(site['url'])
+        data = extract_data(html, site['selectors'])
+        data['source'] = site['name'] 
+        all_data.append(data)
+    return jsonify(all_data)
     
    
 
