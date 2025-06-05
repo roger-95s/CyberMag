@@ -1,49 +1,73 @@
 # scraper.py
-import requests
 from bs4 import BeautifulSoup
-from tag_guide import TAG_GUIDE
+import requests
 
-def scrape_site(url, selectors):
-    try:
-        response = requests.get(url)
-        soup = BeautifulSoup(response.text, 'html.parser')
+# Add more links and do the same thing 
+"""
+https://www.ransomware.live/,
+https://cybersecurityventures.com/today/,
+https://www.darkreading.com/,
 
-        title_tag = soup.select_one(selectors['title'])
-        content_tag = soup.select_one(selectors['content'])
-        preview_tag = soup.select_one(selectors['preview'])
+, 'ListPreview-Title'
+"""
+# Global Dict/List 
+web_sites = {
+        'name': 'Hacker News',
+        'url': 'https://thehackernews.com/',
+        'selectors': {
+                'url_selector': {'tag': 'a', 'class': 'story-link'},
+                'title_selector': {'tag': 'h2', 'class': 'home-title'},
+        }
+}
+
+WEB_URL = "https://thehackernews.com/"  
+        
+
+def scraper() -> dict:
+        try:
+                # Sent a Get request 
+                response = requests.get(WEB_URL)
+                response.raise_for_status() # Raise HTTPError for bad responses
+                # Parse the HTML content 
+                soup = BeautifulSoup(response.text, 'html.parser')
+                
+                # Extract data 
+                url_item = soup.find_all('a', class_=['story-link'], href=True) 
+                story_links = [link['href'] for link in url_item]
+                if not story_links:
+                        print("❌ No story-link found")  
+                
+                titles = soup.find_all('h2', class_='home-title')
+                story_title = [title.text.strip() for title in titles]
+                if not story_title:
+                        print("❌ No story-title found")   
+
+        except requests.exceptions.RequestException as e:
+                print(f"❌ Unexpected Request error while get(Weburl): {e}")
+        except Exception as e:
+                print(f"❌ Error: occurred: {e}")
+                return None
+        
+        # print(f'😁 {soup.prettify()}')
 
         return {
-            "url": url,
-            "title": title_tag.get_text(strip=True) if title_tag else None,
-            "content": content_tag.get_text(strip=True) if content_tag else None,
-            "preview_link": preview_tag['href'] if preview_tag else None
+                'url': story_links,
+                'title': story_title,
         }
 
-    except Exception as e:
-        print(f"Error scraping {url}: {e}")
-        return None
+def fetch_html(url: str) -> str:
+        url = web_sites
+        response = requests.get(url)
+        response.raise_for_status()
+        extract_data(response)
+        
+        return response
 
+def extract_data(html: str, selectors: dict) -> dict:
+        selectors = BeautifulSoup(html.text, 'html.parser')
 
-def scrape_all():
-    results = []
-    for site_url, selectors in TAG_GUIDE.items():
-        print(f"Scraping: {site_url}")
-        result = scrape_site(site_url, selectors)
-        if result:
-            results.append(result)
-    return results
+        url_selector = selectors.find_all()
 
+        title_selector = selectors.find_all() 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        pass
