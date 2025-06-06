@@ -1,3 +1,4 @@
+
 """
 https://www.ransomware.live/,
 https://cybersecurityventures.com/today/,
@@ -16,11 +17,11 @@ list_of_sites = [
         }
     },
     {
-        'name': 'DarkReading',
-        'url': 'https://www.darkreading.com/',
+        'name': 'SecurityWeek',
+        'url': 'https://threatpost.com/category/vulnerabilities/',
         'selectors': {
-                'url_selector': {'tag': 'a', 'class': 'ListPreview-Title'},
-                'title_selector': {'tag': 'a', 'class': 'ListPreview-Title'},
+                'url_selector': {'tag': 'a', 'class': 'c-card__title'},
+                'title_selector': {'tag': 'h2', 'class': 'c-card__title'},
         }
     },
 
@@ -28,3 +29,12 @@ list_of_sites = [
 ]
 
 
+"""
+URL: https://threatpost.com/
+
+Common structure:
+
+    Titles: <h2 class="c-card__title">...</h2>
+
+    Links: <a href="..." class="c-card__title-link">...</a>
+"""
