@@ -1,19 +1,17 @@
+# Add more links and do the same thing 
+"""
+https://www.ransomware.live/,
+https://cybersecurityventures.com/today/,
+https://www.darkreading.com/,
 
-# TAG_GUIDE ditc
-TAG_GUIDE = {
-    "https://www.ransomware.live/": {
-        "title": "div.group_title",  
-        "content": "div.bubble",
-        "preview": "a.article-link"  
-    },
-    "https://www.kaspersky.com/": {
-        "title": "h1.c-article__title",
-        "content": "div.c-article__body p",
-        "preview": "a.c-article__link" 
-    },
-    "https://thehackernews.com/": {
-        "title": "h2.home-title",
-        "content": "div.home-desc",
-        "preview": "a.story-link"
-    }
-}
+, 'ListPreview-Title'
+"""
+# Global Dict/List 
+list_of_sites = [{
+        'name': 'Hacker News',
+        'url': 'https://thehackernews.com/',
+        'selectors': {
+                'url_selector': {'tag': 'a', 'class': 'story-link'},
+                'title_selector': {'tag': 'h2', 'class': 'home-title'},
+        }
+}]
