@@ -1,6 +1,7 @@
 # scraper.py
 from bs4 import BeautifulSoup
 import requests
+from .tag_guide import list_of_sites
 
 def fetch_html(url: str) -> str:
         response = requests.get(url)
