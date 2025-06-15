@@ -3,6 +3,9 @@ from .tag_guide import list_of_sites
 from bs4 import BeautifulSoup
 import requests
 
+
+html = []
+
 headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
                 'AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -12,6 +15,7 @@ headers = {
 
 # URL Extractor
 def fetch_data(html: str, selectors: dict) -> dict:  
+        
         # Extract urls
         url_tag = selectors['url_selector']['tag']
         url_class = selectors['url_selector']['class']
@@ -45,7 +49,7 @@ def get_response(url: dict):
                         soup = BeautifulSoup(response.text, 'html.parser') 
                         print(f'DataType of soup Var: {type(soup)}')
                         # print(soup.prettify())
-                        return response
+                        return html.append(soup)
                 except Exception as e:
                         print(f"❌ Exaction error just ocurre, soup wasn't allow: {e}")
                 return None
