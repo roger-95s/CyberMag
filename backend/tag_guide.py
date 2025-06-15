@@ -18,7 +18,7 @@ list_of_sites = [
     },
     {
         'name': 'SecurityWeek',
-        'url': 'https://threatpost.com/category/vulnerabilities/',
+        'url': 'https://threatpost.com/',
         'selectors': {
                 'url_selector': {'tag': 'a', 'class': 'c-card__title'},
                 'title_selector': {'tag': 'h2', 'class': 'c-card__title'},
