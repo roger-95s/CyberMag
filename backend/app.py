@@ -10,17 +10,8 @@ CORS(app)
 
 
 # Api router: fetch and analyze latest cyber news
-@app.route("/api/datafetched", methods=["GET", "POST"])
-def index():  
-    """
-        Display data that was just extracted and return it. 
-        Into a dict_list or a json
-    """ 
-    datas_reports = get_all_reports()
-    # Display data on a home page
-    for data in datas_reports:
-        return jsonify(get_all_reports)
-
+@app.route("/api/index", methods=["GET", "POST"])
+def index(): 
     return jsonify(f"👨‍💻⚒️ We're Working soon you will be able to see the result")
 
 # API route: return all stored reports 
