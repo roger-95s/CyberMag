@@ -19,8 +19,7 @@ def index():
     datas_reports = get_all_reports()
     # Display data on a home page
     for data in datas_reports:
-
-        return jsonify(data)
+        return jsonify(get_all_reports)
 
     return jsonify(f"👨‍💻⚒️ We're Working soon you will be able to see the result")
 
