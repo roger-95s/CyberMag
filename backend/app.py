@@ -10,7 +10,7 @@ CORS(app)
 
 
 # Api router: fetch and analyze latest cyber news
-@app.route("/api/rawdata", methods=["GET"])
+@app.route("/api/rawdata", methods=["GET", "POST"])
 def rawdata():  
     """
         Display data that was just extracted and return it. 
