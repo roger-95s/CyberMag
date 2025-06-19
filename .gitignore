@@ -7,30 +7,30 @@ __pycache__/
 
 # dependencies
 # Node.js
-/.node_modules/
-/.pnp
-.pnp.js
+.node_modules/
+.pnp/
+.pnp.js/
 
 #SQLite
-*.db
+*.db/
 
 #Environment 
-.venv
+.venv/
 
 # logs and system
-*.log
-.DS_Store
-cybermagupdates.txt
-historyText.txt
+*.log/
+.DS_Store/
+.cybermagupdates.txt/
+.historyText.txt/
 
 #README
-/frontend/README.md/
+/.frontend/README.md/
 
 # testing
-/coverage
+/.coverage
 
 # production
-/build
+/.build
 
 # misc
 .DS_Store
