@@ -1,0 +1,20 @@
+# This file defines who must review pull requests that touch certain files or directories.
+# Replace @your-username and @team-member with actual GitHub usernames when known.
+
+# Backend code owner
+/backend/ @your-username
+
+# Frontend code owner
+/frontend/ @your-cesartomedes
+
+# Configuration files
+/requirements.txt @your-username
+/package.json @your-username
+
+# General files
+/.github/ @your-username
+
+# Example placeholder for future team members
+# /backend/ @team-backend-lead
+# /frontend/ @team-frontend-lead
+
