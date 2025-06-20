@@ -1,6 +1,6 @@
 {
   "homepage": "https://yourusername.github.io/repositoryname",
-  "name": "your-app-name",
+  "name": "CyberMag",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:5000",
