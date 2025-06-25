@@ -25,6 +25,9 @@ historyText.txt
 # macOS system files
 .DS_Store
 
+# Backend __pycache__ 
+backend/__pycache__
+
 # Frontend build output (if you generate a build)
 frontend/build/
 
