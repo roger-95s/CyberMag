@@ -60,6 +60,7 @@ Thumbs.db
 .env.production
 
 # Coverage / test output
+
 .coverage
 coverage/
 .nyc_output
@@ -88,4 +89,5 @@ Icon?
 *.pem
 *.p12
 *.pfx
+
 
