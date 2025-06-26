@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
   const [data, setData] = useState({
@@ -22,10 +22,10 @@ function App() {
           loading: false,
           error: null
         });
-        console.log("Fetched data:", responseData);
+        // console.log("Fetched data:", responseData);
       })
       .catch(error => {
-        console.error("Error fetching data:", error);
+        // console.error("Error fetching data:", error);
         setData({
           articles: [],
           loading: false,
