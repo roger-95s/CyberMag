@@ -1,13 +1,12 @@
 # Python virtual environment
 venv/
-.venv/
 
 # Python bytecode
-backend/__pycache__/
+/backend/__pycache__
 *.pyc
 
 # Node.js dependencies
-frontend/node_modules/
+/frontend/node_modules/
 
 # Node / Yarn / npm logs
 npm-debug.log*
@@ -18,22 +17,23 @@ yarn-error.log*
 *.db
 
 # Logs or misc local files
-*.log
+# *.log
 cybermagupdates.txt
 historyText.txt
 
+
 # macOS system files
-.DS_Store
+# .DS_Store
 
 # Frontend build output (if you generate a build)
-frontend/build/
+/frontend/build/
 
 # Environment files (adjust if you have any)
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# .env.local
+# .env.development.local
+# .env.test.local
+# .env.production.local
 
 # Coverage / test output
-.coverage
-coverage/
+# .coverage
+# coverage/
