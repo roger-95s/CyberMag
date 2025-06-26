@@ -3,7 +3,7 @@ venv/
 .venv/
 
 # Python bytecode
-__pycache__/
+backend/__pycache__/
 *.pyc
 
 # Node.js dependencies
