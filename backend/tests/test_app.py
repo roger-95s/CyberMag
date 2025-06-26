@@ -1,6 +1,6 @@
 # backend/tests/test_app.py
 import pytest
-from your_app import app  # adjust import
+from . import app  # adjust import
 
 @pytest.fixture
 def client():
