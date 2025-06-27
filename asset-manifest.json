@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/repositoryname/static/js/main.1444d8d5.js",
-    "static/js/453.280b3da5.chunk.js": "/repositoryname/static/js/453.280b3da5.chunk.js",
-    "index.html": "/repositoryname/index.html",
-    "main.1444d8d5.js.map": "/repositoryname/static/js/main.1444d8d5.js.map",
-    "453.280b3da5.chunk.js.map": "/repositoryname/static/js/453.280b3da5.chunk.js.map"
+    "main.js": "/CyberMag/static/js/main.e3274712.js",
+    "static/js/453.1e0d5738.chunk.js": "/CyberMag/static/js/453.1e0d5738.chunk.js",
+    "index.html": "/CyberMag/index.html",
+    "main.e3274712.js.map": "/CyberMag/static/js/main.e3274712.js.map",
+    "453.1e0d5738.chunk.js.map": "/CyberMag/static/js/453.1e0d5738.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.1444d8d5.js"
+    "static/js/main.e3274712.js"
   ]
 }
