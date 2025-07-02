@@ -11,8 +11,16 @@ env/
 __pycache__/
 .Python
 
+# Flask instance files
+# This is where Flask stores instance-specific data, such as configuration files.
+# It is often used for production settings and should not be committed to version control.
+backend/__init__.py
+
 # Flask instance folder
 instance/
+
+# Flask AI feature files
+backend/llm_tools.py
 
 # Node.js dependencies
 /frontend/node_modules/
@@ -88,5 +96,3 @@ Icon?
 *.pem
 *.p12
 *.pfx
-
-
