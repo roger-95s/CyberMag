@@ -18,7 +18,7 @@ def index():
 
 
 # API route: return all stored reports
-@app.route("/api/reports", methods=["GET"])
+@app.route("/api/reports", methods=["GET", "POST"])
 def get_reports():
     """Function get_reports return json python version."""
     try:
