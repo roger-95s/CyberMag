@@ -33,28 +33,23 @@ def get_reports():
 
 # Uncomment the following lines if you want to add a route to save reports"
 # Optional: Add a route to get a single report by ID
-# @app.route("/api/reports/<int:report_id>", methods=["GET"])
-# def get_single_report(report_id):
-#     try:
-#         articles = get_all_reports()
-#         article = next((a for a in articles if a["id"] == report_id), None)
-#         if article:
-#             return jsonify({
-#                 "success": True,
-#                 "article": article
-#             })
-#         else:
-#             return jsonify({
-#                 "success": False,
-#                 "error": "Article not found"
-#             }), 404
-#     except Exception as e:
-#         return jsonify({
-#             "success": False,
-#             "error": str(e)
-#         }), 500
+@app.route("/api/reports/<int:report_id>", methods=["GET"])
+def get_single_report(report_id):
+    try:
+        from .models import get_all_reports  # Import here to avoid circular import
+
+        articles = get_all_reports()
+        article = next((a for a in articles if a["id"] == report_id), None)
+        if article:
+            return jsonify({"success": True, "article": article})
+        return jsonify({"success": False, "error": "Article not found"}), 404
+    except ImportError as e:
+        articles = None
+        # Handle ImportError if models.py is not found or has issues
+        print(f"❌ Error fetching report: {e}")
+        return jsonify({"success": False, "error": str(e)}), 500
 
 
 if __name__ == "__main__":
-    # init_db() # Run it one to create the DataBase?
+    # init_db()  # Run it one to create the DataBase?
     app.run(debug=True, port=5000)
