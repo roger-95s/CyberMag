@@ -7,6 +7,17 @@ on:
   pull_request:
     branches: [ main, dev ]
 
+permissions:
+  contents: read
+  id-token: write
+  actions: write
+  checks: write
+  deployments: write
+  issues: write
+  pull-requests: write
+  statuses: write
+
+
 jobs:
   backend:
     name: Backend (Flask)
