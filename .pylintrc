@@ -1,0 +1,48 @@
+[MASTER]
+ignore = migrations, venv
+extension-pkg-whitelist=
+jobs=1
+load-plugins=pylint.extensions.docparams
+
+[MESSAGES CONTROL]
+# Disable less helpful or noisy rules for early development
+disable =
+    missing-module-docstring,
+    missing-function-docstring,
+    missing-class-docstring,
+    invalid-name,
+    too-few-public-methods,
+    import-error,
+    no-name-in-module,
+    redefined-outer-name,
+    wrong-import-order,
+    useless-suppression,
+    line-too-long,
+    import-outside-toplevel
+
+[REPORTS]
+# Turn off the full report
+reports=no
+score=yes
+
+[FORMAT]
+# Let Black or Ruff handle formatting
+max-line-length=100
+
+[TYPECHECK]
+# Sometimes useful during development if packages not installed yet
+ignored-modules=
+ignored-classes=
+
+[DESIGN]
+# Avoid early enforcement of OOP rules
+max-args=10
+max-attributes=15
+max-locals=30
+max-branches=12
+max-statements=50
+max-parents=7
+max-returns=6
+max-nested-blocks=5
+min-public-methods=0
+max-public-methods=20
