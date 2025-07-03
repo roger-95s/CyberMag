@@ -74,6 +74,15 @@ coverage/
 htmlcov/
 .pytest_cache/
 
+# Test files
+*.test.js
+*.spec.js
+*.test.ts
+*.spec.ts
+*.test.py
+*.spec.py
+test_app.cpython-311-pytest-8.4.1.pyc
+
 # IDE files
 .vscode/
 .idea/
