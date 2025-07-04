@@ -150,6 +150,31 @@ trivy fs .
 
 ---
 
+# Feature: UI Report Cards Grid
+
+  ## 🚀 Objective
+  Implement a modern, responsive design for report cards using Tailwind CSS in React. This includes visual integration with risk, summary, analysis, and adaptive grid mode.
+
+  ## ✅ Main Changes
+
+  - Installation and configuration of **Tailwind CSS v3**
+  - Integration of the `@tailwindcss/line-clamp` plugin
+  - `ReportCard.jsx` component:
+  - Clickable title with icon
+  - Summary and analysis (if available)
+  - Risk level with dynamic color
+  - “Show more” dropdown button
+  - Responsive, modern, and clean style
+
+  - Layout:
+  - Used `grid-cols` to display multiple cards in rows and columns based on screen size.
+
+## 🔧 Added Dependencies
+
+```bash
+  npm install -D tailwindcss postcss autoprefixer
+  npm install -D @tailwindcss/line-clamp
+
 ## 💬 Questions?
 
 Ask in the PR or review team channel (this channel is not yet implemented. Let’s keep this repo clean, tested, and ready for deployment 🙌
