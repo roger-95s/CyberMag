@@ -1,12 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import ReportCard from "./components/ReportCard";
-import './App.css';
+import Header from "./components/Header";
+import "./App.css";
 
 function App() {
-  const [theme, setTheme] = useState(() =>
-    localStorage.getItem("theme") || "light"
-  );
-
   const [data, setData] = useState({
     articles: [],
     loading: true,
@@ -14,17 +11,11 @@ function App() {
   });
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () =>
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
-
-  useEffect(() => {
     fetch("/api/reports")
       .then((res) => {
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
         return res.json();
       })
       .then((responseData) => {
@@ -45,39 +36,59 @@ function App() {
 
   if (data.loading) {
     return (
-      <div className="flex justify-center items-center h-screen bg-gray-50 dark:bg-gray-900">
-        <p className="text-lg text-gray-600 dark:text-gray-300">
-          Loading articles...
-        </p>
-      </div>
+      <>
+        <Header />
+        <div className="p-4 space-y-4 bg-white text-gray-900 dark:bg-[#0a0f1a] dark:text-gray-100 min-h-screen transition-colors duration-500">
+          <div className="bg-green-100 text-green-800 p-4 rounded"></div>
+          <p>Loading articles...</p>
+        </div>
+      </>
+    );
+  }
+
+  if (data.error) {
+    return (
+      <>
+        <Header />
+        <div className="p-4 bg-white text-gray-900 dark:bg-[#0a0f1a] dark:text-gray-100 min-h-screen transition-colors duration-500">
+          <p className="text-red-500">Error: {data.error}</p>
+        </div>
+      </>
+    );
+  }
+
+  if (data.articles.length === 0) {
+    return (
+      <>
+        <Header />
+        <div className="p-4 bg-white text-gray-900 dark:bg-[#0a0f1a] dark:text-gray-100 min-h-screen transition-colors duration-500">
+          <p>No articles found.</p>
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm px-6 py-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">🛡️ Cybersecurity News</h1>
-        <button
-          onClick={toggleTheme}
-          className="text-sm px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 transition"
-        >
-          Toggle {theme === "light" ? "Dark" : "Light"}
-        </button>
-      </header>
+    <>
+      <Header />
+      <div className="min-h-screen bg-white text-gray-900 dark:bg-[#0a0f1a] dark:text-gray-100 transition-colors duration-500">
+        <div className="container mx-auto p-4">
+          <h1 className="text-3xl font-bold mb-6 text-center">
+            Cybersecurity News
+          </h1>
 
-      <main className="container mx-auto px-6 py-8">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {data.articles.map((article, index) => (
-            <ReportCard key={article.id || index} article={article} />
-          ))}
-        </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {data.articles.map((article, index) => (
+              <ReportCard key={article.id || index} article={article} />
+            ))}
+          </div>
 
-        <div className="mt-10 text-center text-gray-500 dark:text-gray-400 italic">
-          Total articles: {data.articles.length}
+          <div className="mt-6 text-center text-gray-400 dark:text-gray-400">
+            Total articles: {data.articles.length}
+          </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </>
   );
 }
 
