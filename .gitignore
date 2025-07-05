@@ -38,8 +38,6 @@ lerna-debug.log*
 
 # Logs or misc local files
 *.log
-cybermagupdates.txt
-historyText.txt
 
 # macOS system files
 .DS_Store

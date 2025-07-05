@@ -1,6 +1,8 @@
 [MASTER]
-ignore = migrations, venv
+ignore = migrations, venv, historyText.txt, cybermagupdates.txt
 extension-pkg-whitelist=
+    pylint.extensions.mccabe,
+    pylint.extensions.docparams
 jobs=1
 load-plugins=pylint.extensions.docparams
 

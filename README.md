@@ -152,4 +152,4 @@ trivy fs .
 
 ## 💬 Questions?
 
-Ask in the PR or review team channel (this channel is not yet implemented. Let’s keep this repo clean, tested, and ready for deployment 🙌
+Ask in the PR or review team channel this channel is not yet implemented. Let’s keep this repo clean, tested, and ready for deployment 🙌
