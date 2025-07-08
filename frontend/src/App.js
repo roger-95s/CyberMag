@@ -1,3 +1,4 @@
+// hooks n components
 import { useState, useEffect } from "react";
 import ReportCard from "./components/ReportCard";
 import Header from "./components/Header";
@@ -5,12 +6,14 @@ import Hero from "./components/Hero";
 import "./App.css";
 
 function App() {
+  // state to handle data loading/errors
   const [data, setData] = useState({
     articles: [],
     loading: true,
     error: null,
   });
 
+  // get reports from backend
   useEffect(() => {
     fetch("/api/reports")
       .then((res) => {
@@ -35,10 +38,10 @@ function App() {
       });
   }, []);
 
+  // show loading screen
   if (data.loading) {
     return (
       <>
-      
         <Hero />
         <Header />
         <div className="p-4 space-y-4 bg-white text-gray-900 dark:bg-[#0a0f1a] dark:text-gray-100 min-h-screen transition-colors duration-500">
@@ -49,6 +52,7 @@ function App() {
     );
   }
 
+  // show error screen
   if (data.error) {
     return (
       <>
@@ -60,6 +64,7 @@ function App() {
     );
   }
 
+  // no data found
   if (data.articles.length === 0) {
     return (
       <>
@@ -71,23 +76,26 @@ function App() {
     );
   }
 
+  // default UI when data is fine
   return (
     <>
-    
       <Header />
       <Hero />
       <div className="min-h-screen bg-white text-gray-900 dark:bg-[#0a0f1a] dark:text-gray-100 transition-colors duration-500">
         <div className="container mx-auto p-4">
+          {/* title */}
           <h1 className="text-3xl font-bold mb-6 text-center">
             Cybersecurity News
           </h1>
 
+          {/* cards grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {data.articles.map((article, index) => (
               <ReportCard key={article.id || index} article={article} />
             ))}
           </div>
 
+          {/* count of items */}
           <div className="mt-6 text-center text-gray-400 dark:text-gray-400">
             Total articles: {data.articles.length}
           </div>

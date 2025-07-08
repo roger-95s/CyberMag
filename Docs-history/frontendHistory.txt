@@ -1,87 +1,69 @@
-Frontend Development Summary – CyberMag
-Feature Branch: feature/ui-reportcards-grid, feature/add-menu-mobile
+Frontend Development Summary – CyberMag  
+Feature Branches: `feature/ui-reportcards-grid`, `feature/add-menu-mobile`, `feature/hero-section`, `feature/code-comments`
 
-    Implemented Features
+---
 
-        1. Tailwind CSS v3 Integration
-        Successfully set up and configured Tailwind CSS v3.
+## Implemented Features
 
-        Verified functionality with sample utility classes (bg-green-100, text-cyan-400, etc.).
+### 1. Tailwind CSS v3 Integration
+- Successfully set up and configured **Tailwind CSS v3**.
+- Verified functionality using utility classes like `bg-green-100`, `text-cyan-400`, etc.
+- Customized `tailwind.config.js` for future scalability and color theme control.
 
-        Configuration file tailwind.config.js is customized for future scalability.
+### 2. Dark/Light Mode Toggle
+- Implemented a **theme toggle** using Lucide icons (`<Sun />`, `<Moon />`).
+- Theme preference is saved in `localStorage` and respects system settings on first load.
+- `dark` class is applied to `document.documentElement` dynamically.
+- Tailwind-based styles reflect mode across all components.
 
-        2. Dark/Light Mode Toggle
-        Implemented a toggle button in the Header.jsx using lucide-react icons.
+### 3. Responsive Header with Burger Menu
+- Built a sticky, mobile-responsive **Header** with `<Shield />` icon and page links.
+- Mobile menu toggles with `<Menu />` and `<X />` icons using a smooth transition.
+- Desktop nav hidden on small screens, visible with `md:flex`.
 
-        Stored theme preference in localStorage for persistence across sessions.
+### 4. Modern UI Layout (Grid System)
+- Used Tailwind’s `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3` layout to render article cards.
+- Optimized spacing with `gap-6`, `mt-20`, and container alignment.
 
-        Theme preference also respects user system preference on first load.
+### 5. Dynamic Content Fetching
+- Used `useEffect` and native `fetch` to load articles from `/api/reports`.
+- Handled **loading**, **error**, and **empty** states with user-friendly UI messages.
+- Displays total number of articles at the bottom of the grid.
 
-        Applied conditional dark class to document.documentElement and styled accordingly with Tailwind.
+### 6. Stylized Article Cards
+- Built `ReportCard.jsx`:
+  - Displays title, summary, analysis, and optional full content.
+  - Icons dynamically chosen based on article type (`ai`, `network`, `ransomware`...).
+  - Background color of risk badge reflects severity (critical, high, medium, low, unknown).
+  - Uses `line-clamp`, transitions, and border effects for a clean visual look.
 
-        3. Responsive Header with Burger Menu
-        Created a sticky Header component with logo (<Shield />) and navigation links.
+---
 
-        Developed a mobile-friendly burger menu with toggle animation.
+## NEW: Hero Section Terminal-Style (feature/hero-section)
+- Created a new `Hero.jsx` component with:
+  - Terminal-like UI showing animated typing effect (simulated CLI output).
+  - Auto-restarts every few seconds with system-status messages.
+  - Fully responsive and supports dark/light themes.
+  - Includes animated `<ShieldCheck />` icon and glowing status bar indicators.
+- Text animation is handled with `setTimeout` and React state tracking `currentChar` and `currentLine`.
 
-        Navigation is hidden on md and displayed with flex for larger viewports.
-
-        4. Modern UI Layout (Grid System)
-        Used responsive Tailwind grid layout (grid-cols-1, sm:grid-cols-2, lg:grid-cols-3) to display cards dynamically.
-
-        Spacing and padding handled with gap-6, mt-20, and container mx-auto p-4.
-
-        5. Dynamic Content Fetching
-        Used useEffect to fetch articles from /api/reports.
-
-        Implemented loading, error, and empty-state UI feedback.
-
-        Displayed total article count at the bottom.
-
-        6. Stylized Article Cards
-        Created ReportCard.jsx with:
-
-        Title, summary, date, and tag display.
-
-        Line clamp utility for text overflow.
-
-        Border glow and hover transition effects for modern aesthetics.
-
-        Icons used to represent categories like AI, Ransomware, Network Security.
-
-        7. Design System
-        Color palette: Deep navy backgrounds (#0a0f1a), electric blue highlights, white text.
-
-        Typography: Clean sans-serif fonts with hierarchy.
-
-        Accessibility: Toggle buttons have aria-labels.
-
-        Visual effects: Shadows, glows, and hover transitions using Tailwind.
+### Typing Output Sample:
+```bash
+fetching cyber-intel...
+✔️ AI Threats detected
+✔️ Ransomware patterns updated
+✔️ Network firewalls active
+> Ready for new reports
 
 
-    Testing & Validation
+###  Testing & Validation
+    -Verified dark mode toggle works and persists after refresh.
+    -Confirmed responsive layout behaves well across breakpoints (sm, md, lg).
+    -Tested article rendering with multiple article sets (empty, error, valid).
+    -Confirmed Hero animation resets cleanly and transitions properly.
 
-        Verified dark mode toggle persists on reload.
+ ### Dependencies Used
 
-        Ensured responsiveness across breakpoints (sm, md, lg).
-
-        Confirmed cards render correctly with different data sizes.
-
-    Dependencies Used
-
-        tailwindcss, postcss, autoprefixer
-
-        lucide-react for icons
-
-        classnames (optional) for conditional class handling
-
-
-    Suggestions for Next Features
-    
-        Hero section with glowing shield graphic and subheading.
-
-        Filtering or search bar for articles.
-
-        Backend tagging system to categorize data (NEWS, REPORTS, ANALYSIS).
-
-        Loading skeletons instead of plain text loader.
+    -tailwindcss, postcss, autoprefixer
+    -lucide-react for modern SVG icons
+    -(Optional) classnames for conditional class building (not yet used)

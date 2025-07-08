@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Shield, Sun, Moon, Menu, X } from "lucide-react";
 
+// header compoent
 const Header = () => {
+  // darkmode init check from local or browser
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window !== "undefined") {
       return (
@@ -13,8 +15,10 @@ const Header = () => {
     return false;
   });
 
+  // mobile menu state
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // toggle dark mode n update class + localstorage
   useEffect(() => {
     const root = document.documentElement;
     if (isDarkMode) {
@@ -26,10 +30,12 @@ const Header = () => {
     }
   }, [isDarkMode]);
 
+  // toggle dark
   const toggleDarkMode = () => {
     setIsDarkMode((prev) => !prev);
   };
 
+  // toggle mobile menu
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
   };
@@ -37,7 +43,7 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 bg-[#0a0f1a] border-b border-gray-800 shadow-m">
       <div className="container mx-auto flex items-center justify-between px-4 py-3">
-        {/* Logo */}
+        {/* logo and title */}
         <div className="flex items-center gap-2">
           <Shield className="text-cyan-400 w-6 h-6" />
           <span className="text-white font-bold text-xl tracking-wide">
@@ -45,7 +51,7 @@ const Header = () => {
           </span>
         </div>
 
-        {/* Desktop Navigation */}
+        {/* nav for desktop only */}
         <nav className="hidden md:flex gap-6 text-sm font-medium">
           <a href="#" className="text-gray-300 hover:text-cyan-400 transition-colors">
             NEWS
@@ -62,7 +68,7 @@ const Header = () => {
         </nav>
 
         <div className="flex items-center gap-2 md:gap-4">
-          {/* Dark Mode Toggle */}
+          {/* btn toggle darkmode */}
           <button
             onClick={toggleDarkMode}
             className="p-2 rounded-full bg-gray-800 hover:bg-cyan-600 transition-colors duration-300 text-cyan-400 hover:text-white"
@@ -75,7 +81,7 @@ const Header = () => {
             )}
           </button>
 
-          {/* Mobile Menu Toggle */}
+          {/* burger btn for mobile */}
           <button
             className="md:hidden p-2 rounded hover:bg-gray-700 text-cyan-400 transition-all"
             onClick={toggleMenu}
@@ -86,7 +92,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation Dropdown */}
+      {/* mobile nav dropdown */}
       <div
         className={`md:hidden px-4 pb-4 transition-all duration-300 ease-in-out ${
           menuOpen ? "max-h-60 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
