@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import ReportCard from "./components/ReportCard";
 import Header from "./components/Header";
+import Hero from "./components/Hero";
 import "./App.css";
 
 function App() {
@@ -37,6 +38,8 @@ function App() {
   if (data.loading) {
     return (
       <>
+      
+        <Hero />
         <Header />
         <div className="p-4 space-y-4 bg-white text-gray-900 dark:bg-[#0a0f1a] dark:text-gray-100 min-h-screen transition-colors duration-500">
           <div className="bg-green-100 text-green-800 p-4 rounded"></div>
@@ -70,7 +73,9 @@ function App() {
 
   return (
     <>
+    
       <Header />
+      <Hero />
       <div className="min-h-screen bg-white text-gray-900 dark:bg-[#0a0f1a] dark:text-gray-100 transition-colors duration-500">
         <div className="container mx-auto p-4">
           <h1 className="text-3xl font-bold mb-6 text-center">
