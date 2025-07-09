@@ -73,7 +73,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18, 20, 22]
+        node-version: [18, 20, 22, 23, 24]
 
     steps:
       - name: Checkout code
@@ -103,6 +103,11 @@ jobs:
         with:
           name: frontend-build
           path: frontend/build/
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./frontend/coverage/coverage-final.json
+          flags: frontend
 
   security:
     name: Security Scan
