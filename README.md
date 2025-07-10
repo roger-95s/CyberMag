@@ -37,6 +37,7 @@ Developer (You)
 ```bash
 cd backend
 pytest --cov=. --cov-report=term-missing
+
 ```
 
 - ✅ Required: No test failures
@@ -67,7 +68,10 @@ def test_addition():
 
 ```bash
 cd frontend
+npm run lint
 npm test -- --coverage
+npm test -- --verbose
+npx jest --verbose
 ```
 
 - ✅ Required: No failing tests

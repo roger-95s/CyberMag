@@ -47,18 +47,18 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex gap-6 text-sm font-medium">
-          <a href="#" className="text-gray-300 hover:text-cyan-400 transition-colors">
+          <button type="button" className="text-gray-300 hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 cursor-pointer">
             NEWS
-          </a>
-          <a href="#" className="text-gray-300 hover:text-cyan-400 transition-colors">
+          </button>
+          <button type="button" className="text-gray-300 hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 cursor-pointer">
             REPORTS
-          </a>
-          <a href="#" className="text-gray-300 hover:text-cyan-400 transition-colors">
+          </button>
+          <button type="button" className="text-gray-300 hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 cursor-pointer">
             ANALYSIS
-          </a>
-          <a href="#" className="text-gray-300 hover:text-cyan-400 transition-colors">
+          </button>
+          <button type="button" className="text-gray-300 hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 cursor-pointer">
             ABOUT
-          </a>
+          </button>
         </nav>
 
         <div className="flex items-center gap-2 md:gap-4">
@@ -88,23 +88,22 @@ const Header = () => {
 
       {/* Mobile Navigation Dropdown */}
       <div
-        className={`md:hidden px-4 pb-4 transition-all duration-300 ease-in-out ${
-          menuOpen ? "max-h-60 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
-        }`}
+        className={`md:hidden px-4 pb-4 transition-all duration-300 ease-in-out ${menuOpen ? "max-h-60 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
+          }`}
       >
         <nav className="flex flex-col gap-3 text-sm font-medium text-gray-300">
-          <a href="#" className="hover:text-cyan-400 transition-colors">
+          <button type="button" className="hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 text-left cursor-pointer">
             NEWS
-          </a>
-          <a href="#" className="hover:text-cyan-400 transition-colors">
+          </button>
+          <button type="button" className="hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 text-left cursor-pointer">
             REPORTS
-          </a>
-          <a href="#" className="hover:text-cyan-400 transition-colors">
+          </button>
+          <button type="button" className="hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 text-left cursor-pointer">
             ANALYSIS
-          </a>
-          <a href="#" className="hover:text-cyan-400 transition-colors">
+          </button>
+          <button type="button" className="hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 text-left cursor-pointer">
             ABOUT
-          </a>
+          </button>
         </nav>
       </div>
     </header>

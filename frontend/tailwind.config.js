@@ -6,5 +6,8 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [require("@tailwindcss/line-clamp")],
+  plugins: [
+    // @tailwindcss/line-clamp is now built into Tailwind CSS v3.3+
+    // No plugin needed - just use line-clamp-{n} classes directly
+  ],
 };

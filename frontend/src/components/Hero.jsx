@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import { ShieldCheck } from "lucide-react";
 
 const Hero = () => {
-  const lines = [
-    "fetching cyber-intel...",
-    "✔️ AI Threats detected",
-    "✔️ Ransomware patterns updated",
-    "✔️ Network firewalls active",
-    "> Ready for new reports",
-  ];
+  const lines = React.useMemo(
+    () => [
+      "fetching cyber-intel...",
+      "✔️ AI Threats detected",
+      "✔️ Ransomware patterns updated",
+      "✔️ Network firewalls active",
+      "> Ready for new reports",
+    ],
+    []
+  );
 
   const [displayedLines, setDisplayedLines] = useState([]);
   const [currentLine, setCurrentLine] = useState(0);

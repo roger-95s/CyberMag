@@ -5,7 +5,6 @@ import {
   Globe,
   BrainCircuit,
   Bug,
-  ShieldAlert,
   FileText,
 } from "lucide-react";
 
@@ -42,7 +41,7 @@ function ReportCard({ article }) {
 
       {/* Título */}
       <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
-          {/* <ShieldAlert className="w-5 h-5 text-blue-600 dark:text-blue-400" /> */}
+        {/* <ShieldAlert className="w-5 h-5 text-blue-600 dark:text-blue-400" /> */}
         {article.url ? (
           <a
             href={article.url}
