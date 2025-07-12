@@ -88,6 +88,8 @@ function ReportCard({ article }) {
           Risk Level: {article.risk_level || "Unknown"}
         </span>
 
+        {/* I'm seeing the this article.content, but I don't quat yet understand why we have this here?
+          Waht I mean's I know that this work to show more content, but from where the content will come from?*/}
         {article.content && (
           <details className="ml-auto text-sm text-blue-500 cursor-pointer group-open:text-blue-700">
             <summary className="list-none hover:underline flex items-center gap-1">

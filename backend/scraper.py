@@ -7,7 +7,15 @@ from bs4 import BeautifulSoup
 from .tag_guide import list_of_sites
 from .models import save_report
 
-
+# User-Agent header to mimic a browser request
+# This is important to avoid being blocked by some websites that check for bots
+# and to ensure we get the correct content.
+# You can change this to any valid User-Agent string.
+# For example, you can use a User-Agent from a real browser.
+# Here is an example of a User-Agent string for Chrome on Windows 10.
+# You can find more User-Agent strings at https://www.whatismybrowser.com/detect
+# or https://developers.whatismybrowser.com/useragents/explore/
+# or you can use a library like fake-useragent to generate random User-Agent strings.
 headers = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -17,6 +25,7 @@ headers = {
 }
 
 
+# Function to get the HTML content of a page
 def get_response(page_url: str) -> BeautifulSoup | None:
     """Fetch and parse the HTML content of the given URL."""
     try:
@@ -27,6 +36,7 @@ def get_response(page_url: str) -> BeautifulSoup | None:
         return None
 
 
+# Function to extract article titles and URLs from the soup object
 def fetch_data(soup_obj: BeautifulSoup, selectors_map: dict, limit: int) -> dict:
     """Extract article titles and URLs using the provided selectors."""
     try:
@@ -67,6 +77,7 @@ def fetch_data(soup_obj: BeautifulSoup, selectors_map: dict, limit: int) -> dict
         }
 
 
+# Function to save articles to the database
 def save_articles_to_db(articles_data: dict) -> int:
     """Save extracted articles to the database."""
     if (
@@ -89,7 +100,7 @@ def save_articles_to_db(articles_data: dict) -> int:
             "summary": "",
             "risk_level": "",
         }
-        save_report(article_data)
+        save_report(report_data=article_data)
         saved_count += 1
 
     return saved_count

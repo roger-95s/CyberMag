@@ -10,14 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 
-# Api router: fetch and analyze latest cyber news
-@app.route("/api/index", methods=["GET", "POST"])
-def index():
-    """Function returning a json python version."""
-    return jsonify({"message ": "👨‍💻⚒️ Website's being build"})
-
-
-# API route: return all stored reports
+# Route to get all reports
 @app.route("/api/reports", methods=["GET", "POST"])
 def get_reports():
     """Function get_reports return json python version."""
@@ -48,6 +41,27 @@ def get_single_report(report_id):
         # Handle ImportError if models.py is not found or has issues
         print(f"❌ Error fetching report: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
+
+
+# Route the Analysis page
+@app.route("/api/analysis", methods=["GET"])
+def analysis():
+    """Function returning a json python version."""
+    return jsonify({"message": "👨‍💻⚒️ Analysis page is under construction"})
+
+
+# Route the About page
+@app.route("/api/about", methods=["GET"])
+def about():
+    """Function returning a json python version."""
+    return jsonify({"message": "👨‍💻⚒️ About page is under construction"})
+
+
+# Main entry point
+@app.route("/", methods=["GET"])
+def home():
+    """Function returning a json python version."""
+    return jsonify({"message": "👨‍💻⚒️ Welcome to CyberMag!"})
 
 
 if __name__ == "__main__":

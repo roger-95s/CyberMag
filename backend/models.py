@@ -74,8 +74,8 @@ def get_all_reports():
         {
             "id": r.id,
             "title": r.title,
-            "content": r.content,
             "url": r.url,
+            "content": r.content,
             "analysis": r.analysis,
             "summary": r.summary,
             "risk_level": r.risk_level,
