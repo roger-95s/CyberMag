@@ -38,7 +38,7 @@ const Hero = () => {
         }, 400);
       }
     } else {
-      // Reiniciar animación luego de una pausa
+      // Restart animation after a pause
       timeout = setTimeout(() => {
         setDisplayedLines([]);
         setCurrentLine(0);

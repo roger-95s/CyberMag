@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Shield, Sun, Moon, Menu, X } from "lucide-react";
+import notFoundImage from "../assets/img/Page_not_Found_404.png";
 
 const Header = () => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -47,18 +48,30 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex gap-6 text-sm font-medium">
-          <button type="button" className="text-gray-300 hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 cursor-pointer">
+          <a
+            href={notFoundImage}
+            className="text-gray-300 hover:text-cyan-400 transition-colors"
+          >
             NEWS
-          </button>
-          <button type="button" className="text-gray-300 hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 cursor-pointer">
+          </a>
+          <a
+            href={notFoundImage}
+            className="text-gray-300 hover:text-cyan-400 transition-colors"
+          >
             REPORTS
-          </button>
-          <button type="button" className="text-gray-300 hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 cursor-pointer">
+          </a>
+          <a
+            href={notFoundImage}
+            className="text-gray-300 hover:text-cyan-400 transition-colors"
+          >
             ANALYSIS
-          </button>
-          <button type="button" className="text-gray-300 hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 cursor-pointer">
+          </a>
+          <a
+            href={notFoundImage}
+            className="text-gray-300 hover:text-cyan-400 transition-colors"
+          >
             ABOUT
-          </button>
+          </a>
         </nav>
 
         <div className="flex items-center gap-2 md:gap-4">
@@ -81,27 +94,46 @@ const Header = () => {
             onClick={toggleMenu}
             aria-label="Toggle Navigation Menu"
           >
-            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {menuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
       </div>
 
       {/* Mobile Navigation Dropdown */}
       <div
-        className={`md:hidden px-4 pb-4 transition-all duration-300 ease-in-out ${menuOpen ? "max-h-60 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
-          }`}
+        className={`md:hidden px-4 pb-4 transition-all duration-300 ease-in-out ${
+          menuOpen
+            ? "max-h-60 opacity-100"
+            : "max-h-0 opacity-0 overflow-hidden"
+        }`}
       >
         <nav className="flex flex-col gap-3 text-sm font-medium text-gray-300">
-          <button type="button" className="hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 text-left cursor-pointer">
+          <button
+            type="button"
+            className="hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 text-left cursor-pointer"
+          >
             NEWS
           </button>
-          <button type="button" className="hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 text-left cursor-pointer">
+          <button
+            type="button"
+            className="hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 text-left cursor-pointer"
+          >
             REPORTS
           </button>
-          <button type="button" className="hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 text-left cursor-pointer">
+          <button
+            type="button"
+            className="hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 text-left cursor-pointer"
+          >
             ANALYSIS
           </button>
-          <button type="button" className="hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 text-left cursor-pointer">
+          <button
+            type="button"
+            className="hover:text-cyan-400 transition-colors bg-transparent border-none p-0 m-0 text-left cursor-pointer"
+          >
             ABOUT
           </button>
         </nav>
