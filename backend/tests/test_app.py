@@ -5,5 +5,5 @@ from flask.testing import FlaskClient
 
 
 def test_health_check(client: FlaskClient):
-    response = client.get("/api/reports")  # or your main route
+    response = client.get("/post")  # or your main route
     assert response.status_code == 200

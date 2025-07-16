@@ -108,6 +108,10 @@ make lint  # Run flake8 and pylint
 make test  # Run all Python tests
 make check # Run all of the above
 ```
+ruff check . --fix
+
+
+pre-commit run --all-files
 
 Or manually:
 

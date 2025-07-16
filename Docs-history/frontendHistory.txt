@@ -77,7 +77,7 @@ Feature Branch: feature/ui-reportcards-grid, feature/add-menu-mobile
 
 
     Suggestions for Next Features
-    
+
         Hero section with glowing shield graphic and subheading.
 
         Filtering or search bar for articles.

@@ -61,7 +61,7 @@ def save_report(report_data):
         session.close()
 
 
-# Fetch all reports
+# Get all reports
 def get_all_reports():
     """
     Returns all stored reports as a list of dicts.
