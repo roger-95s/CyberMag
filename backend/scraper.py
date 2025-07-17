@@ -1,11 +1,16 @@
-"""Module providing a function python version."""
+"""
+Scraper app to fetch articles from various news sites and save them to the database.
+This script uses BeautifulSoup to parse HTML and extract article titles and URLs.
+It iterates over a predefined list of sites, fetches the HTML content,
+extracts the required data, and saves it to the database.
+"""
 
 import traceback
 import requests
 from bs4 import BeautifulSoup
-
-from .tag_guide import list_of_sites
 from .models import save_report
+from .tag_guide import list_of_sites
+
 
 # User-Agent header to mimic a browser request
 # This is important to avoid being blocked by some websites that check for bots
