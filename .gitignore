@@ -36,6 +36,10 @@ lerna-debug.log*
 *.sqlite
 *.sqlite3
 
+# Allow schema/migration files
+!migrations/
+!schema.sql
+
 # Logs or misc local files
 *.log
 
