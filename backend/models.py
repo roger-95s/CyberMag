@@ -1,12 +1,16 @@
 """Module providing a functions python version."""
 
-from sqlalchemy import create_engine, Column, Integer, String, Text
+from pathlib import Path
+from sqlalchemy import create_engine, Column, Integer, String, Text, inspect
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 
+# Using absolute path for the database file
+BASE_DIR = Path(__file__).resolve().parent
+DATABASE_PATH = BASE_DIR / "cybermag.db"
 # SQLite database location
-DATABASE_URL = "sqlite:///cybermag.db"
+DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
 
 # SQLAlchemy setup
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
@@ -31,8 +35,37 @@ class Report(Base):
 
 # Create tables if not already created
 def init_db():
-    """Function initializing the database."""
+    """Function initializing database table. Run it once to create the database."""
+
+    # Create all tables
     Base.metadata.create_all(bind=engine)
+    print(f"✅ Database initialized at {DATABASE_PATH}")
+
+    # Verify if the table exists
+    inspector = inspect(engine)
+    tables = inspector.get_table_names()
+    print(f"Tables in the database: {tables}")
+
+
+def verify_db():
+    """Function to verify if the database is initialized."""
+
+    if not DATABASE_PATH.exists():
+        print(
+            f"❌ Database file does not exist at {DATABASE_PATH}. Please run init_db() first."
+        )
+        return False
+
+    inspector = inspect(engine)
+    tables = inspector.get_table_names()
+    if "reports" not in tables:
+        print(
+            f"❌ 'reports' table does not exist. {tables} Please run init_db() first."
+        )
+        return False
+
+    print(f"✅ Database is initialized and 'reports': {DATABASE_PATH} table exists.")
+    return True
 
 
 # Save a report

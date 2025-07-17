@@ -2,7 +2,6 @@
 
 from flask import Flask, jsonify
 from flask_cors import CORS
-from .models import init_db, get_all_reports
 
 
 # Create Flask app
@@ -14,6 +13,8 @@ CORS(app)
 @app.route("/", methods=["POST", "GET"])
 def home() -> tuple:
     """Home route returning a welcome message and 9 articles."""
+    from .models import get_all_reports
+
     # Build a welcome message displaying the app name
     welcome_message = "👨‍💻⚒️ Welcome to CyberMag!   "
     welcome_message += "... This is a App for managing cyber security reports.  "
@@ -60,6 +61,8 @@ def home() -> tuple:
 def post_reports():
     """Function post_reports return True if successful,
     len(articles) and articles, and A list of articles."""
+    from .models import get_all_reports
+
     # try to get all reports from the database
     try:
         articles = get_all_reports()
@@ -77,7 +80,7 @@ def post_reports():
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def get_single_report(post_id):
     try:
-        from .models import get_all_reports  # Import here to avoid circular import
+        from .models import get_all_reports
 
         articles = get_all_reports()
         article = next((a for a in articles if a["id"] == post_id), None)
@@ -96,6 +99,8 @@ def get_single_report(post_id):
 @app.route("/analysis", methods=["GET", "POST"])
 def analysis() -> tuple:
     """Function returning a json response for the analysis page."""
+    from .models import get_all_reports
+
     # Build a welcome message displaying the app name
     welcome_message = "👨‍💻⚒️ Welcome to CyberMag Analysis page!"
     count = 9
@@ -156,5 +161,17 @@ def about():
 # Main entry point to run the Flask app
 # Uncomment the following line to initialize the database
 if __name__ == "__main__":
-    init_db()  # Run it one to create the DataBase?
+
+    # import os
+    # print(os.getcwd())
+
+    # from .models import init_db, verify_db
+    # # Verify if the database is initialized
+    # if not verify_db():
+    #     print("❌ Database is not initialized.")
+    #     # Uncomment ONLY in the first run
+    #     init_db()  # Run it once to create Tables
+    #     exit(1)
+
+    # Run the Flask app
     app.run(debug=True, port=5000)
