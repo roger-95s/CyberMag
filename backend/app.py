@@ -2,7 +2,7 @@
 
 from flask import Flask, jsonify
 from flask_cors import CORS
-from .models import get_all_reports
+from .models import init_db, get_all_reports
 
 
 # Create Flask app
@@ -93,10 +93,57 @@ def get_single_report(post_id):
 
 
 # Route the Analysis page
-@app.route("/analysis", methods=["GET"])
-def analysis():
-    """Function returning a json python version."""
-    return jsonify({"message": "👨‍💻⚒️ Analysis page is under construction"})
+@app.route("/analysis", methods=["GET", "POST"])
+def analysis() -> tuple:
+    """Function returning a json response for the analysis page."""
+    # Build a welcome message displaying the app name
+    welcome_message = "👨‍💻⚒️ Welcome to CyberMag Analysis page!"
+    count = 9
+
+    try:
+        # Assuming this function returns analysis data
+        articles_analysis = get_all_reports()
+
+        # if not articles_analysis "analysis" is empty
+        if not articles_analysis:
+            welcome_message += " No analysis found."
+        else:
+            welcome_message += f"Latest {count} Analisys of Cyber Attacks:"
+
+        articles_data = []
+        for article in articles_analysis[:count]:
+            try:
+                analysis_item = {
+                    "title": article.get("title", "No Title"),
+                    "analysis": article.get("analysis", "No Analysis"),
+                    "risk_level": article.get("risk_level", "Unknown"),
+                }
+                articles_data.append(analysis_item)
+            except (KeyError, TypeError) as e:
+                print(f"❌ Error processing article: {e}")
+                continue
+
+        # Return the welcome message as a JSON response with 200 status code
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "message": welcome_message,
+                    # return only title, analysis, and risk_level
+                    "analysis": articles_data,
+                    "count": len(articles_analysis),
+                }
+            ),
+            200,
+        )
+    except ImportError as e:
+        # Handle any exception that might occur when fetching analysis
+        error_message = welcome_message + f" ❌ Error fetching analysis: {e}"
+        print(f"❌ Error fetching analysis: {e}")
+        return (
+            jsonify({"success": False, "error": error_message}),
+            500,
+        )
 
 
 # Route the About page
@@ -109,5 +156,5 @@ def about():
 # Main entry point to run the Flask app
 # Uncomment the following line to initialize the database
 if __name__ == "__main__":
-    # init_db()  # Run it one to create the DataBase?
+    init_db()  # Run it one to create the DataBase?
     app.run(debug=True, port=5000)
