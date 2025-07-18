@@ -14,6 +14,11 @@ list_of_sites = [
         "selectors": {
             "url_selector": {"tag": "a", "class": "story-link"},
             "title_selector": {"tag": "h2", "class": "home-title"},
+            "content_selector": {
+                "tag": "p",
+                "ancestor_tag": "div",
+                "ancestor_class": "body-post__content",
+            },
         },
     },
     {
@@ -22,6 +27,11 @@ list_of_sites = [
         "selectors": {
             "url_selector": {"tag": "h2", "class": "c-card__title"},
             "title_selector": {"tag": "h2", "class": "c-card__title"},
+            "content_selector": {
+                "tag": "p",
+                "ancestor_tag": "div",
+                "ancestor_class": "c-entry-content",
+            },
         },
     },
     # Add more sites
