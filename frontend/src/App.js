@@ -6,13 +6,13 @@ import "./App.css";
 
 function App() {
   const [data, setData] = useState({
-    articles: [],
+    articles_data: [],
     loading: true,
     error: null,
   });
 
   useEffect(() => {
-    fetch("/api/reports")
+    fetch("/api/index")
       .then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -21,14 +21,14 @@ function App() {
       })
       .then((responseData) => {
         setData({
-          articles: responseData.articles || [],
+          articles_data: responseData.articles_data || [],
           loading: false,
           error: null,
         });
       })
       .catch((error) => {
         setData({
-          articles: [],
+          articles_data: [],
           loading: false,
           error: error.message,
         });
@@ -38,9 +38,8 @@ function App() {
   if (data.loading) {
     return (
       <>
-
-        <Hero />
         <Header />
+        <Hero />
         <div className="p-4 space-y-4 bg-white text-gray-900 dark:bg-[#0a0f1a] dark:text-gray-100 min-h-screen transition-colors duration-500">
           <div className="bg-green-100 text-green-800 p-4 rounded"></div>
           <p>Loading articles...</p>
@@ -48,24 +47,23 @@ function App() {
       </>
     );
   }
-
   if (data.error) {
     return (
       <>
         <Header />
+        <Hero />
         <div className="p-4 bg-white text-gray-900 dark:bg-[#0a0f1a] dark:text-gray-100 min-h-screen transition-colors duration-500">
           <p className="text-red-500">Error: {data.error}</p>
         </div>
       </>
     );
   }
-
-  if (data.articles.length === 0) {
+  if (data.articles_data.length === 0) {
     return (
       <>
         <Header />
         <div className="p-4 bg-white text-gray-900 dark:bg-[#0a0f1a] dark:text-gray-100 min-h-screen transition-colors duration-500">
-          <p>No articles found.</p>
+          <p>❌ No articles found.</p>
         </div>
       </>
     );
@@ -73,7 +71,6 @@ function App() {
 
   return (
     <>
-
       <Header />
       <Hero />
       <div className="min-h-screen bg-white text-gray-900 dark:bg-[#0a0f1a] dark:text-gray-100 transition-colors duration-500">
@@ -83,13 +80,9 @@ function App() {
           </h1>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data.articles.map((article, index) => (
-              <ReportCard key={article.id || index} article={article} />
+            {data.articles_data.map((article, index) => (
+              <ReportCard key={index} articleData={article} />
             ))}
-          </div>
-
-          <div className="mt-6 text-center text-gray-400 dark:text-gray-400">
-            Total articles: {data.articles.length}
           </div>
         </div>
       </div>

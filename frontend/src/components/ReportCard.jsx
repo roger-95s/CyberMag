@@ -1,4 +1,3 @@
-import React from "react";
 import {
   ShieldCheck,
   Lock,
@@ -26,12 +25,12 @@ const riskColors = {
   unknown: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400",
 };
 
-function ReportCard({ article }) {
-  const icon = iconMap[article.icon] || (
+function ReportCard({ articleData }) {
+  const icon = iconMap[articleData.icon] || (
     <ShieldCheck className="w-10 h-10 text-cyan-400" />
   );
 
-  const risk = article.risk_level?.toLowerCase() || "unknown";
+  const risk = articleData.risk_level?.toLowerCase() || "unknown";
   const riskColorClass = riskColors[risk] || riskColors["unknown"];
 
   return (
@@ -42,17 +41,17 @@ function ReportCard({ article }) {
       {/* Título */}
       <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
         {/* <ShieldAlert className="w-5 h-5 text-blue-600 dark:text-blue-400" /> */}
-        {article.url ? (
+        {articleData.url ? (
           <a
-            href={article.url}
+            href={articleData.url}
             target="_blank"
             rel="noopener noreferrer"
             className="hover:underline text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
           >
-            {article.title}
+            {articleData.title}
           </a>
         ) : (
-          article.title
+          articleData.title
         )}
       </h2>
 
@@ -60,8 +59,8 @@ function ReportCard({ article }) {
       <div className="text-sm mb-3">
         <p className="text-gray-600 dark:text-gray-300 mb-1 leading-relaxed line-clamp-3">
           <strong>Summary:</strong>{" "}
-          {article.summary ? (
-            article.summary
+          {articleData.summary ? (
+            articleData.summary
           ) : (
             <span className="italic text-gray-400 dark:text-gray-500">
               No summary available.
@@ -70,8 +69,8 @@ function ReportCard({ article }) {
         </p>
         <p className="text-gray-500 dark:text-gray-400 italic line-clamp-2">
           <strong>Analysis:</strong>{" "}
-          {article.analysis ? (
-            article.analysis
+          {articleData.analysis ? (
+            articleData.analysis
           ) : (
             <span className="italic text-gray-400 dark:text-gray-500">
               No analysis provided.
@@ -85,20 +84,20 @@ function ReportCard({ article }) {
         <span
           className={`px-3 py-1 rounded-full text-xs font-medium ${riskColorClass}`}
         >
-          Risk Level: {article.risk_level || "Unknown"}
+          Risk Level: {articleData.risk_level || "Unknown"}
         </span>
 
         {/* I'm seeing the this article.content, but I don't quat yet understand why we have this here?
           Waht I mean's I know that this work to show more content, but from where the content will come from?*/}
-        {article.content && (
+        {articleData.summary && (
           <details className="ml-auto text-sm text-blue-500 cursor-pointer group-open:text-blue-700">
             <summary className="list-none hover:underline flex items-center gap-1">
               <FileText className="w-4 h-4" />
               Show more
             </summary>
             <div className="mt-2 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-2 rounded text-sm">
-              {article.content.substring(0, 400)}
-              {article.content.length > 400 && "..."}
+              {articleData.summary.substring(0, 400)}
+              {articleData.summary.length > 400 && "..."}
             </div>
           </details>
         )}

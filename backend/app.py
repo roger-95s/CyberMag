@@ -10,54 +10,82 @@ CORS(app)
 
 
 # Route the home page
-@app.route("/", methods=["POST", "GET"])
+@app.route("/api/index", methods=["POST", "GET"])
 def home() -> tuple:
     """Home route returning a welcome message and 9 articles."""
     from .models import get_all_reports
 
     # Build a welcome message displaying the app name
-    welcome_message = "👨‍💻⚒️ Welcome to CyberMag!   "
-    welcome_message += "... This is a App for managing cyber security reports.  "
-    welcome_message += (
-        "... Use the /post or click on resport to see moro endpoint to view reports.  "
+    welcome_message = (
+        "👨‍💻⚒️ Welcome to CyberMag! "
+        "This is an app for managing cybersecurity reports. "
+        "Use the /post endpoint or click on a report to see more."
     )
     # Try to display the first 9 articles in the welcome message
     count = 9
-    articles = get_all_reports()
+
     try:
+        # Assuming this function returns analysis data
+        articles = get_all_reports()
+
+        # if not  "analysis" is empty
         if not articles:
-            welcome_message += " No reports found."
+            welcome_message += " No articles found."
         else:
-            welcome_message += f"Latest {count} Cyber Attacks:"
+            welcome_message += f"Latest {count} Articles of Cyber Attacks:"
 
-            if len(articles) > count:
-                # For more articles, add a button or link to view all posts reports
-                welcome_message += (
-                    f"\n... and {len(articles) - count} more. Click here for more."
-                )
+        articles_data = []
+        for article in articles[:count]:
+            try:
+                title = article.get("title", "").lower()
+                if "ai" in title:
+                    icon = "ai"
+                elif "ransomware" in title:
+                    icon = "ransomware"
+                elif "network" in title:
+                    icon = "network"
+                elif "threat" in title:
+                    icon = "threats"
+                elif "global" in title:
+                    icon = "globe"
+                else:
+                    icon = "unknown"
 
+                articles_item = {
+                    "title": article.get("title", "No Title"),
+                    "url": article.get("url", "No Urls"),
+                    "analysis": article.get("analysis", "No Analysis"),
+                    "summary": article.get("summary", "No Summary"),
+                    "risk_level": article.get("risk_level", "Unknown"),
+                    "icon": icon,
+                }
+                articles_data.append(articles_item)
+            except (KeyError, TypeError) as e:
+                print(f"❌ Error processing article: {e}")
+                continue
         # Return the welcome message as a JSON response with 200 status code
         return (
             jsonify(
                 {
                     "success": True,
                     "message": welcome_message,
-                    "articles": articles[:count],
+                    "articles_data": articles_data,
                 }
             ),
             200,
         )
-    # Handle ImportError if models.py is not found or has issues
     except ImportError as e:
-        welcome_message += f" ❌ Error fetching reports: {e}", 500
+        # Handle any exception that might occur when fetching analysis
+        error_message = welcome_message + f" ❌ Error: {e}"
+        print(f"❌ Error fetching analysis: {e}")
         return (
-            jsonify({"success": False, "error": str(e), "message": welcome_message}),
+            jsonify({"success": False, "error": error_message}),
             500,
         )
 
 
 # Route to get all reports
-@app.route("/post", methods=["GET", "POST"])
+@app.route("/post", methods=["GET"])
 def post_reports():
     """Function post_reports return True if successful,
     len(articles) and articles, and A list of articles."""
