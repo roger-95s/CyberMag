@@ -17,12 +17,12 @@ list_of_sites = [
             "content_selector": {
                 "tag": "p",
                 "ancestor_tag": "div",
-                "ancestor_class": "body-post__content",
+                "ancestor_class": "articlebody",
             },
         },
     },
     {
-        "name": "SecurityWeek",
+        "name": "ThreatPost",
         "url": "https://threatpost.com/",
         "selectors": {
             "url_selector": {"tag": "h2", "class": "c-card__title"},
@@ -30,7 +30,7 @@ list_of_sites = [
             "content_selector": {
                 "tag": "p",
                 "ancestor_tag": "div",
-                "ancestor_class": "c-entry-content",
+                "ancestor_class": "c-article__content",
             },
         },
     },

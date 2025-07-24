@@ -27,7 +27,6 @@ def home() -> tuple:
     try:
         # Assuming this function returns analysis data
         articles = get_all_reports()
-
         # if not  "analysis" is empty
         if not articles:
             welcome_message += " No articles found."
@@ -189,7 +188,6 @@ def about():
 # Main entry point to run the Flask app
 # Uncomment the following line to initialize the database
 if __name__ == "__main__":
-
     # import os
     # print(os.getcwd())
 
