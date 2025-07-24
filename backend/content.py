@@ -58,27 +58,27 @@ def fetch_content_data(soup_obj: BeautifulSoup, selector_map: dict):
             content_ancestor_tag, class_=content_class
         )
 
-        print(
-            f"Found {len(ancestor_containers)} ancestor containers with class '{content_class}'"
-        )
+        # print(
+        #     f"Found {len(ancestor_containers)} ancestor containers with class '{content_class}'"
+        # )
 
         content_items = []
         for container in ancestor_containers:
             items = container.find_all(content_tag)
             content_items.extend(items)
 
-        print(
-            f"Found {len(content_items)} {content_tag} tags within ancestor containers"
-        )
+        # print(
+        #     f"Found {len(content_items)} {content_tag} tags within ancestor containers"
+        # )
 
         contents = []
         for content in content_items:
             text = content.get_text(strip=True)
-            print(
-                f"Content text: {text[:100]}..."
-                if len(text) > 100
-                else f"Content text: {text}"
-            )
+            # print(
+            #     f"Content text: {text[:100]}..."
+            #     if len(text) > 100
+            #     else f"Content text: {text}"
+            # )
             if text:
                 contents.append(text)
         if not contents:
@@ -111,7 +111,8 @@ def debug_selector():
 debug_selector()
 
 
-#  Change this for the url of the cybermag.db
+# Connect the databse cybermag.db en stract each url
+# Make sure that each link is pair with it site selectors.
 test_url = [
     {
         "name": "The Hacker News",
@@ -125,27 +126,30 @@ test_url = [
 
 
 # 🔁 Main loop
-for i, site in enumerate(list_of_sites):
-    selector = site.get("selectors")
-    # url = site.get('url')
+for i, (site, test_url) in enumerate(zip(list_of_sites, test_url)):
+    # site contains selectors
+    # url_data contains the actual URL to fetch
+    selector = site.get("selectors", "Unknown")
+    name = site.get("name", "Unknown")
+    url = test_url.get("url", "Unknown")
+
     print(f"\n{'=' * 50}")
+    # ===========================================================
+    print(f"✅ Selectors found for site: {name}")
     print(f"Processing site {i + 1}/{len(list_of_sites)}")
-    print(f"✅ Selectors found for site: {site.get('name', 'Unknown')}")
+    print(f"✅ Site_Url: {url}")
 
     # get site selectors from dictionary list (list_of_sites)
     if not selector:
         print("❌ Content_selector was not found:")
     else:
-        content_only = {"content_selector": selector["content_selector"]}
-        print(f"✅ Selectors_tags found: {content_only}")
+        selector.get("content_selector", {})
+        # content_only = {"content_selector": selector.get("content_selector", {})}
+        print(f"✅ Selectors_tags found: {selector}")
 
-        # Check the logic @CrafteosK
-        for i, url in enumerate(test_url):
-            if "name" in url:
-                print(f"✅ {url['name']} {i + 1}/{len(url)}")
-
-            soup = get_response(url.get("url"))
-            if not soup:
-                print(print(f"❌ Could not get soup {url}"))
-            else:
-                data = fetch_content_data(soup, content_only)
+    soup = get_response(url)
+    if not soup:
+        print(print(f"❌ Could not get soup {url}"))
+    else:
+        data = fetch_content_data(soup, selector_map=selector)
+        # print(data)

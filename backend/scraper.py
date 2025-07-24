@@ -6,10 +6,10 @@ extracts the required data, and saves it to the database.
 """
 
 import traceback
-import requests
 from bs4 import BeautifulSoup
 from .models import save_report
 from .tag_guide import list_of_sites
+from .content import get_response
 
 
 # User-Agent header to mimic a browser request
@@ -21,24 +21,6 @@ from .tag_guide import list_of_sites
 # You can find more User-Agent strings at https://www.whatismybrowser.com/detect
 # or https://developers.whatismybrowser.com/useragents/explore/
 # or you can use a library like fake-useragent to generate random User-Agent strings.
-headers = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/92.0.4515.159 Safari/537.36"
-    )
-}
-
-
-# Function to get the HTML content of a page
-def get_response(page_url: str) -> BeautifulSoup | None:
-    """Fetch and parse the HTML content of the given URL."""
-    try:
-        response = requests.get(page_url, headers=headers, timeout=10)
-        return BeautifulSoup(response.text, "html.parser")
-    except ImportError as e:
-        print(f"❌ Failed to get {page_url}: Error type: {e}")
-        return None
 
 
 # Function to extract article titles and URLs from the soup object

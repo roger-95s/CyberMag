@@ -199,5 +199,5 @@ if __name__ == "__main__":
     #     init_db()  # Run it once to create Tables
     #     exit(1)
 
-    # Run the Flask app
+    # Run the Flask apps
     app.run(debug=True, port=5000)
