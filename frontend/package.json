@@ -63,6 +63,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-backend": "cd cybermag/backend/app && env/binflask run --no-debugger",
     "build": "react-scripts build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",

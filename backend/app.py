@@ -10,7 +10,7 @@ CORS(app)
 
 
 # Route the home page
-@app.route("/api/index", methods=["POST", "GET"])
+@app.route("/index", methods=["POST", "GET"])
 def home() -> tuple:
     """Home route returning a welcome message and 9 articles."""
     from .models import get_all_reports
