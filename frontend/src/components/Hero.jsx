@@ -52,19 +52,20 @@ const Hero = () => {
   return (
     <section className="bg-white dark:bg-[#0a0f1a] text-gray-900 dark:text-white py-16 transition-colors duration-500">
       <div className="container mx-auto px-4 text-center">
+        
         {/* Headline */}
         <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-          STAY AHEAD OF CYBER THREATS
+        CyberMag: Stay Ahead of Cyber Threats
         </h1>
 
         {/* Subheading */}
         <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-          Actionable insights and threat analysis for the evolving digital landscape.
+        We empower digital defenders with timely cyber threat intelligence and AI-driven insights
         </p>
 
         {/* Icon */}
         <div className="flex justify-center mb-8">
-          <ShieldCheck className="w-12 h-12 text-cyan-500 animate-pulse" />
+          <ShieldCheck  data-testid="shield-icon"  className="w-12 h-12 text-cyan-500 animate-pulse" />
         </div>
 
         {/* Terminal Block */}
