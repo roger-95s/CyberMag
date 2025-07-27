@@ -10,7 +10,7 @@ CORS(app)
 
 
 # Route the home page
-@app.route("/index", methods=["POST", "GET"])
+@app.route("/api/home", methods=["POST", "GET"])
 def home() -> tuple:
     """Home route returning a welcome message and 9 articles."""
     from .models import get_all_reports
@@ -84,7 +84,7 @@ def home() -> tuple:
 
 
 # Route to get all reports
-@app.route("/post", methods=["GET"])
+@app.route("/api/reports", methods=["GET"])
 def post_reports():
     """Function post_reports return True if successful,
     len(articles) and articles, and A list of articles."""
@@ -104,7 +104,7 @@ def post_reports():
 
 # Uncomment the following lines if you want to add a route to save reports"
 # Optional: Add a route to get a single report by ID
-@app.route("/post/<int:post_id>", methods=["GET", "POST"])
+@app.route("/api/report_post/<int:post_id>", methods=["GET", "POST"])
 def get_single_report(post_id):
     try:
         from .models import get_all_reports
@@ -123,7 +123,7 @@ def get_single_report(post_id):
 
 
 # Route the Analysis page
-@app.route("/analysis", methods=["GET", "POST"])
+@app.route("/api/analysis", methods=["GET", "POST"])
 def analysis() -> tuple:
     """Function returning a json response for the analysis page."""
     from .models import get_all_reports
