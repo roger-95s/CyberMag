@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { ShieldCheck, Lock, Globe, BrainCircuit, Bug } from "lucide-react";
 
 // Mapa de íconos basado en el tipo de artículo
@@ -20,6 +21,9 @@ const riskColors = {
 };
 
 function ReportCard({ articleData }) {
+  const [analysis, setAnalysis] = useState(null);
+  const [loadingAnalysis, setLoadingAnalysis] = useState(false);
+  const [error, setError] = useState(null);
   
   const icon = iconMap[articleData.icon] || (
     <ShieldCheck className="w-10 h-10 text-cyan-400" />
@@ -27,6 +31,30 @@ function ReportCard({ articleData }) {
 
   const risk = articleData.risk_level?.toLowerCase() || "unknown";
   const riskColorClass = riskColors[risk] || riskColors["unknown"];
+
+  const fetchAnalysis = async () => {
+    setLoadingAnalysis(true);
+    setError(null);
+    try {
+      const res = await fetch("/analysis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: articleData.url }),
+      });
+      if (!res.ok) throw new Error(`Status ${res.status}`);
+      const data = await res.json();
+      if (data.success) {
+        setAnalysis(data.analysis?.[0] || null); 
+      } else {
+        setError("Failed to get analysis");
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoadingAnalysis(false);
+    }
+  };
+
 
   return (
     <div className="group relative rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-in-out">
@@ -85,6 +113,20 @@ function ReportCard({ articleData }) {
           {/* peque~o cambio realizado para evitar que diga undefined si algun dato falla, se agrego ?? al fallback*/}
           Risk Level: {articleData.risk_level ?? "Unknown"}
         </span>
+        <button
+          onClick={fetchAnalysis}
+          disabled={loadingAnalysis}
+          className="ml-4 text-sm text-blue-500 hover:underline disabled:text-gray-400"
+        >
+          {loadingAnalysis ? "Analyzing..." : "Analyze"}
+        </button>
+      </div>
+
+      {error && (
+        <p className="mt-2 text-sm text-red-500">
+          Error fetching analysis: {error}
+        </p>
+      )}
 
         {/* I'm seeing the this article.content, but I don't quat yet understand why we have this here?
           Waht I mean's I know that this work to show more content, but from where the content will come from?*/}
@@ -103,7 +145,6 @@ function ReportCard({ articleData }) {
           </span>
         ) : null}
       </div>
-    </div>
   );
 }
 
