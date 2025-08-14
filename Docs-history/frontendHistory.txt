@@ -85,3 +85,23 @@ Feature Branch: feature/ui-reportcards-grid, feature/add-menu-mobile
         Backend tagging system to categorize data (NEWS, REPORTS, ANALYSIS).
 
         Loading skeletons instead of plain text loader.
+
+
+   ** Update => 27/07/2025
+   
+        Report Card Restructuring
+        
+            Modified the structure so that the card has two columns at the top:
+
+            Column 1: article icon.
+            Column 2: date at the top and title at the bottom.
+            At the bottom, the card has two sections:
+            Left column: article summary.
+            Right column: AI analysis button.
+            Improved visual and semantic layout using flexbox and grid to clearly separate the sections.
+
+        Hero.jsx update
+
+            A new main tagline has been added below the title:
+            "We empower digital defenders with timely cyber threat intelligence and AI-driven insights."
+            The terminal-like animation, icon, and responsive design have been maintained.   
