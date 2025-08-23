@@ -51,6 +51,7 @@ def home() -> tuple:
                     icon = "unknown"
 
                 articles_item = {
+                    "site_name": article.get("site_name", "No Site Name"),
                     "title": article.get("title", "No Title"),
                     "url": article.get("url", "No Urls"),
                     "analysis": article.get("analysis", "No Analysis"),
@@ -146,6 +147,7 @@ def analysis() -> tuple:
         for article in articles_analysis[:count]:
             try:
                 analysis_item = {
+                    "site_name": article.get("site_name"),
                     "title": article.get("title", "No Title"),
                     "analysis": article.get("analysis", "No Analysis"),
                     "risk_level": article.get("risk_level", "Unknown"),
@@ -189,9 +191,11 @@ def about():
 # Uncomment the following line to initialize the database
 if __name__ == "__main__":
     # import os
+
     # print(os.getcwd())
 
     # from .models import init_db, verify_db
+
     # # Verify if the database is initialized
     # if not verify_db():
     #     print("❌ Database is not initialized.")

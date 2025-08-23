@@ -12,6 +12,8 @@ from bs4 import BeautifulSoup
 # import save_report
 from .tag_guide import list_of_sites
 
+# Impport artile get_all_reports(url)
+from .models import get_all_reports
 
 # Get a request from webpage
 headers = {
@@ -44,7 +46,7 @@ def get_response(page_url: str) -> BeautifulSoup | None:
 def fetch_content_data(soup_obj: BeautifulSoup, selector_map: dict):
     """fetch articles' content using the provided selectors"""
     try:
-        print(f"🔍 Selector map structure: {selector_map}")
+        # print(f"🔍 Selector map structure: {selector_map}")
         # check if content_selector exists
         if "content_selector" not in selector_map:
             print("❌ 'content_selector' key not found in selector_map")
@@ -66,6 +68,7 @@ def fetch_content_data(soup_obj: BeautifulSoup, selector_map: dict):
         for container in ancestor_containers:
             items = container.find_all(content_tag)
             content_items.extend(items)
+            # print(f"📦{container}")
 
         # print(
         #     f"Found {len(content_items)} {content_tag} tags within ancestor containers"
@@ -113,43 +116,37 @@ debug_selector()
 
 # Connect the databse cybermag.db en stract each url
 # Make sure that each link is pair with it site selectors.
-test_url = [
-    {
-        "name": "The Hacker News",
-        "url": "https://thehackernews.com/2025/07/hackers-use-github-repositories-to-host.html",
-    },
-    {
-        "name": "ThreatPost",
-        "url": "https://threatpost.com/student-loan-breach-exposes-2-5m-records/180492/",
-    },
-]
+test_url = get_all_reports()
 
+# Build a quick lookup dictionary from list_of_sites
+site_lookup = {site["name"]: site for site in list_of_sites}
 
-# 🔁 Main loop
-for i, (site, test_url) in enumerate(zip(list_of_sites, test_url)):
-    # site contains selectors
-    # url_data contains the actual URL to fetch
-    selector = site.get("selectors", "Unknown")
-    name = site.get("name", "Unknown")
-    url = test_url.get("url", "Unknown")
+# 🔁 Main loopIterate over all DB articles
+for i, row in enumerate(test_url, start=1):
+    name = row.get("site_name", "Unknown")
+    url = row.get("url", "Unknown")
 
     print(f"\n{'=' * 50}")
-    # ===========================================================
-    print(f"✅ Selectors found for site: {name}")
-    print(f"Processing site {i + 1}/{len(list_of_sites)}")
+    print(f"✅ Site: {name}")
+    print(f"Processing article {i}/{len(test_url)}")
     print(f"✅ Site_Url: {url}")
 
-    # get site selectors from dictionary list (list_of_sites)
+    # Get selectors by site name
+    site = site_lookup.get(name)
+    if not site:
+        print(f"❌ No selectors found for site '{name}'")
+        continue
+
+    selector = site.get("selectors", {})
     if not selector:
         print("❌ Content_selector was not found:")
-    else:
-        selector.get("content_selector", {})
-        # content_only = {"content_selector": selector.get("content_selector", {})}
-        print(f"✅ Selectors_tags found: {selector}")
+        continue
 
+    # Fetch and parse
     soup = get_response(url)
     if not soup:
-        print(print(f"❌ Could not get soup {url}"))
-    else:
-        data = fetch_content_data(soup, selector_map=selector)
-        # print(data)
+        print(f"❌ Could not get soup for {url}")
+        continue
+
+    data = fetch_content_data(soup, selector_map=selector)
+    print(data)
