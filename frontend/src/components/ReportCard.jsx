@@ -22,7 +22,6 @@ const riskColors = {
 };
 
 function ReportCard({ articleData }) {
-  const [analysis, setAnalysis] = useState(null);
   const [loadingAnalysis, setLoadingAnalysis] = useState(false);
   const [error, setError] = useState(null);
 
@@ -44,11 +43,7 @@ function ReportCard({ articleData }) {
       });
       if (!res.ok) throw new Error(`Status ${res.status}`);
       const data = await res.json();
-      if (data.success) {
-        setAnalysis(data.analysis?.[0] || null);
-      } else {
-        setError("Failed to get analysis");
-      }
+      if (!data.success) setError("Failed to get analysis");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -86,13 +81,13 @@ function ReportCard({ articleData }) {
             articleData.summary
           ) : (
             <span className="italic text-gray-400 dark:text-gray-500">
-              [No summary from backend]
+              No summary available.
             </span>
           )}
         </p>
       </div>
 
-      {/* Pie: nivel de riesgo + análisis */}
+      {/* Pie: nivel de riesgo + botón de análisis */}
       <div className="flex items-center justify-between mt-4">
         <span
           className={`px-3 py-1 rounded-full text-xs font-medium ${riskColorClass}`}
@@ -113,21 +108,6 @@ function ReportCard({ articleData }) {
           Error fetching analysis: {error}
         </p>
       )}
-
-      {articleData.analysis_url ? (
-        <a
-          href={articleData.analysis_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-sm text-blue-500 hover:underline"
-        >
-          View full AI-generated analysis
-        </a>
-      ) : articleData.analysis ? (
-        <span className="text-sm italic text-gray-500 dark:text-gray-400">
-          {articleData.analysis}
-        </span>
-      ) : null}
     </div>
   );
 }
