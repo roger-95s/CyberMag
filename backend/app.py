@@ -1,7 +1,9 @@
 """Module providing a flaks class and json function python version."""
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
+from backend.models import get_all_reports, save_report
+
 
 
 # Create Flask app
@@ -13,7 +15,6 @@ CORS(app)
 @app.route("/api/index", methods=["POST", "GET"])
 def home() -> tuple:
     """Home route returning a welcome message and 9 articles."""
-    from .models import get_all_reports
 
     # Build a welcome message displaying the app name
     welcome_message = (
@@ -25,13 +26,13 @@ def home() -> tuple:
     count = 9
 
     try:
-        # Assuming this function returns analysis data
+        # Get all reports from the database
         articles = get_all_reports()
-        # if not  "analysis" is empty
+        # if not articles list is empty
         if not articles:
             welcome_message += " No articles found."
         else:
-            welcome_message += f"Latest {count} Articles of Cyber Attacks:"
+            welcome_message += f" Latest {count} Articles of Cyber Attacks:"
 
         articles_data = []
         for article in articles[:count]:
@@ -51,9 +52,9 @@ def home() -> tuple:
                     icon = "unknown"
 
                 articles_item = {
+                    "id": article.get("id"),
                     "title": article.get("title", "No Title"),
                     "url": article.get("url", "No Urls"),
-                    "analysis": article.get("analysis", "No Analysis"),
                     "summary": article.get("summary", "No Summary"),
                     "risk_level": article.get("risk_level", "Unknown"),
                     "icon": icon,
@@ -73,7 +74,7 @@ def home() -> tuple:
             ),
             200,
         )
-    except ImportError as e:
+    except Exception as e:
         # Handle any exception that might occur when fetching analysis
         error_message = welcome_message + f" ❌ Error: {e}"
         print(f"❌ Error fetching analysis: {e}")
@@ -88,66 +89,71 @@ def home() -> tuple:
 def post_reports():
     """Function post_reports return True if successful,
     len(articles) and articles, and A list of articles."""
-    from .models import get_all_reports
 
-    # try to get all reports from the database
     try:
         articles = get_all_reports()
         return (
             jsonify({"success": True, "count": len(articles), "articles": articles}),
             200,
         )
-    # Handle ImportError if models.py is not found or has issues
-    except ImportError as e:
+    except Exception as e:
         return ({"success": False, "error": str(e), "articles": []}), 500
 
 
-# Uncomment the following lines if you want to add a route to save reports"
+# Route to save a new report manually
+@app.route("/post", methods=["POST"])
+def create_report():
+    """Function to save a new report via POST request.
+    Needs: title, url, summary, risk_level
+    """
+    try:
+        data = request.json
+        save_report(data)
+        return jsonify({"success": True, "message": "✅ Report saved"}), 201
+    except Exception as e:
+        print(f"❌ Error creating report: {e}")
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
 # Optional: Add a route to get a single report by ID
-@app.route("/post/<int:post_id>", methods=["GET", "POST"])
+@app.route("/post/<int:post_id>", methods=["GET"])
 def get_single_report(post_id):
     try:
-        from .models import get_all_reports
-
         articles = get_all_reports()
         article = next((a for a in articles if a["id"] == post_id), None)
         if article:
             return jsonify({"success": True, "article": article})
         # Return 404 if article not found
         return jsonify({"success": False, "error": "Article not found"}), 404
-    except ImportError as e:
-        articles = None
-        # Handle ImportError if models.py is not found or has issues
+    except Exception as e:
         print(f"❌ Error fetching report: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
 
 
 # Route the Analysis page
-@app.route("/analysis", methods=["GET", "POST"])
+@app.route("/analysis", methods=["GET"])
 def analysis() -> tuple:
     """Function returning a json response for the analysis page."""
-    from .models import get_all_reports
 
-    # Build a welcome message displaying the app name
     welcome_message = "👨‍💻⚒️ Welcome to CyberMag Analysis page!"
     count = 9
 
     try:
-        # Assuming this function returns analysis data
+        # Get all reports
         articles_analysis = get_all_reports()
 
-        # if not articles_analysis "analysis" is empty
+        # if not articles_analysis is empty
         if not articles_analysis:
             welcome_message += " No analysis found."
         else:
-            welcome_message += f"Latest {count} Analisys of Cyber Attacks:"
+            welcome_message += f" Latest {count} Analysis of Cyber Attacks:"
 
         articles_data = []
         for article in articles_analysis[:count]:
             try:
                 analysis_item = {
                     "title": article.get("title", "No Title"),
-                    "analysis": article.get("analysis", "No Analysis"),
+                    "summary": article.get("summary", "No Summary"),
                     "risk_level": article.get("risk_level", "Unknown"),
                 }
                 articles_data.append(analysis_item)
@@ -161,15 +167,14 @@ def analysis() -> tuple:
                 {
                     "success": True,
                     "message": welcome_message,
-                    # return only title, analysis, and risk_level
+                    # return only title, summary, and risk_level
                     "analysis": articles_data,
                     "count": len(articles_analysis),
                 }
             ),
             200,
         )
-    except ImportError as e:
-        # Handle any exception that might occur when fetching analysis
+    except Exception as e:
         error_message = welcome_message + f" ❌ Error fetching analysis: {e}"
         print(f"❌ Error fetching analysis: {e}")
         return (
@@ -186,18 +191,5 @@ def about():
 
 
 # Main entry point to run the Flask app
-# Uncomment the following line to initialize the database
 if __name__ == "__main__":
-    # import os
-    # print(os.getcwd())
-
-    # from .models import init_db, verify_db
-    # # Verify if the database is initialized
-    # if not verify_db():
-    #     print("❌ Database is not initialized.")
-    #     # Uncomment ONLY in the first run
-    #     init_db()  # Run it once to create Tables
-    #     exit(1)
-
-    # Run the Flask apps
     app.run(debug=True, port=5000)

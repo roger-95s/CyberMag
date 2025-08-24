@@ -83,7 +83,6 @@ def save_articles_to_db(articles_data: dict) -> int:
         article_data = {
             "title": titles[i],
             "url": urls[i],
-            "content": "",
             "summary": "",
             "risk_level": "",
         }
