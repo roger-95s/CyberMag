@@ -86,7 +86,7 @@ function ReportCard({ articleData }) {
             articleData.summary
           ) : (
             <span className="italic text-gray-400 dark:text-gray-500">
-              [No summary from backend]
+              [No summary from backend.]
             </span>
           )}
         </p>
@@ -104,7 +104,12 @@ function ReportCard({ articleData }) {
           disabled={loadingAnalysis}
           className="ml-4 text-sm text-blue-500 hover:underline disabled:text-gray-400"
         >
-          {loadingAnalysis ? "Analyzing..." : "Analyze"}
+          {/* analisis aparecera cuando tengamos, por ahora esta en una condicional para que ESlint no nos de mola con ello */}
+          {analysis && (
+            <span className="text-sm italic text-gray-500 dark:text-gray-400">
+              {analysis.summary ?? "No analysis available"}
+            </span>
+          )}
         </button>
       </div>
 
