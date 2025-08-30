@@ -4,7 +4,7 @@ import ReportPage from "./pages/ReportPage";
 
 function App() {
   return (
-    <Router>
+    <Router basename="/CyberMag">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/post/:id" element={<ReportPage />} />
