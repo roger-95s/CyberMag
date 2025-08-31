@@ -54,6 +54,7 @@ def home() -> tuple:
                     "site_name": article.get("site_name", "No Site Name"),
                     "title": article.get("title", "No Title"),
                     "url": article.get("url", "No Urls"),
+                    "content": article.get("content", "No Content"),
                     "analysis": article.get("analysis", "No Analysis"),
                     "summary": article.get("summary", "No Summary"),
                     "risk_level": article.get("risk_level", "Unknown"),
