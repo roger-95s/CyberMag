@@ -24,7 +24,7 @@ function ReportCard({ articleData }) {
   const [analysis, setAnalysis] = useState(null);
   const [loadingAnalysis, setLoadingAnalysis] = useState(false);
   const [error, setError] = useState(null);
-  
+
   const icon = iconMap[articleData.icon] || (
     <ShieldCheck className="w-10 h-10 text-cyan-400" />
   );
@@ -44,7 +44,7 @@ function ReportCard({ articleData }) {
       if (!res.ok) throw new Error(`Status ${res.status}`);
       const data = await res.json();
       if (data.success) {
-        setAnalysis(data.analysis?.[0] || null); 
+        setAnalysis(data.analysis?.[0] || null);
       } else {
         setError("Failed to get analysis");
       }

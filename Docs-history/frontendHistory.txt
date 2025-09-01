@@ -88,9 +88,9 @@ Feature Branch: feature/ui-reportcards-grid, feature/add-menu-mobile
 
 
    ** Update => 27/07/2025
-   
+
         Report Card Restructuring
-        
+
             Modified the structure so that the card has two columns at the top:
 
             Column 1: article icon.
@@ -104,4 +104,4 @@ Feature Branch: feature/ui-reportcards-grid, feature/add-menu-mobile
 
             A new main tagline has been added below the title:
             "We empower digital defenders with timely cyber threat intelligence and AI-driven insights."
-            The terminal-like animation, icon, and responsive design have been maintained.   
+            The terminal-like animation, icon, and responsive design have been maintained.

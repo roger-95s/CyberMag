@@ -77,12 +77,15 @@ def save_articles_to_db(articles_data: dict) -> int:
     saved_count = 0
     titles = articles_data["title"]
     urls = articles_data["url"]
+    site_name = articles_data.get("site_name", "")
+
     min_length = min(len(titles), len(urls))
 
     for i in range(min_length):
         article_data = {
             "title": titles[i],
             "url": urls[i],
+            "site_name": site_name,
             "content": "",
             "summary": "",
             "risk_level": "",

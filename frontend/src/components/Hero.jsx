@@ -52,7 +52,7 @@ const Hero = () => {
   return (
     <section className="bg-white dark:bg-[#0a0f1a] text-gray-900 dark:text-white py-16 transition-colors duration-500">
       <div className="container mx-auto px-4 text-center">
-        
+
         {/* Headline */}
         <h1 className="text-4xl sm:text-5xl font-bold mb-4">
         CyberMag: Stay Ahead of Cyber Threats
