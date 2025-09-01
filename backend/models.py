@@ -1,4 +1,4 @@
-"""Module providing a functions python version."""
+"""Module providing database models and functions."""
 
 from pathlib import Path
 from sqlalchemy import create_engine, Column, Integer, String, Text, inspect
@@ -25,8 +25,6 @@ class Report(Base):
     __tablename__ = "reports"
 
     id = Column(Integer, primary_key=True, index=True)
-    # add date time
-    site_name = Column(String(255), nullable=False)
     title = Column(String(255), nullable=False)
     url = Column(String(500), nullable=False, unique=True)
     content = Column(Text, nullable=True)
