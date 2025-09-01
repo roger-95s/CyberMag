@@ -1,4 +1,4 @@
-"""Module providing a functions python version."""
+"""Module providing database models and functions."""
 
 from pathlib import Path
 from sqlalchemy import create_engine, Column, Integer, String, Text, inspect
@@ -76,8 +76,23 @@ def save_report(report_data):
     report_data should be a dictionary with
     keys: title, url, summary, risk_level.
     """
+
     session = SessionLocal()
     try:
+        # Modify save report to check every column for duplications
+        # when save_report is call
+        # The code bellow is redundant convine into one check condition
+        content = (
+            session.query(Report).filter_by(content=report_data["content"]).first()
+        )
+        if content:
+            print(
+                f"⚠️ Report with similar content already exists: {report_data['title']}"
+            )
+            return
+        new_content = Report(**report_data)
+        session.add(new_content)
+        session.commit()
         # Prevent duplicates inside this function
         exists = session.query(Report).filter_by(url=report_data["url"]).first()
         if exists:
@@ -93,6 +108,9 @@ def save_report(report_data):
         session.rollback()
     finally:
         session.close()
+
+
+# save fetched content in to Content row
 
 
 # Get all reports

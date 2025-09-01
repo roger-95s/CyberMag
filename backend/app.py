@@ -51,13 +51,14 @@ def home() -> tuple:
                     icon = "unknown"
 
                 articles_item = {
-                    "site_name": article.get("site_name", "No Site Name"),
-                    "title": article.get("title", "No Title"),
-                    "url": article.get("url", "No Urls"),
                     "analysis": article.get("analysis", "No Analysis"),
                     "summary": article.get("summary", "No Summary"),
                     "risk_level": article.get("risk_level", "Unknown"),
+                    "title": article.get("title", "No Title"),
+                    "url": article.get("url", "No Urls"),
+                    "site_name": article.get("site_name", "No Site Name"),
                     "icon": icon,
+                    "id": article.get("id"),
                 }
                 articles_data.append(articles_item)
             except (KeyError, TypeError) as e:
@@ -85,7 +86,7 @@ def home() -> tuple:
 
 
 # Route to get all reports
-@app.route("/api/reports", methods=["GET"])
+@app.route("/api/post", methods=["GET"])
 def post_reports():
     """Function post_reports return True if successful,
     len(articles) and articles, and A list of articles."""
@@ -105,7 +106,7 @@ def post_reports():
 
 # Uncomment the following lines if you want to add a route to save reports"
 # Optional: Add a route to get a single report by ID
-@app.route("/api/report_post/<int:post_id>", methods=["GET", "POST"])
+@app.route("/api/post/<int:post_id>", methods=["GET"])
 def get_single_report(post_id):
     try:
         from .models import get_all_reports
@@ -124,7 +125,7 @@ def get_single_report(post_id):
 
 
 # Route the Analysis page
-@app.route("/api/analysis", methods=["GET", "POST"])
+@app.route("/api/analysis", methods=["GET"])
 def analysis() -> tuple:
     """Function returning a json response for the analysis page."""
     from .models import get_all_reports
@@ -149,7 +150,7 @@ def analysis() -> tuple:
                 analysis_item = {
                     "site_name": article.get("site_name"),
                     "title": article.get("title", "No Title"),
-                    "analysis": article.get("analysis", "No Analysis"),
+                    "summary": article.get("summary", "No Summary"),
                     "risk_level": article.get("risk_level", "Unknown"),
                 }
                 articles_data.append(analysis_item)
@@ -163,7 +164,7 @@ def analysis() -> tuple:
                 {
                     "success": True,
                     "message": welcome_message,
-                    # return only title, analysis, and risk_level
+                    # return only title, summary, analysis, and risk_level
                     "analysis": articles_data,
                     "count": len(articles_analysis),
                 }
@@ -191,7 +192,6 @@ def about():
 # Uncomment the following line to initialize the database
 if __name__ == "__main__":
     # import os
-
     # print(os.getcwd())
 
     # from .models import init_db, verify_db

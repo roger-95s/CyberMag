@@ -12,8 +12,9 @@ from bs4 import BeautifulSoup
 # import save_report
 from .tag_guide import list_of_sites
 
-# Impport artile get_all_reports(url)
+# Import artile get_all_reports(url)
 from .models import get_all_reports
+
 
 # Get a request from webpage
 headers = {
@@ -95,7 +96,33 @@ def fetch_content_data(soup_obj: BeautifulSoup, selector_map: dict):
         return {"content": []}
 
 
-# Save in data base refere articles content by id to articles fetched on scraper.py
+# def save_content_to_db(article_id: int, content_data: dict) -> bool:
+#     """Save the fetched content data to the database."""
+#     # To save the content I just saved. I should Relate that content with its id
+#     # compare content id with site_id
+#     # if content_id and site_id match
+#     # print success
+
+#     # Store content Data and article ID
+#     contents = content_data.get("content", [])
+#     articles_id = article_id.get("id", None)
+
+#     # Try to save content in to the content row Report table id by site an url
+#     # check if there is not content and id
+#     if not contents or not articles_id:
+#         print("❌ No content data or invalid article ID")
+#         return False
+#         # Join content list into a single string
+#     full_content = "\n".join(contents)
+#     report_data = {"id": articles_id, "content": full_content}
+#         # Update the report with new content
+#         # save_update_report(report_data)
+#         # if
+#         # update_report_db = Report.update().where(Report.id == articles_id).values(**report_data)
+#         # Check for exceptions and possible bugs, Content already in database
+#     return update_report_db(report_data)
+
+
 # Debug function to inspect the selector structure
 def debug_selector():
     """Debug function to inspect the imported selectors"""
@@ -126,6 +153,10 @@ for i, row in enumerate(test_url, start=1):
     name = row.get("site_name", "Unknown")
     url = row.get("url", "Unknown")
 
+    # I need to get the id from the database table Report 'id'
+    # and pass it to save_content_to_db()
+    articles_id = row.get("id", None)
+
     print(f"\n{'=' * 50}")
     print(f"✅ Site: {name}")
     print(f"Processing article {i}/{len(test_url)}")
@@ -143,10 +174,27 @@ for i, row in enumerate(test_url, start=1):
         continue
 
     # Fetch and parse
+    # Calling get_response to get site's responses
     soup = get_response(url)
+    # if response is None or not valid
     if not soup:
         print(f"❌ Could not get soup for {url}")
         continue
-
+    # Else call fetch_content_data and save content parsed
     data = fetch_content_data(soup, selector_map=selector)
-    print(data)
+    # if data.get("content") and articles_id.get("id", None):
+    #     # print(f"✅ Fetched {len(data['content'])} content items")
+    #     saved = save_content_to_db(
+    #         article_id=articles_id.get("id", None), content_data=data
+    #     )
+    #     if saved:
+    #         print(
+    #             f"📦 Saved content for article ID {articles_id.get('id', None)} to database"
+    #         )
+    #     else:
+    #         print(
+    #             f"❌ Failed to save content for article ID {articles_id.get('id', None)}"
+    #         )
+    # else:
+    #     print(f"❌ No content fetched from {url} or invalid article ID")
+    # print(data)
