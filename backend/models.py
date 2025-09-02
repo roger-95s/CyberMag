@@ -25,6 +25,7 @@ class Report(Base):
     __tablename__ = "reports"
 
     id = Column(Integer, primary_key=True, index=True)
+    site_name = Column(String(100), nullable=False)
     title = Column(String(255), nullable=False)
     url = Column(String(500), nullable=False, unique=True)
     content = Column(Text, nullable=True)
