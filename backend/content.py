@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 from .tag_guide import list_of_sites
 
 # Import artile get_all_reports(url)
-from .models import get_all_reports
+from .models import get_all_reports, update_report_db
 
 
 # Get a request from webpage
@@ -96,45 +96,45 @@ def fetch_content_data(soup_obj: BeautifulSoup, selector_map: dict):
         return {"content": []}
 
 
-# def save_content_to_db(article_id: int, content_data: dict) -> bool:
-#     """Save the fetched content data to the database."""
-#     # To save the content I just saved. I should Relate that content with its id
-#     # compare content id with site_id
-#     # if content_id and site_id match
-#     # print success
+def save_content_to_db(article_id: int, content_data: dict) -> bool:
+    """Save the fetched content data to the database."""
+    # To save the content I just saved. I should Relate that content with its id
+    # compare content id with site_id
+    # if content_id and site_id match
+    # print success
 
-#     # Store content Data and article ID
-#     contents = content_data.get("content", [])
-#     articles_id = article_id.get("id", None)
+    # Store content Data and article ID
+    contents = content_data.get("content", [])
+    articles_id = article_id.get("id", None)
 
-#     # Try to save content in to the content row Report table id by site an url
-#     # check if there is not content and id
-#     if not contents or not articles_id:
-#         print("❌ No content data or invalid article ID")
-#         return False
-#         # Join content list into a single string
-#     full_content = "\n".join(contents)
-#     report_data = {"id": articles_id, "content": full_content}
-#         # Update the report with new content
-#         # save_update_report(report_data)
-#         # if
-#         # update_report_db = Report.update().where(Report.id == articles_id).values(**report_data)
-#         # Check for exceptions and possible bugs, Content already in database
-#     return update_report_db(report_data)
+    # Try to save content in to the content row Report table id by site an url
+    # check if there is not content and id
+    if not contents or not articles_id:
+        print("❌ No content data or invalid article ID")
+        return False
+        # Join content list into a single string
+    full_content = "\n".join(contents)
+    report_data = {"id": articles_id, "content": full_content}
+    # Update the report with new content
+    # save_update_report(report_data)
+    # if
+    # update_report_db = Report.update().where(Report.id == articles_id).values(**report_data)
+    # Check for exceptions and possible bugs, Content already in database
+    return update_report_db(report_data)
 
 
 # Debug function to inspect the selector structure
 def debug_selector():
     """Debug function to inspect the imported selectors"""
-    # print("🔍 Debugging selector structure...")
-    # print(f"Number of sites in list_of_sites: {len(list_of_sites)}")
+    print("🔍 Debugging selector structure...")
+    print(f"Number of sites in list_of_sites: {len(list_of_sites)}")
 
-    # for i, site in enumerate(list_of_sites):
-    #     print(f"\n📍Site {i+1}: {site.get('name')}")
-    #     if "selectors" in site:
-    #         print(f" Selectors: {site['selectors'].get('content_selector')}")
-    #     else:
-    #         print(" ❌ No selectors found")
+    for i, site in enumerate(list_of_sites):
+        print(f"\n📍Site {i+1}: {site.get('name')}")
+        if "selectors" in site:
+            print(f" Selectors: {site['selectors'].get('content_selector')}")
+        else:
+            print(" ❌ No selectors found")
 
 
 # Run debug
@@ -182,19 +182,19 @@ for i, row in enumerate(test_url, start=1):
         continue
     # Else call fetch_content_data and save content parsed
     data = fetch_content_data(soup, selector_map=selector)
-    # if data.get("content") and articles_id.get("id", None):
-    #     # print(f"✅ Fetched {len(data['content'])} content items")
-    #     saved = save_content_to_db(
-    #         article_id=articles_id.get("id", None), content_data=data
-    #     )
-    #     if saved:
-    #         print(
-    #             f"📦 Saved content for article ID {articles_id.get('id', None)} to database"
-    #         )
-    #     else:
-    #         print(
-    #             f"❌ Failed to save content for article ID {articles_id.get('id', None)}"
-    #         )
-    # else:
-    #     print(f"❌ No content fetched from {url} or invalid article ID")
-    # print(data)
+    if data.get("content") and articles_id.get("id", None):
+        # print(f"✅ Fetched {len(data['content'])} content items")
+        saved = save_content_to_db(
+            article_id=articles_id.get("id", None), content_data=data
+        )
+        if saved:
+            print(
+                f"📦 Saved content for article ID {articles_id.get('id', None)} to database"
+            )
+        else:
+            print(
+                f"❌ Failed to save content for article ID {articles_id.get('id', None)}"
+            )
+    else:
+        print(f"❌ No content fetched from {url} or invalid article ID")
+    print(data)

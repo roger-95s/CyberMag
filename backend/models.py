@@ -69,48 +69,58 @@ def verify_db():
     return True
 
 
-# Save a report
-def save_report(report_data):
-    """
-    Saves a report to the database.
-    report_data should be a dictionary with
-    keys: title, url, summary, risk_level.
-    """
+# # Save a report
+# def save_report(report_data):
+#     """
+#     Saves a report to the database.
+#     report_data should be a dictionary with
+#     keys: title, url, summary, risk_level.
+#     """
+#     session = SessionLocal()
+#     try:
+#         new_content = Report(**report_data)
+#         session.add(new_content)
+#         session.commit()
 
-    session = SessionLocal()
-    try:
-        # Modify save report to check every column for duplications
-        # when save_report is call
-        # The code bellow is redundant convine into one check condition
-        content = (
-            session.query(Report).filter_by(content=report_data["content"]).first()
-        )
-        if content:
-            print(
-                f"⚠️ Report with similar content already exists: {report_data['title']}"
-            )
-            return
-        new_content = Report(**report_data)
-        session.add(new_content)
-        session.commit()
-        # Prevent duplicates inside this function
-        exists = session.query(Report).filter_by(url=report_data["url"]).first()
-        if exists:
-            print(f"⚠️ Report already exists: {report_data['title']}")
-            return
-
-        new_report = Report(**report_data)
-        session.add(new_report)
-        session.commit()
-        print(f"✅ Saved to DB: {new_report.title}")
-    except ImportError as e:
-        print(f"❌ Error saving report: {e}")
-        session.rollback()
-    finally:
-        session.close()
-
-
-# save fetched content in to Content row
+#         # Prevent duplicates inside this function
+#         exists = (
+#             session.query(Report)
+#             .filter_by(
+#                 id=report_data["id"],
+#                 site_name=report_data["site_name"],
+#                 url=report_data["url"],
+#             )
+#             .first()
+#         )
+#         if exists:
+#             print(
+#                 f"⚠️ Report already exists: {report_data['site_name']}: {report_data['title']}"
+#             )
+#         # If it not in report create a new report
+#         elif not exists:
+#             new_report = Report(**report_data)
+#             session.add(new_report)
+#             session.commit()
+#             print(f"✅ Saved to DB: {new_report.title}")
+#             return True
+#         # Else update reports with content fetched
+#         if exists:
+#             update_report = (
+#                 update(Report)
+#                 .where(Report.id == report_data["id"])
+#                 .where(Report.content != report_data["content"])  # noqa: E711
+#                 .values(**report_data)
+#             )
+#         session.execute(update_report)
+#         session.add(update_report)
+#         session.commit()
+#         print(f"✅ Updated report in DB: {report_data['title']}")
+#         return True
+#     except ImportError as e:
+#         print(f"❌ Error saving report: {e}")
+#         session.rollback()
+#     finally:
+#         session.close()
 
 
 # Get all reports
