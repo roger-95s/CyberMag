@@ -12,8 +12,8 @@ from bs4 import BeautifulSoup
 # import save_report
 from .tag_guide import list_of_sites
 
-# Import artile get_all_reports(url)
-from .models import get_all_reports, update_report_db
+# Import database session and models
+from .models import get_all_site, ArticleContent
 
 
 # Get a request from webpage
@@ -96,31 +96,33 @@ def fetch_content_data(soup_obj: BeautifulSoup, selector_map: dict):
         return {"content": []}
 
 
-def save_content_to_db(article_id: int, content_data: dict) -> bool:
+def save_content_to_db(content_data):
     """Save the fetched content data to the database."""
-    # To save the content I just saved. I should Relate that content with its id
-    # compare content id with site_id
-    # if content_id and site_id match
-    # print success
+    if not content_data:
+        return 0
 
-    # Store content Data and article ID
-    contents = content_data.get("content", [])
-    articles_id = article_id.get("id", None)
+    # counter for saved contents
+    saved_count = 0
 
-    # Try to save content in to the content row Report table id by site an url
-    # check if there is not content and id
-    if not contents or not articles_id:
-        print("❌ No content data or invalid article ID")
-        return False
-        # Join content list into a single string
-    full_content = "\n".join(contents)
-    report_data = {"id": articles_id, "content": full_content}
-    # Update the report with new content
-    # save_update_report(report_data)
-    # if
-    # update_report_db = Report.update().where(Report.id == articles_id).values(**report_data)
-    # Check for exceptions and possible bugs, Content already in database
-    return update_report_db(report_data)
+    contents = content_data
+    if not contents:
+        print("❌ No content to save.")
+        return saved_count
+    print(f"🔖 Found {len(contents)} content items to save.")
+    for i, content in enumerate(contents):
+        site_content = {
+            "content": content,
+        }
+        save = ArticleContent.save(site_content)
+        if save:
+            saved_count += 1
+            print(
+                f"📦 Saving content {i+1}/{len(contents)}: {site_content['content'][:30]}..."
+            )
+        else:
+            print("❌ Failed to save article")
+        return content
+    return saved_count
 
 
 # Debug function to inspect the selector structure
@@ -143,7 +145,8 @@ debug_selector()
 
 # Connect the databse cybermag.db en stract each url
 # Make sure that each link is pair with it site selectors.
-test_url = get_all_reports()
+test_url = get_all_site()
+print(f"\n🔍 Fetched {len(test_url)} articles from the database for processing.")
 
 # Build a quick lookup dictionary from list_of_sites
 site_lookup = {site["name"]: site for site in list_of_sites}
@@ -151,26 +154,23 @@ site_lookup = {site["name"]: site for site in list_of_sites}
 # 🔁 Main loopIterate over all DB articles
 for i, row in enumerate(test_url, start=1):
     name = row.get("site_name", "Unknown")
+    title = row.get("title", "Unknown")
     url = row.get("url", "Unknown")
 
-    # I need to get the id from the database table Report 'id'
-    # and pass it to save_content_to_db()
-    articles_id = row.get("id", None)
-
+    # debugging and visual strucute
     print(f"\n{'=' * 50}")
-    print(f"✅ Site: {name}")
+    print(f"⭐ Site: {name}")
     print(f"Processing article {i}/{len(test_url)}")
-    print(f"✅ Site_Url: {url}")
+    print(f"✅ Title: {title}")
 
     # Get selectors by site name
     site = site_lookup.get(name)
     if not site:
         print(f"❌ No selectors found for site '{name}'")
         continue
-
     selector = site.get("selectors", {})
     if not selector:
-        print("❌ Content_selector was not found:")
+        print(f"❌ {name}: Content_selector was not found")
         continue
 
     # Fetch and parse
@@ -180,21 +180,20 @@ for i, row in enumerate(test_url, start=1):
     if not soup:
         print(f"❌ Could not get soup for {url}")
         continue
-    # Else call fetch_content_data and save content parsed
+
+    # Call fetch_content_data and save content parsed
     data = fetch_content_data(soup, selector_map=selector)
-    if data.get("content") and articles_id.get("id", None):
-        # print(f"✅ Fetched {len(data['content'])} content items")
-        saved = save_content_to_db(
-            article_id=articles_id.get("id", None), content_data=data
-        )
-        if saved:
-            print(
-                f"📦 Saved content for article ID {articles_id.get('id', None)} to database"
-            )
-        else:
-            print(
-                f"❌ Failed to save content for article ID {articles_id.get('id', None)}"
-            )
-    else:
-        print(f"❌ No content fetched from {url} or invalid article ID")
-    print(data)
+    if not data:
+        print(f"data no found {data}")
+    print(f"🔍 Data found: {data}")
+
+    # Call save function
+    save = []
+
+    try:
+        save = save_content_to_db(data["content"])
+        if save:
+            print("Counter was founded and saved")
+    except ImportError as e:
+        print(f"❌ Error during fetching article content: {e}")
+        traceback.print_exc()
