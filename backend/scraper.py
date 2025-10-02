@@ -7,7 +7,7 @@ extracts the required data, and saves it to the database.
 
 import traceback
 from bs4 import BeautifulSoup
-from .models import save_report
+from .models import WebsiteFetch
 from .tag_guide import list_of_sites
 from .content import get_response
 
@@ -65,40 +65,42 @@ def fetch_data(soup_obj: BeautifulSoup, selectors_map: dict, limit: int) -> dict
 
 
 # Function to save articles to the database
-def save_articles_to_db(articles_data: dict) -> int:
+def save_articles_to_db(articles_data: dict, site_name: str) -> dict:
     """Save extracted articles to the database."""
     if (
         not articles_data
         or not articles_data.get("title")
         or not articles_data.get("url")
+        or not site_name
     ):
         return 0
 
     saved_count = 0
+    name = site_name
     titles = articles_data["title"]
     urls = articles_data["url"]
-    site_name = articles_data.get("site_name", "")
-
     min_length = min(len(titles), len(urls))
+    print(f"🔖 Found {min_length} articles to save.")
 
     for i in range(min_length):
         article_data = {
-            "title": titles[i],
             "url": urls[i],
-            "site_name": site_name,
-            "content": "",
-            "summary": "",
-            "risk_level": "",
+            "title": titles[i],
+            "site_name": name,
         }
-        save_report(report_data=article_data)
-        saved_count += 1
-
+        save = WebsiteFetch.save(article_data)
+        if save:
+            saved_count += 1
+            print(f"👨‍💻 Saved article: {article_data['title']}")
+        else:
+            print(f"❌ Failed to save article: {article_data['title']}")
     return saved_count
 
 
 # 🔁 Main loop
 for site in list_of_sites:
     name = site.get("name", "Unknown")
+    # print(f"\n🌐 Scraping site: {name}")
     url = site.get("url")
     selectors = site.get("selectors")
 
@@ -107,11 +109,12 @@ for site in list_of_sites:
         soup = get_response(url)
 
         if soup:
-            data = fetch_data(soup, selectors, limit=10)
+            data = fetch_data(soup, selectors, limit=15)
 
             if data.get("title") and data.get("url"):
-                print(f"✅ {name}: {len(data['title'])} {len(data['url'])}")
-                saved = save_articles_to_db(data)
+                print(f"✅ {name}: {len(data['title'])}/{len(data['url'])}")
+                saved = save_articles_to_db(data, site_name=name)
+
                 print(f"📦 Saved {saved} new articles to database")
             else:
                 print(f"❌ No data scraped from {name}")
