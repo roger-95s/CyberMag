@@ -1,138 +1,201 @@
-"""Module providing a Flask class and JSON function Python version.
-Contains endpoints for CyberMag: home, posts, analysis, and about.
-Ensures all articles have consistent IDs and proper icon assignment.
-"""
+"""Module providing a flaks class and json function python version."""
 
+from .models import get_all_site
 from flask import Flask, jsonify
 from flask_cors import CORS
-from .models import get_all_site
 
-# Crear Flask app
+
+# Create Flask app
 app = Flask(__name__)
 CORS(app)
 
 
-# Helper para asignar ID y construir artículos
-def build_articles(articles_raw, count=None):
-    """
-    Construye una lista de artículos a partir de la data cruda.
-    Asigna un ID incremental si no existe y determina el icono basado en el título.
-    """
-    articles_data = []
-    for idx, article in enumerate(articles_raw[:count] if count else articles_raw, start=1):
-        title_lower = article.get("title", "").lower()
-        if "ai" in title_lower:
-            icon = "ai"
-        elif "ransomware" in title_lower:
-            icon = "ransomware"
-        elif "network" in title_lower:
-            icon = "network"
-        elif "threat" in title_lower:
-            icon = "threats"
-        elif "global" in title_lower:
-            icon = "globe"
-        else:
-            icon = "unknown"
-
-        articles_data.append({
-            "id": article.get("id") or idx,
-            "title": article.get("title", "No Title"),
-            "summary": article.get("summary", "No Summary"),
-            "analysis": article.get("analysis", "No Analysis"),
-            "risk_level": article.get("risk_level", "Unknown"),
-            "url": article.get("url", "No Urls"),
-            "site_name": article.get("site_name", "No Site Name"),
-            "icon": icon,
-            "date": article.get("date")
-        })
-    return articles_data
-
-
-# Endpoint /api/home
-@app.route("/api/home", methods=["GET", "POST"])
-def home():
+# Route the home page
+@app.route("/api/home", methods=["POST", "GET"])
+def home() -> tuple:
     """Home route returning a welcome message and 9 articles."""
+    # Build a welcome message displaying the app name
+    welcome_message = (
+        "👨‍💻⚒️ Welcome to CyberMag! "
+        "This is an app for managing cybersecurity reports. "
+        "Use the /post endpoint or click on a report to see more."
+    )
+    # Try to display the first 9 articles in the welcome message
+    count = 9
+
     try:
-        articles_raw = get_all_site()
-        count = 9
-        articles = build_articles(articles_raw, count)
-        welcome_message = (
-            "👨‍💻⚒️ Welcome to CyberMag! "
-            "This is an app for managing cybersecurity reports. "
-            "Use the /post endpoint or click on a report to see more."
-        )
-        if articles:
-            welcome_message += f" Latest {len(articles)} Articles of Cyber Attacks:"
-        else:
+        # Assuming this function returns analysis data
+        articles = get_all_site()
+        # if not  "analysis" is empty
+        if not articles:
             welcome_message += " No articles found."
+        else:
+            welcome_message += f"Latest {count} Articles of Cyber Attacks:"
 
-        return jsonify({"success": True, "message": welcome_message, "articles_data": articles}), 200
-    except Exception as e:
-        print(f"❌ Error in /api/home: {e}")
-        return jsonify({"success": False, "error": str(e), "articles_data": []}), 500
+        articles_data = []
+        for article in articles[:count]:
+            try:
+                title = article.get("title", "").lower()
+                if "ai" in title:
+                    icon = "ai"
+                elif "ransomware" in title:
+                    icon = "ransomware"
+                elif "network" in title:
+                    icon = "network"
+                elif "threat" in title:
+                    icon = "threats"
+                elif "global" in title:
+                    icon = "globe"
+                else:
+                    icon = "unknown"
+
+                articles_item = {
+                    "analysis": article.get("analysis", "No Analysis"),
+                    "summary": article.get("summary", "No Summary"),
+                    "risk_level": article.get("risk_level", "Unknown"),
+                    "title": article.get("title", "No Title"),
+                    "url": article.get("url", "No Urls"),
+                    "site_name": article.get("site_name", "No Site Name"),
+                    "icon": icon,
+                    "id": article.get("id"),
+                }
+                articles_data.append(articles_item)
+            except (KeyError, TypeError) as e:
+                print(f"❌ Error processing article: {e}")
+                continue
+        # Return the welcome message as a JSON response with 200 status code
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "message": welcome_message,
+                    "articles_data": articles_data,
+                }
+            ),
+            200,
+        )
+    except ImportError as e:
+        # Handle any exception that might occur when fetching analysis
+        error_message = welcome_message + f" ❌ Error: {e}"
+        print(f"❌ Error fetching analysis: {e}")
+        return (
+            jsonify({"success": False, "error": error_message}),
+            500,
+        )
 
 
-# Endpoint /api/post (todos los artículos)
+# Route to get all reports
 @app.route("/api/post", methods=["GET"])
 def post_reports():
-    """Returns all articles with count and details."""
+    """Function post_reports return True if successful,
+    len(articles) and articles, and A list of articles."""
+    # try to get all reports from the database
     try:
-        articles_raw = get_all_site()
-        articles = build_articles(articles_raw)
-        return jsonify({"success": True, "count": len(articles), "articles": articles}), 200
-    except Exception as e:
-        print(f"❌ Error in /api/post: {e}")
-        return jsonify({"success": False, "error": str(e), "articles": []}), 500
+        articles = get_all_site()
+        return (
+            jsonify({"success": True, "count": len(articles), "articles": articles}),
+            200,
+        )
+    # Handle ImportError if models.py is not found or has issues
+    except ImportError as e:
+        return ({"success": False, "error": str(e), "articles": []}), 500
 
 
-# Endpoint /api/post/<post_id> (artículo individual)
+# Uncomment the following lines if you want to add a route to save reports"
+# Optional: Add a route to get a single report by ID
 @app.route("/api/post/<int:post_id>", methods=["GET"])
 def get_single_report(post_id):
-    """
-    Returns a single article by ID.
-    If not found, returns 404 with error message.
-    """
     try:
-        articles_raw = get_all_site()
-        articles = build_articles(articles_raw)
+        articles = get_all_site()
         article = next((a for a in articles if a["id"] == post_id), None)
         if article:
-            return jsonify({"success": True, "article": article}), 200
+            return jsonify({"success": True, "article": article})
+        # Return 404 if article not found
         return jsonify({"success": False, "error": "Article not found"}), 404
-    except Exception as e:
-        print(f"❌ Error in /api/post/<post_id>: {e}")
+    except ImportError as e:
+        articles = None
+        # Handle ImportError if models.py is not found or has issues
+        print(f"❌ Error fetching report: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
 
 
-# Endpoint /api/analysis
+# Route the Analysis page
 @app.route("/api/analysis", methods=["GET"])
-def analysis():
-    """
-    Returns latest 9 articles with full analysis details.
-    Only includes title, summary, analysis, risk level, and other info.
-    """
+def analysis() -> tuple:
+    """Function returning a json response for the analysis page."""
+    # Build a welcome message displaying the app name
+    welcome_message = "👨‍💻⚒️ Welcome to CyberMag Analysis page!"
+    count = 9
+
     try:
-        articles_raw = get_all_site()
-        count = 9
-        articles = build_articles(articles_raw, count)
-        return jsonify({
-            "success": True,
-            "message": f"👨‍💻⚒️ Latest {len(articles)} Analysis of Cyber Attacks",
-            "analysis": articles,
-            "count": len(articles)
-        }), 200
-    except Exception as e:
-        print(f"❌ Error in /api/analysis: {e}")
-        return jsonify({"success": False, "error": str(e), "analysis": []}), 500
+        # Assuming this function returns analysis data
+        articles_analysis = get_all_site()
+
+        # if not articles_analysis "analysis" is empty
+        if not articles_analysis:
+            welcome_message += " No analysis found."
+        else:
+            welcome_message += f"Latest {count} Analisys of Cyber Attacks:"
+
+        articles_data = []
+        for article in articles_analysis[:count]:
+            try:
+                analysis_item = {
+                    "site_name": article.get("site_name"),
+                    "title": article.get("title", "No Title"),
+                    "summary": article.get("summary", "No Summary"),
+                    "risk_level": article.get("risk_level", "Unknown"),
+                }
+                articles_data.append(analysis_item)
+            except (KeyError, TypeError) as e:
+                print(f"❌ Error processing article: {e}")
+                continue
+
+        # Return the welcome message as a JSON response with 200 status code
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "message": welcome_message,
+                    # return only title, summary, analysis, and risk_level
+                    "analysis": articles_data,
+                    "count": len(articles_analysis),
+                }
+            ),
+            200,
+        )
+    except ImportError as e:
+        # Handle any exception that might occur when fetching analysis
+        error_message = welcome_message + f" ❌ Error fetching analysis: {e}"
+        print(f"❌ Error fetching analysis: {e}")
+        return (
+            jsonify({"success": False, "error": error_message}),
+            500,
+        )
 
 
-# Endpoint /about
+# Route the About page
 @app.route("/about", methods=["GET"])
 def about():
-    """Returns about page message."""
+    """Function returning a json python version."""
     return jsonify({"message": "👨‍💻⚒️ About page is under construction"})
 
 
+# Main entry point to run the Flask app
+# Uncomment the following line to initialize the database
 if __name__ == "__main__":
-    # Main entry point to run the Flask app
+    # import os
+
+    # print(os.getcwd())
+
+    # from .models2 import init_db, verify_db
+
+    # # Verify if the database is initialized
+    # if not verify_db():
+    #     print("❌ Database is not initialized.")
+    #     # Uncomment ONLY in the first run
+    #     init_db()  # Run it once to create Tables
+    #     exit(1)
+
+    # Run the Flask apps
     app.run(debug=True, port=5000)
