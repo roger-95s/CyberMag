@@ -188,7 +188,7 @@ if __name__ == "__main__":
 
     # print(os.getcwd())
 
-    # from .models2 import init_db, verify_db
+    # from .models import init_db, verify_db
 
     # # Verify if the database is initialized
     # if not verify_db():
