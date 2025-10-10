@@ -7,13 +7,13 @@ extracts the required data, and saves it to the database.
 
 import traceback
 import requests
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup
 
 # import save_report
 from .tag_guide import list_of_sites
 
 # Import database session and models
-from .models import get_all_site
+from .models import get_all_site, ArticleContent
 
 
 # Get a request from webpage
@@ -66,11 +66,9 @@ def fetch_content_data(soup_obj: BeautifulSoup, selector_map: dict):
         # )
 
         content_items = []
-
         for container in ancestor_containers:
-            if isinstance(container, Tag):
-                items = container.find_all(content_tag)
-                content_items.extend(items)
+            items = container.find_all(content_tag)
+            content_items.extend(items)
             # print(f"📦{container}")
 
         # print(
@@ -98,44 +96,33 @@ def fetch_content_data(soup_obj: BeautifulSoup, selector_map: dict):
         return {"content": []}
 
 
-# What if I don't save the content and just use the fetched content to make the LLm AI module to summarize and Analize the content
-# That Analysis and summary will be sabe in the data base.
+def save_content_to_db(content_data):
+    """Save the fetched content data to the database."""
+    if not content_data:
+        return 0
 
-# No need this delete and clean up. Here and in models.py too
-# def save_content_to_db(content_data):
-#     """Save the fetched content data to the database."""
-#     if not content_data:
-#         return 0
+    # counter for saved contents
+    saved_count = 0
 
-#     contents = []
-
-#     for content in content_data:
-
-#         text = content
-#         print(f"✅📦🪪⭐ {text}")
-
-#         if text:
-
-#             contents.append(text)
-#             print(f"📦🪪⭐✅ {contents}")
-
-#             try:
-#                 content_record_db = ArticleContent(contents=text)
-#                 content_record_db.save()
-#                 print(f"✅ Content saved to DB: {content_record_db}")
-
-#             except Exception as e:
-#                 print(f"❌ Error saving content to DB: {e}")
-#                 traceback.print_exc()
-#             break
-
-#             if not contents:
-#                 print("❌ No valid content to save.")
-#                 return {"content": []}
-
-#             return {"content": contents}
-
-#     return  0
+    contents = content_data
+    if not contents:
+        print("❌ No content to save.")
+        return saved_count
+    print(f"🔖 Found {len(contents)} content items to save.")
+    for i, content in enumerate(contents):
+        site_content = {
+            "content": content,
+        }
+        save = ArticleContent.save(site_content)
+        if save:
+            saved_count += 1
+            print(
+                f"📦 Saving content {i+1}/{len(contents)}: {site_content['content'][:30]}..."
+            )
+        else:
+            print("❌ Failed to save article")
+        return content
+    return saved_count
 
 
 # Debug function to inspect the selector structure
@@ -168,12 +155,11 @@ site_lookup = {site["name"]: site for site in list_of_sites}
 for i, row in enumerate(test_url, start=1):
     name = row.get("site_name", "Unknown")
     title = row.get("title", "Unknown")
-    url = row.get("url", "")
-    # url = json.loads(row.get("url", "[]"))
+    url = row.get("url", "Unknown")
 
     # debugging and visual strucute
     print(f"\n{'=' * 50}")
-    print(f"⭐ Site name: {name}")
+    print(f"⭐ Site: {name}")
     print(f"Processing article {i}/{len(test_url)}")
     print(f"✅ Title: {title}")
 
@@ -189,28 +175,25 @@ for i, row in enumerate(test_url, start=1):
 
     # Fetch and parse
     # Calling get_response to get site's responses
-    soup = get_response(url.strip())
+    soup = get_response(url)
     # if response is None or not valid
     if not soup:
         print(f"❌ Could not get soup for {url}")
         continue
-    print(f"✅ Successfully fetched and parsed {url}")
 
     # Call fetch_content_data and save content parsed
     data = fetch_content_data(soup, selector_map=selector)
     if not data:
-        print("data not found ❌")
-    print(f"Data successful: {data}")
-    # save = data.get('content')
-    # if not save:
-    #     print(f"The content failed ❌")
-    # print(f"Data successful: ")
-    # # Call save function
-    # try:
-    #     save_content_to_db(save)
-    #     # print(f"✅: {save}")
-    #     if save:
-    #         print(f"Counter saved: ")
-    # except ImportError as e:
-    #     print(f"❌ Error during fetching article content: {e}")
-    #     traceback.print_exc()
+        print(f"data no found {data}")
+    print(f"🔍 Data found: {data}")
+
+    # Call save function
+    save = []
+
+    try:
+        save = save_content_to_db(data["content"])
+        if save:
+            print("Counter was founded and saved")
+    except ImportError as e:
+        print(f"❌ Error during fetching article content: {e}")
+        traceback.print_exc()
