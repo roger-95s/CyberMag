@@ -13,7 +13,7 @@ function HomePage() {
   });
 
   useEffect(() => {
-    fetch("/api/index")
+    fetch("/api/home")
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
