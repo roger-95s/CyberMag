@@ -12,8 +12,14 @@ function HomePage() {
     error: null,
   });
 
+  // estados para el paginador
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   useEffect(() => {
-    fetch("/api/home")
+    setData((prev) => ({ ...prev, loading: true }));
+
+    fetch("/api/home?page=1&limit=9")
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
@@ -25,6 +31,9 @@ function HomePage() {
           loading: false,
           error: null,
         });
+
+        //  Guarda total de páginas desde backend
+        setTotalPages(responseData.total_pages || 1);
       })
       .catch((error) => {
         setData({
@@ -34,7 +43,7 @@ function HomePage() {
           error: error.message,
         });
       });
-  }, []);
+  }, [currentPage]); //  se volvera a ejecutar cuando cambie la página
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0a0f1a] text-gray-900 dark:text-gray-100 transition-colors duration-500">
@@ -65,11 +74,84 @@ function HomePage() {
 
         {/* Articles grid */}
         {!data.loading && !data.error && data.articles_data.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data.articles_data.map((article, index) => (
-              <ReportCard key={index} articleData={article} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {data.articles_data.map((article, index) => (
+                <ReportCard key={index} articleData={article} />
+              ))}
+            </div>
+
+            <div className="flex justify-center mt-8 space-x-2">
+              {/* Botón ir al primero */}
+              <button
+                onClick={() => setCurrentPage(1)}
+                disabled={currentPage === 1}
+                className={`px-3 py-2 rounded-md border text-sm font-medium transition-colors ${
+                  currentPage === 1
+                    ? "bg-gray-300 dark:bg-gray-800 text-gray-500 cursor-not-allowed"
+                    : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600"
+                }`}
+              >
+                « First
+              </button>
+
+              {/* Botón anterior */}
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className={`px-3 py-2 rounded-md border text-sm font-medium transition-colors ${
+                  currentPage === 1
+                    ? "bg-gray-300 dark:bg-gray-800 text-gray-500 cursor-not-allowed"
+                    : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600"
+                }`}
+              >
+                ‹ Prev
+              </button>
+
+              {/* Números de página */}
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentPage(index + 1)}
+                  className={`px-4 py-2 rounded-md border text-sm font-medium transition-colors ${
+                    currentPage === index + 1
+                      ? "bg-blue-600 text-white border-blue-600"
+                      : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 border-gray-400 hover:bg-gray-300 dark:hover:bg-gray-600"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+
+              {/* Botón siguiente */}
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className={`px-3 py-2 rounded-md border text-sm font-medium transition-colors ${
+                  currentPage === totalPages
+                    ? "bg-gray-300 dark:bg-gray-800 text-gray-500 cursor-not-allowed"
+                    : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600"
+                }`}
+              >
+                Next ›
+              </button>
+
+              {/* Botón ir al ultimo */}
+              <button
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={currentPage === totalPages}
+                className={`px-3 py-2 rounded-md border text-sm font-medium transition-colors ${
+                  currentPage === totalPages
+                    ? "bg-gray-300 dark:bg-gray-800 text-gray-500 cursor-not-allowed"
+                    : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600"
+                }`}
+              >
+                Last »
+              </button>
+            </div>
+          </>
         )}
 
         {/* No articles */}

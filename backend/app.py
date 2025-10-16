@@ -1,7 +1,7 @@
 """Module providing a flaks class and json function python version."""
 
 from .models import get_all_site
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 
@@ -21,19 +21,27 @@ def home() -> tuple:
         "Use the /post endpoint or click on a report to see more."
     )
     # Try to display the first 9 articles in the welcome message
-    count = 9
+    page = int(request.args.get("page", 1))
+    limit = int(request.args.get("limit", 10))
 
     try:
         # Assuming this function returns analysis data
         articles = get_all_site()
-        # if not  "analysis" is empty
-        if not articles:
-            welcome_message += " No articles found."
+        total_articles = len(articles)
+        total_pages = (total_articles + limit -1) // limit
+        
+        start = (page -1) * limit
+        end = start + limit
+        paginated_articles = articles[start:end]
+        
+        if not paginated_articles:
+            welcome_message += "No article found."
         else:
-            welcome_message += f"Latest {count} Articles of Cyber Attacks:"
+            welcome_message += f"Latest {len(paginated_articles)} Articles of Cyber Attacks:"
+        # if not  "analysis" is empty
 
         articles_data = []
-        for article in articles[:count]:
+        for article in paginated_articles:
             try:
                 title = article.get("title", "").lower()
                 if "ai" in title:
@@ -70,6 +78,8 @@ def home() -> tuple:
                     "success": True,
                     "message": welcome_message,
                     "articles_data": articles_data,
+                    "total_pages": total_pages,
+                    "current_page": page,
                 }
             ),
             200,
