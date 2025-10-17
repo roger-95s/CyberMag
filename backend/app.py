@@ -3,11 +3,26 @@
 from .models import get_all_site
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from .pagination import get_paginated_articles
 
 
 # Create Flask app
 app = Flask(__name__)
 CORS(app)
+
+
+# Helper function for pagination
+def get_paginated_articles(page: int, limit: int):
+    """Return paginated articles and pagination info."""
+    articles = get_all_site()
+    total_articles = len(articles)
+    total_pages = (total_articles + limit - 1) // limit
+
+    start = (page - 1) * limit
+    end = start + limit
+    paginated_articles = articles[start:end]
+
+    return paginated_articles, total_pages
 
 
 # Route the home page
@@ -25,20 +40,13 @@ def home() -> tuple:
     limit = int(request.args.get("limit", 10))
 
     try:
-        # Assuming this function returns analysis data
-        articles = get_all_site()
-        total_articles = len(articles)
-        total_pages = (total_articles + limit -1) // limit
-        
-        start = (page -1) * limit
-        end = start + limit
-        paginated_articles = articles[start:end]
-        
+        # Get paginated articles using helper
+        paginated_articles, total_pages = get_paginated_articles(page, limit)
+
         if not paginated_articles:
             welcome_message += "No article found."
         else:
             welcome_message += f"Latest {len(paginated_articles)} Articles of Cyber Attacks:"
-        # if not  "analysis" is empty
 
         articles_data = []
         for article in paginated_articles:
@@ -71,6 +79,7 @@ def home() -> tuple:
             except (KeyError, TypeError) as e:
                 print(f"❌ Error processing article: {e}")
                 continue
+
         # Return the welcome message as a JSON response with 200 status code
         return (
             jsonify(
