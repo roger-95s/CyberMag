@@ -8,6 +8,11 @@
 
 
 # def file_open():
+#     """
+#     Open json file function
+#     """
+#     prompt = []
+
 #     # Join path components
 #     prompt_path = os.path.join(
 #         os.path.dirname(__file__),
@@ -18,19 +23,19 @@
 #     # Check if a file exists
 #     if os.path.exists(prompt_path):
 #         print(f"{os.path.basename(prompt_path)} exists.")
-#         with open(prompt_path, encoding="utf-8") as f:
-#             prompt_template = json.load(f)
-#             # print(f"Json info load: {prompt_template}")
 
-#             prompt = f"{prompt_template['description']}\n\nArticle:\n{data}\n\nInstructions:\n{json.dumps(prompt_template['instructions'], indent=2, ensure_ascii=False)}"
+#     print(f"{os.path.basename(prompt_path)} does not exist.")
 
-#         return prompt
-#     else:
-#         print(f"{os.path.basename(prompt_path)} does not exist.")
+#     with open(prompt_path, encoding="utf-8") as f:
+#         prompt_template = json.load(f)
+#         # print(f"Json info load: {prompt_template}")
+#     prompt = f"{prompt_template['description']}\n\nArticle:\n{data}\n\nInstructions:\n{json.dumps(prompt_template['instructions'], indent=2, ensure_ascii=False)}"
+
+#     return prompt
 
 
 # # Function that handle ai work
-# def gemma_cyber_analyst(prompt, max_chunks=None):
+# def gemma_cyber_analyst(prompt, max_chunks):
 #     """
 #     Generate Cuybersecurity analysis from the Gemma3
 #     :param prompt: Full text prompt to send to the LLM.
@@ -70,4 +75,4 @@
 # file_open()
 
 # # Calling gemma3
-# gemma_cyber_analyst(prompt=prompt)
+# gemma_cyber_analyst(prompt=prompt, max_chunks=None)

@@ -32,7 +32,9 @@ def home() -> tuple:
         if not paginated_articles:
             welcome_message += "No article found."
         else:
-            welcome_message += f"Latest {len(paginated_articles)} Articles of Cyber Attacks:"
+            welcome_message += (
+                f"Latest {len(paginated_articles)} Articles of Cyber Attacks:"
+            )
 
         articles_data = []
         for article in paginated_articles:
