@@ -21,7 +21,6 @@ function HomePage() {
     setData((prev) => ({ ...prev, loading: true }));
 
     fetch(`/api/home?page=${currentPage}&limit=${articlesPerPage}`)
-
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
