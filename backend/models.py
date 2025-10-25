@@ -238,6 +238,7 @@ def get_all_site():
 
     return [
         {
+            "id": r.id,
             "site_name": r.site_name,
             "title": r.title,
             "url": r.url,
