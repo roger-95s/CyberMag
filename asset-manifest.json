@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/CyberMag/static/css/main.bb38dd21.css",
-    "main.js": "/CyberMag/static/js/main.70172cfc.js",
-    "static/js/488.455ebc0f.chunk.js": "/CyberMag/static/js/488.455ebc0f.chunk.js",
+    "main.css": "/CyberMag/static/css/main.6da069ea.css",
+    "main.js": "/CyberMag/static/js/main.07db1de1.js",
+    "static/js/488.1438971a.chunk.js": "/CyberMag/static/js/488.1438971a.chunk.js",
+    "static/media/Page_not_Found_404.png": "/CyberMag/static/media/Page_not_Found_404.942e3a58fe3fa32b52ec.png",
     "index.html": "/CyberMag/index.html",
-    "main.bb38dd21.css.map": "/CyberMag/static/css/main.bb38dd21.css.map",
-    "main.70172cfc.js.map": "/CyberMag/static/js/main.70172cfc.js.map",
-    "488.455ebc0f.chunk.js.map": "/CyberMag/static/js/488.455ebc0f.chunk.js.map"
+    "main.6da069ea.css.map": "/CyberMag/static/css/main.6da069ea.css.map",
+    "main.07db1de1.js.map": "/CyberMag/static/js/main.07db1de1.js.map",
+    "488.1438971a.chunk.js.map": "/CyberMag/static/js/488.1438971a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.bb38dd21.css",
-    "static/js/main.70172cfc.js"
+    "static/css/main.6da069ea.css",
+    "static/js/main.07db1de1.js"
   ]
 }
