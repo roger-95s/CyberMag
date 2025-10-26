@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/roger-95s/CyberMag/static/css/main.7aeef49e.css",
-    "main.js": "/roger-95s/CyberMag/static/js/main.fca56e52.js",
-    "static/js/488.c0560e59.chunk.js": "/roger-95s/CyberMag/static/js/488.c0560e59.chunk.js",
+    "main.css": "/roger-95s/CyberMag/static/css/main.6da069ea.css",
+    "main.js": "/roger-95s/CyberMag/static/js/main.df05aa9f.js",
+    "static/js/488.1ccb5e8e.chunk.js": "/roger-95s/CyberMag/static/js/488.1ccb5e8e.chunk.js",
     "static/media/Page_not_Found_404.png": "/roger-95s/CyberMag/static/media/Page_not_Found_404.942e3a58fe3fa32b52ec.png",
     "index.html": "/roger-95s/CyberMag/index.html",
-    "main.7aeef49e.css.map": "/roger-95s/CyberMag/static/css/main.7aeef49e.css.map",
-    "main.fca56e52.js.map": "/roger-95s/CyberMag/static/js/main.fca56e52.js.map",
-    "488.c0560e59.chunk.js.map": "/roger-95s/CyberMag/static/js/488.c0560e59.chunk.js.map"
+    "main.6da069ea.css.map": "/roger-95s/CyberMag/static/css/main.6da069ea.css.map",
+    "main.df05aa9f.js.map": "/roger-95s/CyberMag/static/js/main.df05aa9f.js.map",
+    "488.1ccb5e8e.chunk.js.map": "/roger-95s/CyberMag/static/js/488.1ccb5e8e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.7aeef49e.css",
-    "static/js/main.fca56e52.js"
+    "static/css/main.6da069ea.css",
+    "static/js/main.df05aa9f.js"
   ]
 }
