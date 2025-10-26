@@ -1,6 +1,6 @@
 {
-  "homepage": "https://roger-95s.github.io/CyberMag/",
-  "name": "cybermag",
+  "homepage": "https://github.com/roger-95s/CyberMag",
+  "name": "CyberMag",
   "license": "SEE LICENSE  IN LICENSE",
   "description": "A modern, responsive web application for managing and visualizing cybersecurity data.",
   "keywords": [
@@ -17,9 +17,19 @@
   "author": "Roger95s",
   "contributors": [
     {
+      "name": "cesartomedes",
+      "email": "cesartomedes@gmail.com",
+      "url": "https://www.linkedin.com/in/c%C3%A9sar-tomedes-6b2688178/"
+    },
+    {
+      "name": "CrafteosK",
+      "email": "kervindiaz2017@gmail.com",
+      "url": "https://www.linkedin.com/in/roger-campo-cordova-574bb930a"
+    },
+    {
       "name": "Roger95s",
       "email": "rogeresleitercc@gmail.com",
-      "url": "https://www.linkedin.com/in/roger-campo-cordova-574bb930a"
+      "url": "https://www.linkedin.com/in/roger-campo-cordova"
     }
   ],
   "repository": {
@@ -64,9 +74,10 @@
   "scripts": {
     "start": "react-scripts start",
     "start-backend": "cd cybermag/backend/app && env/binflask run --no-debugger",
-    "build": "react-scripts build",
+    "dev": "next dev",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "test:coverage": "react-scripts test --coverage --watchAll=false",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
