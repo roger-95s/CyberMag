@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 from ollama import generate
 
 
