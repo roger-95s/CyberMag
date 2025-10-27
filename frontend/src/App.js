@@ -10,7 +10,7 @@ function App() {
         <Route path="/post/:id" element={<ReportPage />} />
         <Route
           path="*"
-
+          element={<h2 className="text-center mt-10">404 - Not Found</h2>}
         />
       </Routes>
     </Router>
