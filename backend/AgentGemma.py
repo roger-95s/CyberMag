@@ -52,4 +52,3 @@ def gemma_cyber_analyst(prompt, max_chunks=None):
 
 # save ai output on data base
 
-
