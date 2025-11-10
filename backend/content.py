@@ -8,14 +8,13 @@ extracts the required data, and saves it to the database.
 import traceback
 import requests
 from bs4 import BeautifulSoup, Tag
-
 # import save_report
 from .tag_guide import list_of_sites
-
 # Import database session and models
+from .aiPromp import file_open 
 from .models import get_all_site
-
-from .AgentGemma import file_open, gemma_cyber_analyst
+from .AgentLlama import llama_cyber_analyst
+from .AgentGemma import gemma_cyber_analyst
 
 # set a limit of site for request 
 LIMIT = 1
@@ -175,6 +174,7 @@ for i, row in enumerate(test_url[2:3], start=1): # Automate test_url[2:3] to pas
                 print(f"❌ Something went wrong with data_save: {data_save}")
             if agentGemmaPrompt:
                 gemma_cyber_analyst(prompt=agentGemmaPrompt)
+                llama_cyber_analyst(prompt=agentGemmaPrompt)
                 
             else:
                 print(f"❌ Something went wrong with agentGemmaPrompt: {agentGemmaPrompt}")
