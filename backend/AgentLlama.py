@@ -1,7 +1,6 @@
 from ollama import generate
 
 
-
 # Function that handle ai work
 def llama_cyber_analyst(prompt, max_chunks=None):
     """
