@@ -36,7 +36,7 @@ def gemma_cyber_analyst(prompt, max_chunks=None):
     :param max_chunks: Limit the number of streamed chunks.
     :return: Complete response as a string.
     """
-    print("==== Generating Analysis ====")
+    print("==== Gemma3 Generating Analysis ====")
     response_text = ""
 
     try:
@@ -49,6 +49,5 @@ def gemma_cyber_analyst(prompt, max_chunks=None):
         print(f"Error generating analysis: {e}")
         return None
 
-
-# save ai output on data base
+    return response_text
 

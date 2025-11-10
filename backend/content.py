@@ -175,6 +175,7 @@ for i, row in enumerate(test_url[2:3], start=1): # Automate test_url[2:3] to pas
                 print(f"❌ Something went wrong with data_save: {data_save}")
             if agentGemmaPrompt:
                 gemma_cyber_analyst(prompt=agentGemmaPrompt)
+                
             else:
                 print(f"❌ Something went wrong with agentGemmaPrompt: {agentGemmaPrompt}")
         except ImportError as e:
