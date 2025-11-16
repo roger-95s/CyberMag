@@ -15,6 +15,7 @@ from .aiPromp import file_open
 from .models import get_all_site
 from .AgentLlama import llama_cyber_analyst
 from .AgentGemma import gemma_cyber_analyst
+from .AgentDeepseek import deepseek_cyber_analyst
 
 # set a limit of site for request 
 LIMIT = 1
@@ -175,6 +176,7 @@ for i, row in enumerate(test_url[2:3], start=1): # Automate test_url[2:3] to pas
             if agentGemmaPrompt:
                 gemma_cyber_analyst(prompt=agentGemmaPrompt)
                 llama_cyber_analyst(prompt=agentGemmaPrompt)
+                deepseek_cyber_analyst(prompt=agentGemmaPrompt)
                 
             else:
                 print(f"❌ Something went wrong with agentGemmaPrompt: {agentGemmaPrompt}")
