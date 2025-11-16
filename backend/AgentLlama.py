@@ -13,7 +13,7 @@ def llama_cyber_analyst(prompt, max_chunks=None):
     response_text = ""
 
     try:
-        for i, chunk in enumerate(generate("llama3.2:3b-instruct-fp16", prompt, stream=True)):
+        for i, chunk in enumerate(generate("llama3.2:latest", prompt, stream=True)):
             response_text += chunk.get("response", "")
             print(chunk.get("response", ""), end="", flush=True)
             if max_chunks and (i + 1) >= max_chunks:

@@ -14,7 +14,7 @@ def gemma_cyber_analyst(prompt, max_chunks=None):
     response_text = ""
 
     try:
-        for i, chunk in enumerate(generate("gemma3", prompt, stream=True)):
+        for i, chunk in enumerate(generate("gemma3:latest", prompt, stream=True)):
             response_text += chunk.get("response", "")
             print(chunk.get("response", ""), end="", flush=True)
             if max_chunks and (i + 1) >= max_chunks:
