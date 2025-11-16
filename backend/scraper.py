@@ -65,6 +65,7 @@ def fetch_data(soup_obj: BeautifulSoup, selectors_map: dict, limit: int) -> dict
 
 
 # Function to save articles to the database
+
 def save_articles_to_db(articles_data: dict, site_name: str) -> dict:
     """Save extracted articles to the database."""
     if (
@@ -122,3 +123,4 @@ for site in list_of_sites:
             print(f"❌ Could not get soup for {name}")
     else:
         print(f"⚠️ Skipping {name} — missing URL or selectors.")
+

@@ -116,6 +116,7 @@ class WebsiteFetch(Base):
 
     # Representation method for easier
     # debugging and logging
+    @classmethod
     def __repr__(self):
         return f"<WebsiteFetch(id={self.id}, title={self.title}, site_name={self.site_name}, url={self.url})>"
 

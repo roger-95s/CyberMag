@@ -10,6 +10,48 @@ from .pagination import get_paginated_articles
 app = Flask(__name__)
 CORS(app)
 
+# # Running backgound features after the fals server starts 
+# import threading
+# import time
+
+# def background_jobs():
+#     """Runs the scraper + content fetcher in the background."""
+#     from .scraper import mainScraperCaller
+#     from .content import mainContentCaller
+
+#     print("⏳ Waiting 5 seconds for Flask to fully start...")
+#     time.sleep(5)  # Give Flask time to boot
+
+#     print("🚀 Starting background tasks...")
+#     try:
+#         mainScraperCaller()
+#         print("✅ Scraper completed successfully.")
+#     except Exception as e:
+#         print(f"❌ Error running scraper: {e}")
+
+#     try:
+#         mainContentCaller()
+#         print("✅ Content processing completed successfully.")
+#     except Exception as e:
+#         print(f"❌ Error running content pipeline: {e}")
+
+
+# def background_jobs():
+#     from .scraper import mainScraperCaller
+#     from .content import mainContentCaller
+#     import time
+
+#     while True:
+#         try:
+#             print("🚀 Running scraper...")
+#             mainScraperCaller()
+#             print("🚀 Running content pipeline...")
+#             mainContentCaller()
+#         except Exception as e:
+#             print(f"❌ Error in background job: {e}")
+#         print("🕒 Sleeping for 3 hours...")
+#         time.sleep(3 * 60 * 60)  # run every 3 hours
+
 
 # Route the home page
 @app.route("/api/home", methods=["POST", "GET"])
@@ -32,7 +74,9 @@ def home() -> tuple:
         if not paginated_articles:
             welcome_message += "No article found."
         else:
-            welcome_message += f"Latest {len(paginated_articles)} Articles of Cyber Attacks:"
+            welcome_message += (
+                f"Latest {len(paginated_articles)} Articles of Cyber Attacks:"
+            )
 
         articles_data = []
         for article in paginated_articles:
@@ -193,7 +237,7 @@ if __name__ == "__main__":
 
     # print(os.getcwd())
 
-    # from .models2 import init_db, verify_db
+    # from .models import init_db, verify_db
 
     # # Verify if the database is initialized
     # if not verify_db():

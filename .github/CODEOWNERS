@@ -2,17 +2,17 @@
 # Replace @your-username and @team-member with actual GitHub usernames when known.
 
 # Backend code owner
-/backend/ @your-username
+/backend/ @roger-95s 
 
 # Frontend code owner
-/frontend/ @your-cesartomedes
+/frontend/ @roger-95s
 
 # Configuration files
-/requirements.txt @your-username
-/package.json @your-username
+/requirements.txt @roger-95s
+/package.json @roger-95s
 
 # General files
-/.github/ @your-username
+/.github/ @roger-95s
 
 # Example placeholder for future team members
 # /backend/ @team-backend-lead
