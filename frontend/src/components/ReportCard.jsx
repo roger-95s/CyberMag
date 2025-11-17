@@ -1,8 +1,11 @@
+"use client";
+
 import React, { useState } from "react";
 import { ShieldCheck, Lock, Globe, BrainCircuit, Bug } from "lucide-react";
 import { Link } from "react-router-dom";
+import { HoverBorderGradient } from "./ui/HoverBorderGradiente"; // relative path to the created component
 
-// Mapa de íconos basado en el tipo de artículo
+// Icon map based on item type
 const iconMap = {
   ai: <BrainCircuit className="w-10 h-10 text-cyan-400" />,
   threats: <ShieldCheck className="w-10 h-10 text-cyan-400" />,
@@ -11,11 +14,12 @@ const iconMap = {
   globe: <Globe className="w-10 h-10 text-cyan-400" />,
 };
 
-// Mapa de colores según el nivel de riesgo
+// Color map according to risk level (only used for tooltip now)
 const riskColors = {
   critical: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
   high: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300",
-  medium: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+  medium:
+    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
   low: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
   unknown: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400",
 };
@@ -28,9 +32,6 @@ function ReportCard({ articleData }) {
   const icon = iconMap[articleData.icon] || (
     <ShieldCheck className="w-10 h-10 text-cyan-400" />
   );
-
-  const risk = articleData.risk_level?.toLowerCase() || "unknown";
-  const riskColorClass = riskColors[risk] || riskColors["unknown"];
 
   const fetchAnalysis = async () => {
     setLoadingAnalysis(true);
@@ -52,68 +53,124 @@ function ReportCard({ articleData }) {
   };
 
   return (
-    <div className="group relative rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-in-out">
-      {/* Cabecera */}
-      <div className="flex items-start gap-4 mb-4">
-        <div className="flex-shrink-0">{icon}</div>
-        <div className="flex flex-col">
-          {articleData.date && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">
-              {articleData.date}
-            </p>
-          )}
-          <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-            <Link
-              to={`/post/${articleData.id}`}
-              className="hover:underline text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
-            >
-              {articleData.title ?? "Untitled Article"}
-            </Link>
-          </h2>
+    // Wrapper HoverBorderGradient for the entire card
+    <HoverBorderGradient
+      as="div"
+      containerClassName="relative w-full max-w-[500px]"
+      className={`
+        rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700
+        shadow-sm p-6 transition-all duration-400 ease-out
+        hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(0,255,255,0.2)]
+      `}
+    >
+      {/* Header: Icon + date + title + risk indicator */}
+      <div className="flex justify-between items-start mb-6">
+        {/* Icon + text */}
+        <div className="flex items-start gap-5">
+          <div className="flex-shrink-0">{icon}</div>
+
+          <div className="flex flex-col">
+            {articleData.date && (
+              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">
+                {articleData.date}
+              </p>
+            )}
+
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-50 leading-snug">
+              <Link
+                to={`/post/${articleData.id}`}
+                className="hover:underline text-blue-600 dark:text-blue-400"
+              >
+                {articleData.title ?? "Untitled Article"}
+              </Link>
+            </h2>
+          </div>
+        </div>
+        {/* Risk indicator converted to color + tooltip */}{" "}
+        <div className="relative group/tooltip">
+          <span
+            className="
+              w-3.5 h-3.5 rounded-full bg-gray-400 dark:bg-gray-500 
+              animate-pulse cursor-pointer block
+            "
+          ></span>
+
+          {/* Tooltip */}
+          <div
+            className="
+              absolute right-0 top-6 opacity-0 group-hover/tooltip:opacity-100
+              transition-all duration-300 pointer-events-none
+              bg-black text-white text-xs py-1 px-2 rounded-md shadow-lg
+            "
+          >
+            Risk Level: {articleData.risk_level ?? "Unknown"}
+          </div>
         </div>
       </div>
 
-      {/* Resumen */}
-      <div className="text-sm mb-4">
-        <p className="text-gray-600 dark:text-gray-300 mb-2 leading-relaxed">
-          <strong>Summary:</strong>{" "}
-          {articleData.summary ? (
-            articleData.summary
-          ) : (
-            <span className="italic text-gray-400 dark:text-gray-500">
-              [No summary from backend]
-            </span>
-          )}
-        </p>
-      </div>
+      {/* Summary */}
+      <p className="text-[15px] text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+        <strong>Summary:</strong>{" "}
+        {articleData.summary ? (
+          articleData.summary
+        ) : (
+          <span className="italic text-gray-400 dark:text-gray-500">
+            [No summary from backend]
+          </span>
+        )}
+      </p>
 
-      {/* Pie: nivel de riesgo + botón de análisis */}
+      {/* Footer: Learn More + button + */}
       <div className="flex items-center justify-between mt-4">
-        <span
-          className={`px-3 py-1 rounded-full text-xs font-medium ${riskColorClass}`}
+        {/* Learn More → (animated and on a single line) */}
+        <button
+          className="
+          group/learn relative flex items-center text-blue-500 text-sm font-medium 
+          whitespace-nowrap overflow-hidden
+        "
         >
-          Risk Level: {articleData.risk_level ?? "Unknown"}
-        </span>
+          {/* Hidden text before hover */}
+          <span
+            className="
+            max-w-0 opacity-0 
+            group-hover/learn:max-w-[200px] group-hover/learn:opacity-100
+            transition-all duration-300 ease-out whitespace-nowrap
+          "
+          >
+            Learn more
+          </span>
+
+          {/* Arrow */}
+          <span
+            className="
+            text-lg ml-1 transition-transform duration-300
+            group-hover/learn:translate-x-1
+          "
+          >
+            →
+          </span>
+        </button>
+
+        {/* Button + */}
         <button
           onClick={fetchAnalysis}
           disabled={loadingAnalysis}
-          className="ml-4 text-sm text-blue-500 hover:underline disabled:text-gray-400"
+          className="
+            w-9 h-9 flex items-center justify-center text-lg rounded-full
+            border border-gray-400 dark:border-gray-600
+            hover:bg-gray-200 dark:hover:bg-gray-700 transition
+          "
         >
-          {/* analisis aparecera cuando tengamos, por ahora esta en una condicional para que ESlint no nos de mola con ello */}
-          {analysis && (
-            <span className="text-sm italic text-gray-500 dark:text-gray-400">
-              {analysis.summary ?? "No analysis available"}
-            </span>
-          )}
+          +
         </button>
       </div>
 
       {error && (
-        <p className="mt-2 text-sm text-red-500">
+        <p className="mt-3 text-sm text-red-500">
           Error fetching analysis: {error}
         </p>
       )}
-    </div>
+    </HoverBorderGradient>
   );
 }
 
