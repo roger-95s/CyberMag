@@ -66,7 +66,7 @@ def fetch_data(soup_obj: BeautifulSoup, selectors_map: dict, limit: int) -> dict
 
 # Function to save articles to the database
 
-def save_articles_to_db(articles_data: dict, site_name: str) -> dict:
+def save_articles_to_db(articles_data: dict, site_name: str) -> int:
     """Save extracted articles to the database."""
     if (
         not articles_data
@@ -89,7 +89,8 @@ def save_articles_to_db(articles_data: dict, site_name: str) -> dict:
             "title": titles[i],
             "site_name": name,
         }
-        save = WebsiteFetch.save(article_data)
+        fetch_instance = WebsiteFetch(**article_data)
+        save = fetch_instance.save()
         if save:
             saved_count += 1
             print(f"👨‍💻 Saved article: {article_data['title']}")
@@ -110,7 +111,7 @@ for site in list_of_sites:
         soup = get_response(url)
 
         if soup:
-            data = fetch_data(soup, selectors, limit=15)
+            data = fetch_data(soup, selectors, limit=1)
 
             if data.get("title") and data.get("url"):
                 print(f"✅ {name}: {len(data['title'])}/{len(data['url'])}")

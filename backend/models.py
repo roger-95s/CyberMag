@@ -1,6 +1,7 @@
 """Module providing database models and functions."""
 
 from pathlib import Path
+from requests import Session
 from sqlalchemy import create_engine, Column, Integer, String, Text, inspect, ForeignKey
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -116,7 +117,6 @@ class WebsiteFetch(Base):
 
     # Representation method for easier
     # debugging and logging
-    @classmethod
     def __repr__(self):
         return f"<WebsiteFetch(id={self.id}, title={self.title}, site_name={self.site_name}, url={self.url})>"
 
@@ -133,41 +133,39 @@ class ArticleContent(Base):
     content = Column(Text, nullable=True)
 
     # save method to add a new website fetch record
-    def save(self):
+    @classmethod
+    def save(cls, article_data: dict) -> "ArticleContent | None":
         """
-        Saves a report to the database.
-        report_data should be a dictionary with
-        keys: title, url, summary, risk_level.
+        Saves article content to the database.
+        article_data should be a dictionary with
+        keys: content.
         """
-        session = SessionLocal()
         try:
-            # Existence check point
+            session = SessionLocal()
             exists = (
-                session.query(ArticleContent)
-                .filter_by(
-                    content=self["content"],
-                )
+                session.query(cls)
+                .filter(cls.content == article_data.get("content"))
                 .first()
             )
-            # If it exists, print a message and return
             if exists:
-                print(f"⚠️ WebsiteFetch already exists: {self}")
-                return self
-            # If it not in report create a new report
-            new_content = ArticleContent(**self)
-            session.add(new_content)
-            session.commit()
-            print(f"✅ Content Saved to DB: {new_content}...")
+                print(f"⚠️ ArticleContent already exists: {article_data.get('content')}")
+                return exists
 
-        except ImportError as e:
-            print(f"❌ Error saving report: {e}")
+            new_article = cls(**article_data)
+            session.add(new_article)
+            session.commit()
+            print(f"✅ ArticleContent saved")
+            return new_article
+        except Exception as e:
+            print(f"❌ Error saving article content: {e}")
             session.rollback()
+            return None
         finally:
             session.close()
-        return self
 
+    # Representation method for easier debugging and logging
     def __repr__(self):
-        return f"<ArticleContent(id={self.id}, content={self.content})>"
+        return f"<WebsiteFetch(id={self.id}, title={self.title}, site_name={self.site_name}, url={self.url})>"
 
 
 # Table LLM Analysis and Summary
