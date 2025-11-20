@@ -38,7 +38,7 @@ const Header = () => {
         <div className="container mx-auto flex items-center justify-between px-4 py-3">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <Shield className="text-cyan-500 w-6 h-6 dark:text-cyan-400" />
+            <Shield className="text-cyan-500 w-10 h-10 dark:text-cyan-400" />
             <span className="text-gray-900 dark:text-white font-bold text-xl tracking-wide">
               CyberMag
             </span>
@@ -86,11 +86,10 @@ const Header = () => {
 
         {/* Mobile Navigation Dropdown */}
         <div
-          className={`md:hidden px-4 pb-4 transition-all duration-300 ease-in-out ${
-            menuOpen
+          className={`md:hidden px-4 pb-4 transition-all duration-300 ease-in-out ${menuOpen
               ? "max-h-60 opacity-100"
               : "max-h-0 opacity-0 overflow-hidden"
-          }`}
+            }`}
         >
           <nav className="flex flex-col gap-3 text-sm font-medium text-gray-700 dark:text-gray-300">
             {["NEWS", "REPORTS", "ANALYSIS", "ABOUT"].map((item) => (
