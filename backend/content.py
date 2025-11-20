@@ -48,7 +48,7 @@ def get_response(page_url: str) -> BeautifulSoup | None:
 
 
 # fetch for articles content_selector tags
-def fetch_content_data(soup_obj: BeautifulSoup, selector_map: dict):
+def fetch_content_data(soup_obj: BeautifulSoup, selector_map: dict, limit: int) -> dict:
     """fetch articles' content using the provided selectors"""
     try:
         # print(f"🔍 Selector map structure: {selector_map}")
@@ -62,7 +62,7 @@ def fetch_content_data(soup_obj: BeautifulSoup, selector_map: dict):
         content_ancestor_tag = selector_map["content_selector"]["ancestor_tag"]
         content_class = selector_map["content_selector"]["ancestor_class"]
         ancestor_containers = soup_obj.find_all(
-            content_ancestor_tag, class_=content_class
+            content_ancestor_tag, class_=content_class, limit=limit
         )
 
         # print(
@@ -129,7 +129,7 @@ print(f"\n🔍 Fetched {len(test_url)} articles from the database for processing
 site_lookup = {site["name"]: site for site in list_of_sites}
 
 # 🔁 Main loopIterate over all DB articles
-for i, row in enumerate(test_url[2:3], start=1): # Automate test_url[2:3] to pasa limit depend on index 
+for i, row in enumerate(test_url[1:2], start=1): # Automate test_url[2:3] to pasa limit depend on index 
     # add Limit of article past
     name = row.get("site_name", "Unknown")
     title = row.get("title", "Unknown")
@@ -162,7 +162,7 @@ for i, row in enumerate(test_url[2:3], start=1): # Automate test_url[2:3] to pas
     print(f"✅ Successfully fetched and parsed {url}")
 
     # Call fetch_content_data and save content parsed
-    data = fetch_content_data(soup, selector_map=selector) # add Limit of article past
+    data = fetch_content_data(soup, selector_map=selector, limit=LIMIT) # add Limit of article past
     if not data:
         print("data not found ❌")
     print(f"✅ Data successful")
@@ -174,12 +174,12 @@ for i, row in enumerate(test_url[2:3], start=1): # Automate test_url[2:3] to pas
             else:   
                 print(f"❌ Something went wrong with data_save: {data_save}")
             if agentGemmaPrompt:
-                gemma_cyber_analyst(prompt=agentGemmaPrompt)
-                llama_cyber_analyst(prompt=agentGemmaPrompt)
-                deepseek_cyber_analyst(prompt=agentGemmaPrompt)
-                
+                # gemma_cyber_analyst(prompt=agentGemmaPrompt)
+                # llama_cyber_analyst(prompt=agentGemmaPrompt)
+                # deepseek_cyber_analyst(prompt=agentGemmaPrompt)
+                print(f"✅ Something went right with agentGemmaPrompt:") 
             else:
-                print(f"❌ Something went wrong with agentGemmaPrompt: {agentGemmaPrompt}")
+                print(f"❌ Something went wrong with agentGemmaPrompt:")
         except ImportError as e:
             print(f"Somethink went wrong traying to implement agent ai tool: {e}")
         # print(f"{data_save}")

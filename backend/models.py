@@ -19,6 +19,28 @@ SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 
 
+# Verify if the database is initialized
+def verify_db():
+    """Function to verify if the database is initialized."""
+
+    if not DATABASE_PATH.exists():
+        print(
+            f"❌ Database file does not exist at {DATABASE_PATH}. Please run init_db() first."
+        )
+        return False
+
+    inspector = inspect(engine)
+    tables = inspector.get_table_names()
+    if "reports" not in tables:
+        print(
+            f"❌ 'reports' table does not exist. {tables} Please run init_db() first."
+        )
+        return False
+
+    print(f"✅ Database is initialized and 'reports': {DATABASE_PATH} table exists.")
+    return True
+
+
 # report table model
 class Report(Base):
     """Class representing a report in the database."""
@@ -76,152 +98,47 @@ class WebsiteFetch(Base):
     title = Column(String, index=True)
     url = Column(String, unique=True, index=True)
 
-    # save method to add a new website fetch record
+    # Save function to store the site_names, titles, and urls in the database to be use for ai analysis
     def save(self):
         """
-        Saves a report to the database.
+        Saves site_names, titles, and urls into the database.
         report_data should be a dictionary with
-        keys: title, url, summary, risk_level.
+        keys: site_name, title, url.
         """
         session = SessionLocal()
         try:
-            # Existence check point if the record already exists
+            # Existence check point if the site_name or title or url already exists
             exists = (
                 session.query(WebsiteFetch)
                 .filter_by(
-                    site_name=self["site_name"],
-                    title=self["title"],
-                    url=self["url"],
+                    site_name=self.site_name,
+                    title=self.title,
+                    url=self.url,
                 )
                 .first()
             )
-            # If it exists, print a message and return
+            # If true print site_name and title exists
             if exists:
                 print(
-                    f"⚠️ WebsiteFetch already exists: {self['site_name']}: {self['title']}"
+                    f"⚠️ WebsiteFetch already exists: {self.site_name}: {self.title}"
                 )
-                return self
 
-            # If it doesn't exist, create and add the new record
-            new_website = WebsiteFetch(**self)
+            # If fetched sites info doesn't exist, create and add the new record
+            new_website = WebsiteFetch(self)
             session.add(new_website)
             session.commit()
             # session.refresh(new_website)
-            print(f"✅ WebsiteFetch saved: {self['site_name']}: {self['title']}")
+            print(f"✅ Success WebsiteFetch was saved: {self.site_name}: {self.title}")
         except ImportError as e:
             print(f"❌ Error saving website fetch: {e}")
             session.rollback()
         finally:
             session.close()
-        return self
 
     # Representation method for easier
     # debugging and logging
     def __repr__(self):
         return f"<WebsiteFetch(id={self.id}, title={self.title}, site_name={self.site_name}, url={self.url})>"
-
-
-# Table web articles content
-class ArticleContent(Base):
-    """
-    Table to store article content after fetched from content.py
-    Columns {ForeignKey, content}.
-    """
-
-    __tablename__ = "article_content"
-    id = Column(Integer, primary_key=True, index=True)
-    content = Column(Text, nullable=True)
-
-    # save method to add a new website fetch record
-    @classmethod
-    def save(cls, article_data: dict) -> "ArticleContent | None":
-        """
-        Saves article content to the database.
-        article_data should be a dictionary with
-        keys: content.
-        """
-        try:
-            session = SessionLocal()
-            exists = (
-                session.query(cls)
-                .filter(cls.content == article_data.get("content"))
-                .first()
-            )
-            if exists:
-                print(f"⚠️ ArticleContent already exists: {article_data.get('content')}")
-                return exists
-
-            new_article = cls(**article_data)
-            session.add(new_article)
-            session.commit()
-            print(f"✅ ArticleContent saved")
-            return new_article
-        except Exception as e:
-            print(f"❌ Error saving article content: {e}")
-            session.rollback()
-            return None
-        finally:
-            session.close()
-
-    # Representation method for easier debugging and logging
-    def __repr__(self):
-        return f"<WebsiteFetch(id={self.id}, title={self.title}, site_name={self.site_name}, url={self.url})>"
-
-
-# Table LLM Analysis and Summary
-class LLManalysis(Base):
-    """
-    Table to store LLM analysis and summary
-    Columns {ForeignKey, analysis, summary, risk_level}.
-    """
-
-    __tablename__ = "llm_analysis"
-
-    id = Column(Integer, primary_key=True, index=True)
-    # article_content = Column(Integer, ForeignKey("article_content.content"),
-    # cascade="all, delete", nullable=False)
-    analysis = Column(Text, nullable=True)
-    summary = Column(Text, nullable=True)
-    risk_level = Column(String(50), nullable=True)
-
-    def __repr__(self):
-        return f"<LLMAnalysis(id={self.id}, analysis={self.analysis}, summary={self.summary} risk_level={self.risk_level})>"
-
-
-# Create tables if not already created
-def init_db():
-    """Function initializing database table. Run it once to create the database."""
-
-    # Create all tables
-    Base.metadata.create_all(bind=engine)
-    print(f"✅ Database initialized at {DATABASE_PATH}")
-
-    # Verify if the table exists
-    inspector = inspect(engine)
-    tables = inspector.get_table_names()
-    print(f"Tables in the database: {tables}")
-
-
-# Verify if the database is initialized
-def verify_db():
-    """Function to verify if the database is initialized."""
-
-    if not DATABASE_PATH.exists():
-        print(
-            f"❌ Database file does not exist at {DATABASE_PATH}. Please run init_db() first."
-        )
-        return False
-
-    inspector = inspect(engine)
-    tables = inspector.get_table_names()
-    if "reports" not in tables:
-        print(
-            f"❌ 'reports' table does not exist. {tables} Please run init_db() first."
-        )
-        return False
-
-    print(f"✅ Database is initialized and 'reports': {DATABASE_PATH} table exists.")
-    return True
 
 
 # Function that returns all stored websites_fetch and article_content as a list of dicts

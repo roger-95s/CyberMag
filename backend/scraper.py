@@ -7,7 +7,7 @@ extracts the required data, and saves it to the database.
 
 import traceback
 from bs4 import BeautifulSoup
-from .models import WebsiteFetch
+from .models import WebsiteFetch 
 from .tag_guide import list_of_sites
 from .content import get_response
 
@@ -64,22 +64,24 @@ def fetch_data(soup_obj: BeautifulSoup, selectors_map: dict, limit: int) -> dict
         }
 
 
-# Function to save articles to the database
-
-def save_articles_to_db(articles_data: dict, site_name: str) -> int:
+def save_articles_to_db(articles_data, name: str) -> int:
     """Save extracted articles to the database."""
+
+    # Validation check of articles_data 
     if (
         not articles_data
         or not articles_data.get("title")
         or not articles_data.get("url")
-        or not site_name
+        or not name.strip()
     ):
         return 0
-
+    
+    # Initialize saved articles counter
     saved_count = 0
-    name = site_name
-    titles = articles_data["title"]
-    urls = articles_data["url"]
+
+    site_name = name.strip()
+    titles = articles_data.get("title", [])
+    urls = articles_data.get("url", [])
     min_length = min(len(titles), len(urls))
     print(f"🔖 Found {min_length} articles to save.")
 
@@ -87,41 +89,44 @@ def save_articles_to_db(articles_data: dict, site_name: str) -> int:
         article_data = {
             "url": urls[i],
             "title": titles[i],
-            "site_name": name,
+            "site_name": site_name,
         }
-        fetch_instance = WebsiteFetch(**article_data)
-        save = fetch_instance.save()
-        if save:
+        # Save each article using the save method from models.py
+        website_fetch = WebsiteFetch(**article_data)
+        if website_fetch:
             saved_count += 1
             print(f"👨‍💻 Saved article: {article_data['title']}")
-        else:
+        elif website_fetch is None:
             print(f"❌ Failed to save article: {article_data['title']}")
+        else:
+            print(f"❌ Article already exists: {article_data['title']}")    
+           
     return saved_count
 
 
 # 🔁 Main loop
 for site in list_of_sites:
-    name = site.get("name", "Unknown")
+    site_name = site.get("name", "Unknown")
     # print(f"\n🌐 Scraping site: {name}")
     url = site.get("url")
     selectors = site.get("selectors")
 
     if url and selectors:
-        print(f"\n🔍 Processing: {name}")
+        print(f"\n🔍 Processing: {site_name}")
         soup = get_response(url)
 
         if soup:
             data = fetch_data(soup, selectors, limit=1)
 
             if data.get("title") and data.get("url"):
-                print(f"✅ {name}: {len(data['title'])}/{len(data['url'])}")
-                saved = save_articles_to_db(data, site_name=name)
+                print(f"✅ {site_name}: {len(data['title'])}/{len(data['url'])}")
+                saved = save_articles_to_db(data, name=site_name)
 
-                print(f"📦 Saved {saved} new articles to database")
+                print(f"📦 Saved  new articles to database")
             else:
-                print(f"❌ No data scraped from {name}")
+                print(f"❌ No data scraped from {site_name}")
         else:
-            print(f"❌ Could not get soup for {name}")
+            print(f"❌ Could not get soup for {site_name}")
     else:
-        print(f"⚠️ Skipping {name} — missing URL or selectors.")
+        print(f"⚠️ Skipping {site_name} — missing URL or selectors.")
 
