@@ -61,7 +61,7 @@ def home() -> tuple:
     welcome_message = (
         "👨‍💻⚒️ Welcome to CyberMag! "
         "This is an app for managing cybersecurity reports. "
-        "Use the /post endpoint or click on a report to see more."
+        "Use the /post endpoint or click on a Post button to see more."
     )
     # Try to display the first 9 articles in the welcome message
     page = int(request.args.get("page", 1))
@@ -134,7 +134,7 @@ def home() -> tuple:
 
 
 # Route to get all reports
-@app.route("/api/post", methods=["GET"])
+@app.route("/api/posts", methods=["post", "GET"])
 def post_reports():
     """Function post_reports return True if successful,
     len(articles) and articles, and A list of articles."""

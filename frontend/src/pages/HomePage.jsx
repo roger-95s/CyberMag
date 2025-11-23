@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
-import Hero from "../components/Hero";
-import ReportCard from "../components/ReportCard";
-import "../App.css";
+import Hero from "../components/Hero"
+import ReportCard from "../components/ReportCard"
 
 function HomePage() {
   const [data, setData] = useState({
@@ -10,14 +9,17 @@ function HomePage() {
     articles_data: [],
     loading: true,
     error: null,
+
   });
 
-  // estados para el paginador
+  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const articlesPerPage = 9;
 
+
   useEffect(() => {
+
     setData((prev) => ({ ...prev, loading: true }));
 
     fetch(`/api/home?page=${currentPage}&limit=${articlesPerPage}`)
@@ -33,8 +35,6 @@ function HomePage() {
           loading: false,
           error: null,
         });
-
-        //  Guarda total de páginas desde backend
         setTotalPages(responseData.total_pages || 1);
       })
       .catch((error) => {
@@ -42,16 +42,14 @@ function HomePage() {
           message: "",
           articles_data: [],
           loading: false,
-          error: error.message,
         });
       });
-  }, [currentPage]); //  se volvera a ejecutar cuando cambie la página
+  }, [currentPage]);
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0a0f1a] text-gray-900 dark:text-gray-100 transition-colors duration-500">
       <Header />
       <Hero />
-
       <div className="container mx-auto p-4">
         {/* Loading */}
         {data.loading && (
@@ -73,7 +71,6 @@ function HomePage() {
             <h2 className="text-2xl font-semibold">{data.message}</h2>
           </div>
         )}
-
         {/* Articles grid */}
         {!data.loading && !data.error && data.articles_data.length > 0 && (
           <>
