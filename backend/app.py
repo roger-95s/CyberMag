@@ -92,51 +92,19 @@ def home() -> tuple:
                 f"Latest {len(paginated_articles)} Articles of Cyber Attacks:"
             )
 
-        articles_data = []
-        for article in paginated_articles:
-            try:
-                title = article.get("title", "").lower()
-                if "ai" in title:
-                    icon = "ai"
-                elif "ransomware" in title:
-                    icon = "ransomware"
-                elif "network" in title:
-                    icon = "network"
-                elif "threat" in title:
-                    icon = "threats"
-                elif "global" in title:
-                    icon = "globe"
-                else:
-                    icon = "unknown"
-
-                articles_item = {
-                    "analysis": article.get("analysis", "No Analysis"),
-                    "summary": article.get("summary", "No Summary"),
-                    "risk_level": article.get("risk_level", "Unknown"),
-                    "title": article.get("title", "No Title"),
-                    "url": article.get("url", "No Urls"),
-                    "site_name": article.get("site_name", "No Site Name"),
-                    "icon": icon,
-                    "id": article.get("id"),
-                }
-                articles_data.append(articles_item)
-            except (KeyError, TypeError) as e:
-                print(f"❌ Error processing article: {e}")
-                continue
-
         # Return the welcome message as a JSON response with 200 status code
         return (
             jsonify(
                 {
                     "success": True,
                     "message": welcome_message,
-                    "articles_data": articles_data,
                     "total_pages": total_pages,
                     "current_page": page,
                 }
             ),
             200,
         )
+    
     except ImportError as e:
         # Handle any exception that might occur when fetching analysis
         error_message = welcome_message + f" ❌ Error: {e}"
@@ -215,7 +183,6 @@ def reports_card():
             jsonify({"success": False, "error": error_message}),
             500,
         )
-
 
 
 # Uncomment the following lines if you want to add a route to save reports"
