@@ -102,24 +102,6 @@ def fetch_content_data(soup_obj: BeautifulSoup, selector_map: dict, limit: int) 
         return {"content": []}
 
 
-# Debug function to inspect the selector structure
-def debug_selector():
-    """Debug function to inspect the imported selectors"""
-    print("🔍 Debugging selector structure...")
-    print(f"Number of sites in list_of_sites: {len(list_of_sites)}")
-
-    for i, site in enumerate(list_of_sites):
-        print(f"\n📍Site {i+1}: {site.get('name')}")
-        if "selectors" in site:
-            print(f" Selectors: {site['selectors'].get('content_selector')}")
-        else:
-            print(" ❌ No selectors found")
-
-
-# Run debug
-debug_selector()
-
-
 # Connect the databse cybermag.db en stract each url
 # Make sure that each link is pair with it site selectors.
 test_url = get_all_site()
@@ -186,18 +168,3 @@ for i, row in enumerate(test_url[1:2], start=1): # Automate test_url[2:3] to pas
     except Exception as e: 
         print(f"Something went wrong: {e}")
 
-    # save = data.get('content')
-    # if not save:
-    #     print(f"The content failed ❌")
-    # print(f"Data successful: ")
-    # # Call save function
-    # try:
-    #     save_content_to_db(save)
-    #     # print(f"✅: {save}")
-    #     if save:
-    #         print(f"Counter saved: ")
-    # except ImportError as e:
-    #     print(f"❌ Error during fetching article content: {e}")
-    #     traceback.print_exc()
-
-    # prompt = file_open(data=data)
