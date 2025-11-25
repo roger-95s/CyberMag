@@ -6,6 +6,7 @@ import ReportCard from "../components/ReportCard"
 function HomePage() {
   const [data, setData] = useState({
     message: "",
+    articles_data: [],
     loading: true,
     error: null,
 
@@ -30,6 +31,7 @@ function HomePage() {
       .then((responseData) => {
         setData({
           message: responseData.message || "Welcome to CyberMag!",
+          articles_data: responseData.articles_data || [],
           loading: false,
           error: null,
         });
@@ -38,6 +40,7 @@ function HomePage() {
       .catch((error) => {
         setData({
           message: "",
+          articles_data: [],
           loading: false,
         });
       });
