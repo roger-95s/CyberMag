@@ -3,7 +3,6 @@
 from .models import get_all_site
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from .pagination import get_paginated_articles
 
 
 # Create Flask app
@@ -51,6 +50,21 @@ CORS(app)
 #             print(f"❌ Error in background job: {e}")
 #         print("🕒 Sleeping for 3 hours...")
 #         time.sleep(3 * 60 * 60)  # run every 3 hours
+
+
+# Pagination funtions 
+def get_paginated_articles(page: int, limit: int):
+    """Return paginate artics and pagination info.."""
+    
+    articles = get_all_site()
+    total_articles = len(articles)
+    total_pages = (total_articles + limit - 1) // limit
+
+    start = (page - 1) * limit
+    end = start + limit
+    paginated_articles = articles[start:end]
+
+    return paginated_articles, total_pages
 
 
 # Route the home page
@@ -135,19 +149,73 @@ def home() -> tuple:
 
 # Route to get all reports
 @app.route("/api/posts", methods=["post", "GET"])
-def post_reports():
+def reports_card():
     """Function post_reports return True if successful,
     len(articles) and articles, and A list of articles."""
-    # try to get all reports from the database
+    
+    # This funtion will handle the reportcard all of our post will be fetch from here to the front-end
+    message = (
+        "Welcome to CyberMag!!! "
+        "Hi This is a article that we scrape and used AI to analyze it"
+    )
+
+    # Asign get_all_site() to articles, and use it to import Reports db    
+    articles = get_all_site()
+    
     try:
-        articles = get_all_site()
+        articles_data = []
+        
+        for article in articles:
+            try:
+                title = article.get("title", "").lower()
+                if "ai" in title:
+                    icon = "ai"
+                elif "ransomware" in title:
+                    icon = "ransomware"
+                elif "network" in title:
+                    icon = "network"
+                elif "threat" in title:
+                    icon = "threats"
+                elif "global" in title:
+                    icon = "globe"
+                else:
+                    icon = "unknown"
+
+                articles_item = {
+                    "analysis": article.get("analysis", "No Analysis"),
+                    "summary": article.get("summary", "No Summary"),
+                    "risk_level": article.get("risk_level", "Unknown"),
+                    "title": article.get("title", "No Title"),
+                    "url": article.get("url", "No Urls"),
+                    "site_name": article.get("site_name", "No Site Name"),
+                    "icon": icon,
+                    "id": article.get("id"),
+                }
+                articles_data.append(articles_item)
+            except (KeyError, TypeError) as e:
+                print(f"❌ Error processing article: {e}")
+                continue
+
+        # Return the welcome message as a JSON response with 200 status code
         return (
-            jsonify({"success": True, "count": len(articles), "articles": articles}),
+            jsonify(
+                {
+                    "articles_data": articles_data,
+                    "success": True,
+                    "message": message,
+                }
+            ),
             200,
         )
-    # Handle ImportError if models.py is not found or has issues
     except ImportError as e:
-        return ({"success": False, "error": str(e), "articles": []}), 500
+        # Handle any exception that might occur when fetching analysis
+        error_message = message + f" ❌ Error: {e}"
+        print(f"❌ Error fetching analysis: {e}")
+        return (
+            jsonify({"success": False, "error": error_message}),
+            500,
+        )
+
 
 
 # Uncomment the following lines if you want to add a route to save reports"

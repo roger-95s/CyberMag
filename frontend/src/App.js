@@ -7,6 +7,7 @@ import About from "./pages/AboutPage";
 function App() {
   return (
     <>
+      {/* basename="/CyberMag" */}
       <Router >
         <Routes>
           <Route path="/" element={<HomePage />} />
