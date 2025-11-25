@@ -6,6 +6,7 @@ import ReportCard from "../components/ReportCard"
 function HomePage() {
   const [data, setData] = useState({
     message: "",
+    articles_data: [],
     loading: true,
     error: null,
 
@@ -30,6 +31,7 @@ function HomePage() {
       .then((responseData) => {
         setData({
           message: responseData.message || "Welcome to CyberMag!",
+          articles_data: responseData.articles_data || [],
           loading: false,
           error: null,
         });
@@ -38,6 +40,7 @@ function HomePage() {
       .catch((error) => {
         setData({
           message: "",
+          articles_data: [],
           loading: false,
         });
       });
@@ -69,11 +72,11 @@ function HomePage() {
           </div>
         )}
         {/* Articles grid */}
-        {!data.loading && !data.error && data.length > 0 && (
+        {!data.loading && !data.error && data.articles_data.length > 0 && (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {data.map((index) => (
-                <ReportCard key={index.id} />
+              {data.articles_data.map((article, index) => (
+                <ReportCard key={index} articleData={article} />
               ))}
             </div>
 
@@ -96,7 +99,7 @@ function HomePage() {
         )}
 
         {/* No articles */}
-        {!data.loading && !data.error && data.length === 0 && (
+        {!data.loading && !data.error && data.articles_data.length === 0 && (
           <p className="text-center text-lg font-medium text-gray-500">
             ❌ No articles found.
           </p>

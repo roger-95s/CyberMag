@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { ShieldCheck, Lock, Globe, BrainCircuit, Bug } from "lucide-react";
 import { Link } from "react-router-dom";
-import { HoverBorderGradient } from "./ui/HoverBorderGradiente";
-// import ReportCard from "./Postsreport";
+import { HoverBorderGradient } from "./ui/HoverBorderGradiente"; // relative path to the created component
 
 // Icon map based on item type
 const iconMap = {
@@ -15,7 +14,7 @@ const iconMap = {
   globe: <Globe className="w-10 h-10 text-cyan-400" />,
 };
 
-// Color map according to risk level (only used for tooltip now) 
+// Color map according to risk level (only used for tooltip now)
 const riskColors = {
   critical: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
   high: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300",
@@ -38,7 +37,7 @@ function ReportCard({ articleData }) {
     setLoadingAnalysis(true);
     setError(null);
     try {
-      const res = await fetch("/api/post", {
+      const res = await fetch("/analysis", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: articleData.url }),
@@ -79,7 +78,7 @@ function ReportCard({ articleData }) {
 
             <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-50 leading-snug">
               <Link
-                to={`/report/${articleData.id}`}
+                to={`/post/${articleData.id}`}
                 className="hover:underline text-blue-600 dark:text-blue-400"
               >
                 {articleData.title ?? "Untitled Article"}

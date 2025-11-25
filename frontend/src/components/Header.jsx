@@ -1,6 +1,6 @@
 // import { useEffect, useState } from "react";
 import { Shield } from "lucide-react";
-import { NavLink } from "./NavbarLinks";
+import { NavLinks } from "./NavbarLinks";
 import DarkModeToggle from "./Darkmode"
 
 const Header = () => {
@@ -18,7 +18,7 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <NavLink />
+          <NavLinks />
           {/* Dark Mode Toggle */}
           <DarkModeToggle />
         </div>
