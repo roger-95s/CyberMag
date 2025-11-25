@@ -11,7 +11,7 @@ export default function ReportPage() {
   useEffect(() => {
     const fetchReport = async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:5000/api/report/${id}`);
+        const res = await fetch(`http://127.0.0.1:5000/api/post/${id}`);
         const data = await res.json();
         if (data.success) {
           setReport(data.article);
