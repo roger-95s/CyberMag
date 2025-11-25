@@ -1,6 +1,11 @@
 from .scraper import soup
 from ollama import Client
 
+
+
+
+# Building a AI agent that can scraper for tags selectors, to be use to scrape articles from a webpage
+
 # Step 1: Get HTML
 html = soup
 
@@ -26,20 +31,4 @@ Please search for each article URL and extract:
 
 """
 
-client = Client(host="http://localhost:11434")
 
-response = client.chat(
-    model="llama3.2:latest",
-    messages=[
-        {
-            "role": "user",
-            "content": prompt,
-        },
-    ],
-)
-
-# print(type(f'✅ {response}'))        # See what kind of object it is
-# print(f'🤞 {response}')              # See what it looks like
-print(f"🎲 Raw HTML input (optional): {html}")
-# Step 4: Get result
-print(f"🤞 {response['message']['content']}")
