@@ -9,48 +9,6 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# # Running backgound features after the fals server starts 
-# import threading
-# import time
-
-# def background_jobs():
-#     """Runs the scraper + content fetcher in the background."""
-#     from .scraper import mainScraperCaller
-#     from .content import mainContentCaller
-
-#     print("⏳ Waiting 5 seconds for Flask to fully start...")
-#     time.sleep(5)  # Give Flask time to boot
-
-#     print("🚀 Starting background tasks...")
-#     try:
-#         mainScraperCaller()
-#         print("✅ Scraper completed successfully.")
-#     except Exception as e:
-#         print(f"❌ Error running scraper: {e}")
-
-#     try:
-#         mainContentCaller()
-#         print("✅ Content processing completed successfully.")
-#     except Exception as e:
-#         print(f"❌ Error running content pipeline: {e}")
-
-
-# def background_jobs():
-#     from .scraper import mainScraperCaller
-#     from .content import mainContentCaller
-#     import time
-
-#     while True:
-#         try:
-#             print("🚀 Running scraper...")
-#             mainScraperCaller()
-#             print("🚀 Running content pipeline...")
-#             mainContentCaller()
-#         except Exception as e:
-#             print(f"❌ Error in background job: {e}")
-#         print("🕒 Sleeping for 3 hours...")
-#         time.sleep(3 * 60 * 60)  # run every 3 hours
-
 
 # Pagination funtions 
 def get_paginated_articles(page: int, limit: int):
@@ -201,61 +159,6 @@ def get_single_report(post_id):
         # Handle ImportError if models.py is not found or has issues
         print(f"❌ Error fetching report: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
-
-
-# Route the Analysis page
-@app.route("/api/analysis", methods=["GET"])
-def analysis() -> tuple:
-    """Function returning a json response for the analysis page."""
-    # Build a welcome message displaying the app name
-    welcome_message = "👨‍💻⚒️ Welcome to CyberMag Analysis page!"
-    count = 9
-
-    try:
-        # Assuming this function returns analysis data
-        articles_analysis = get_all_site()
-
-        # if not articles_analysis "analysis" is empty
-        if not articles_analysis:
-            welcome_message += " No analysis found."
-        else:
-            welcome_message += f"Latest {count} Analisys of Cyber Attacks:"
-
-        articles_data = []
-        for article in articles_analysis[:count]:
-            try:
-                analysis_item = {
-                    "site_name": article.get("site_name"),
-                    "title": article.get("title", "No Title"),
-                    "summary": article.get("summary", "No Summary"),
-                    "risk_level": article.get("risk_level", "Unknown"),
-                }
-                articles_data.append(analysis_item)
-            except (KeyError, TypeError) as e:
-                print(f"❌ Error processing article: {e}")
-                continue
-
-        # Return the welcome message as a JSON response with 200 status code
-        return (
-            jsonify(
-                {
-                    "success": True,
-                    "message": welcome_message,
-                    # return only title, summary, analysis, and risk_level
-                    "analysis": articles_data,
-                    "count": len(articles_analysis),
-                }
-            ),
-            200,
-        )
-    except ImportError as e:
-        # Handle any exception that might occur when fetching analysis
-        error_message = welcome_message + f" ❌ Error fetching analysis: {e}"
-        print(f"❌ Error fetching analysis: {e}")
-        return (
-            jsonify({"success": False, "error": error_message}),
-            500,
-        )
 
 
 # Route the About page
