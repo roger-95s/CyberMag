@@ -9,6 +9,7 @@ def gemma_cyber_analyst(prompt, max_chunks=None):
     response_text = ""
 
     try:
+        print()
         print("==== Gemma3 Generating Analysis ====")
         for i, chunk in enumerate(generate("gemma3:1b", prompt, stream=True)):
             response_text += chunk.get("response", "")

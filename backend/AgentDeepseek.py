@@ -9,6 +9,7 @@ def deepseek_cyber_analyst(prompt, max_chunks=None):
     response_text = ""
 
     try:
+        print()
         print("==== Deepseek Generating Analysis ====")
         for i, chunk in enumerate(generate("deepseek-r1:1.5b", prompt, stream=True)):
             response_text += chunk.get("response", "")
