@@ -16,7 +16,7 @@ function About() {
                     {/* Marketing Section */}
                     <p className="text-lg mb-4 leading-relaxed">
                         CyberMag is a next-generation cybersecurity intelligence platform powered entirely by open-source AI technologies.
-                        Our mission is to make cybersecurity insights accessible, transparent, and AI-driven — using modern models such as
+                        Our mission is to make cybersecurity insights accessible, transparent, and AI-driven. Using modern models such as
                         <strong> Gemma 3</strong>, <strong>Llama 3.2</strong>, and <strong>DeepSeek-R1</strong> through the Ollama framework.
                     </p>
 
@@ -60,7 +60,7 @@ function About() {
                                 Passionate about secure development, problem-solving, and building meaningful technology.
                             </p>
                             <a
-                                href="https://www.linkedin.com/in/roger-campo/"
+                                href="www.linkedin.com/in/roger-campo-cordova"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-blue-500 hover:underline font-medium"
