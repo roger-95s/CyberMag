@@ -1,19 +1,15 @@
 
 from ollama import generate
 
+print("==== Deepseek Generating Analysis ====")
 
 # Function that handle ai work
 def deepseek_cyber_analyst(prompt, max_chunks=None):
-    """
-    Generate Cybersecurity analysis from the Deepseek
-    :param prompt: Full text prompt to send to the LLM.
-    :param max_chunks: Limit the number of streamed chunks.
-    :return: Complete response as a string.
-    """
-    print("==== Deepseek Generating Analysis ====")
+
     response_text = ""
 
     try:
+        print("==== Deepseek Generating Analysis ====")
         for i, chunk in enumerate(generate("deepseek-r1:1.5b", prompt, stream=True)):
             response_text += chunk.get("response", "")
             print(chunk.get("response", ""), end="", flush=True)

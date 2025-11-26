@@ -152,16 +152,19 @@ for i, row in enumerate(test_url[1:2], start=1): # Automate test_url[2:3] to pas
         data_save = [{"Site_name" : name[:]}, {"title_article" : title[:]}, data]
         try:
             if data_save:
-                agentGemmaPrompt = file_open(datas=data_save)
+                agentPrompt = file_open(datas=data_save)
             else:   
                 print(f"❌ Something went wrong with data_save: {data_save}")
-            if agentGemmaPrompt:
-                # gemma_cyber_analyst(prompt=agentGemmaPrompt)
-                # llama_cyber_analyst(prompt=agentGemmaPrompt)
-                # deepseek_cyber_analyst(prompt=agentGemmaPrompt)
-                print(f"✅ Something went right with agentGemmaPrompt:") 
+            if agentPrompt:
+                try: 
+                    llama_cyber_analyst(prompt=agentPrompt)
+                    deepseek_cyber_analyst(prompt=agentPrompt)
+                    gemma_cyber_analyst(prompt=agentPrompt)
+                except Exception as e:
+                    print(f"Error during AI tool execution: {e}")
             else:
-                print(f"❌ Something went wrong with agentGemmaPrompt:")
+                print("❌ AI agentPrompt is empty or None.")
+                break
         except ImportError as e:
             print(f"Somethink went wrong traying to implement agent ai tool: {e}")
         # print(f"{data_save}")
