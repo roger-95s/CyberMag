@@ -1,5 +1,26 @@
 # cybermag
 
+# Command 
+`Running backend services `
+flask --app backend/flaskr run --debug 
+
+`Running frontend service `
+npm start run 
+
+# Installation
+` Install Flask-Migrate with pip: `
+pip install Flask-Migrate
+
+` Create a migration repository with the following command: `
+flask db init
+
+` You can then generate an initial migration: `
+flask db migrate -m "Initial migration."
+
+` Then you can apply the changes described by the migration script to your database: `
+flask db upgrade
+
+
 # ✅ Local Validation Guide (Before You Push or Merge)
 
 This document is a quick step-by-step checklist for **every developer** working on this project.
