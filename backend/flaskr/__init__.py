@@ -84,7 +84,23 @@ def create_app(test_config=None):
             }), 200
         except Exception as e:
             return jsonify({"success": False, "error": str(e)}), 500
-        
 
+
+    # --- API ROUTES --- Single Post Page
+    @app.route("/api/post/<int:post_id>", methods=["GET"])
+    def get_single_report(post_id):
+        try:
+            articles = WebsiteFetch.query.all()
+            article = next((a for a in articles if a.id == post_id), None)
+            if article:
+                return jsonify({"success": True, "article": article.to_dict()}), 200
+            # Return 404 if article not found
+            return jsonify({"success": False, "error": "Article not found"}), 404
+        except ImportError as e:
+            articles = None
+            # Handle ImportError if models.py is not found or has issues
+            print(f"❌ Error fetching report: {e}")
+            return jsonify({"success": False, "error": str(e)}), 500
+ 
 
     return app
