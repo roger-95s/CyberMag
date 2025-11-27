@@ -11,7 +11,7 @@ export default function ReportPage() {
   useEffect(() => {
     const fetchReport = async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:5000/api/post/${id}`);
+        const res = await fetch(`/api/post/${id}`);
         const data = await res.json();
         if (data.success) {
           setReport(data.article);
@@ -46,15 +46,14 @@ export default function ReportPage() {
         <h1 className="text-2xl font-bold mb-4">{report.title}</h1>
         <p className="text-gray-700 mb-4">{report.summary}</p>
         <span
-          className={`inline-block px-3 py-1 rounded-full text-white mb-4 ${
-            report.risk_level === "high"
-              ? "bg-red-500"
-              : report.risk_level === "medium"
+          className={`inline-block px-3 py-1 rounded-full text-white mb-4 ${report.risk_level === "high"
+            ? "bg-red-500"
+            : report.risk_level === "medium"
               ? "bg-yellow-500"
               : report.risk_level === "low"
-              ? "bg-green-500"
-              : "bg-gray-400"
-          }`}
+                ? "bg-green-500"
+                : "bg-gray-400"
+            }`}
         >
           {report.risk_level}
         </span>
