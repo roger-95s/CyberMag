@@ -56,6 +56,7 @@ def home() -> tuple:
                 {
                     "success": True,
                     "message": welcome_message,
+                    "articles_data": paginated_articles,
                     "total_pages": total_pages,
                     "current_page": page,
                 }

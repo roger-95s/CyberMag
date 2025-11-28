@@ -38,7 +38,7 @@ const riskColors = {
  * Renders a single report card based on an article object.
  * @param {object} article - The article data object from the backend.
  */
-function ReportCardItem({ article }) {
+export function ReportCardItem({ article }) {
   // Sanitize and lookup values
   const icon = iconMap[article.icon] || iconMap.unknown;
   const risk = article.risk_level?.toLowerCase() || "unknown";
@@ -242,4 +242,4 @@ export function ReportCardList() {
   );
 }
 
-export default ReportCardList;
+export default ReportCardItem;
