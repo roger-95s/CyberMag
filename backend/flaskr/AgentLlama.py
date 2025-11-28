@@ -1,20 +1,16 @@
-
 from ollama import generate
 
 
+
+
 # Function that handle ai work
-def gemma_cyber_analyst(prompt, max_chunks=None):
-    """
-    Generate Cybersecurity analysis from the Gemma3
-    :param prompt: Full text prompt to send to the LLM.
-    :param max_chunks: Limit the number of streamed chunks.
-    :return: Complete response as a string.
-    """
-    print("==== Gemma3 Generating Analysis ====")
+def llama_cyber_analyst(prompt, max_chunks=None):
+
     response_text = ""
 
     try:
-        for i, chunk in enumerate(generate("gemma3:latest", prompt, stream=True)):
+        print("==== Llama 3.2 Generating Analysis ====")
+        for i, chunk in enumerate(generate("llama3.2", prompt, stream=True)):
             response_text += chunk.get("response", "")
             print(chunk.get("response", ""), end="", flush=True)
             if max_chunks and (i + 1) >= max_chunks:

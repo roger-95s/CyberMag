@@ -11,10 +11,15 @@ env/
 __pycache__/
 .Python
 
+.pytest_cache/
+
 # Flask instance files
 # This is where Flask stores instance-specific data, such as configuration files.
 # It is often used for production settings and should not be committed to version control.
 backend/__init__.py
+
+# Distribution / packaging
+*.egg-info/
 
 # Flask instance folder
 instance/
@@ -59,6 +64,8 @@ Thumbs.db
 # Frontend build output
 /frontend/build/
 /frontend/dist/
+dist/
+build/
 
 # Environment files
 .env

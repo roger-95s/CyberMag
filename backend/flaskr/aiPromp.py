@@ -10,7 +10,7 @@ def file_open(datas):
     # Join path components
     prompt_path = os.path.join(
         os.path.dirname(__file__), 
-        "../backend/cyberattack_analysis_prompt.json",
+        "../flaskr/cyberattack_analysis_prompt.json",
     )
     # print(f"File path: {prompt_path}")
     # Check if a file exists
