@@ -11,7 +11,7 @@ function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const articlesPerPage = 9;
+  const articlesPerPage = 6;
 
   useEffect(() => {
     setLoading(true);
