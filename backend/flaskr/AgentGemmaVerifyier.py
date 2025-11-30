@@ -1,5 +1,7 @@
 from ollama import generate
 
+
+
 # Function that handle ai work
 def gemma_agent_verifier(prompt, max_chunks=None):
     
@@ -18,4 +20,5 @@ def gemma_agent_verifier(prompt, max_chunks=None):
 
     return response_text
 
-# Call the function to get the response
+
+   

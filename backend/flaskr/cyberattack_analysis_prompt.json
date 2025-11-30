@@ -8,6 +8,7 @@
     "output_format": "JSON",
     "sections": {
       "article_metadata": {
+        "article_url": "",
         "title": "",
         "source": "",
         "publication_date": "",
