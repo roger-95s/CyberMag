@@ -6,6 +6,7 @@
     "context": "You are a cybersecurity analyst analyzing diverse cybersecurity-related content. Your task is to extract technical, operational, and strategic insights and present them in a structured intelligence format.",
     "input": "Full text or summary of the cybersecurity article.",
     "output_format": "JSON",
+    "ai_agent_name": "eg,. Gemma3",
     "sections": {
       "article_metadata": {
         "article_url": "",
