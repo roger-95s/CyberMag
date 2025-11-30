@@ -2,8 +2,9 @@ from sqlalchemy.dialects.postgresql import JSONB
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy import DateTime, Integer, String, Text, TIMESTAMP
+from sqlalchemy import DateTime, Integer, String, Text, JSON
 from sqlalchemy.orm import Mapped, mapped_column
+from typing import Any
 
 
 class Base(DeclarativeBase):
@@ -16,6 +17,9 @@ class cybersecurity_reports(db.Model):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     
+    # Add ai tool
+    agent_name: Mapped[str] = mapped_column(String(500), index=True)
+
     # Metadata fields for the report  
     url: Mapped[str] = mapped_column(String(500), nullable=False, unique=True)
     site_name: Mapped[str] = mapped_column(String(100), index=True)
@@ -26,8 +30,11 @@ class cybersecurity_reports(db.Model):
     summary: Mapped[str] = mapped_column(Text, nullable=True)
     
     # Storing the full analysis payload as JSONB
-    analysis_payload: Mapped[dict] = mapped_column(JSONB, nullable=True)
-    
+    analysis_payload: Mapped[dict[str, Any]] = mapped_column(
+        JSON().with_variant(JSONB, "postgresql"), 
+        nullable=False
+    )
+
     # Timestamps for record keeping or DB-level timestamps
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=db.func.now())
 
