@@ -26,13 +26,13 @@ def gemma_agent_verifier(prompt, max_chunks=None):
                     new_report = cybersecurity_reports( 
                     # Map the metadata fields
                     # ReportCard Column fields
-                    agent = data.get("ai_agent_name", "UNKNOWN_AGENT") # Add agent to report table
-                    url = meta.get("article_url", "UNKNOWN_URL")
-                    site_name = meta.get("source", "UNKNOWN")  
-                    title = meta.get("title", "UNKNOWN")
-                    risk_level = meta.get("risk_level", "UNKNOWN")  # Placeholder, replace with actual risk level if available
-                    publication_date = data.get("publication_date", None)
-                    summary = data.get("executive_summary", "UNKNOWN") # Placeholder, replace with actual summary if available
+                    agent = data.get("ai_agent_name", "UNKNOWN"),
+                    url = meta.get("article_url", "UNKNOWN_URL"),
+                    site_name = meta.get("source", "UNKNOWN"),  
+                    title = meta.get("title", "UNKNOWN"),
+                    risk_level = meta.get("risk_level", "UNKNOWN"),  
+                    publication_date = data.get("publication_date", None),
+                    summary = data.get("executive_summary", "UNKNOWN"),
 
                     # Full analysis payload as JSONB
                     analysis_payload = data 
