@@ -1,8 +1,8 @@
 {
-  "role": "cybersecurity_analyst",
-  "task": "analyze_cybersecurity_article",
   "description": "Perform a comprehensive cybersecurity analysis of the provided article, regardless of whether it describes a cyberattack, vulnerability, policy change, trend, or tool discovery.",
   "instructions": {
+    "role": "cybersecurity_analyst",
+    "task": "analyze_cybersecurity_article",
     "context": "You are a cybersecurity analyst analyzing diverse cybersecurity-related content. Your task is to extract technical, operational, and strategic insights and present them in a structured intelligence format.",
     "input": "Full text or summary of the cybersecurity article.",
     "output_format": "JSON",

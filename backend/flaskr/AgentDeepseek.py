@@ -10,7 +10,7 @@ def deepseek_cyber_analyst(prompt, max_chunks=None):
         print("==== Deepseek Generating Analysis ====")
         for i, chunk in enumerate(generate("deepseek-r1:1.5b", prompt, stream=True)):
             response_text += chunk.get("response", "")
-            print(chunk.get("response", ""), end="", flush=True)
+            # print(chunk.get("response", ""), end="", flush=True)
             if max_chunks and (i + 1) >= max_chunks:
                 break
     except Exception as e:

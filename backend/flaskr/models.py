@@ -12,7 +12,7 @@ class Base(DeclarativeBase):
 
 db = SQLAlchemy(model_class=Base)
 
-class cybersecurity_reports(db.Model):
+class Cybersecurity_Reports(db.Model):
     __tablename__ = "reports"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
@@ -39,8 +39,13 @@ class cybersecurity_reports(db.Model):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=db.func.now())
 
 
-    def __str__(self) -> str:
-        return f"<Report {self.title} - {self.url}>"
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "site_name": self.site_name,
+            "title": self.title,
+            "url": self.url
+        } 
 
 
 class WebsiteFetch(db.Model):
@@ -59,3 +64,5 @@ class WebsiteFetch(db.Model):
             "title": self.title,
             "url": self.url
         }
+    
+
