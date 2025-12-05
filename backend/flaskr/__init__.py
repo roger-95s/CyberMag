@@ -1,7 +1,15 @@
 import os
+import traceback
+from .aiPromp import file_open
+from .AgentGemma import gemma_cyber_analyst
+from .AgentLlama import llama_cyber_analyst
+from .AgentDeepseek import deepseek_cyber_analyst
+from .scraper import get_response, fetch_data, save_articles_to_db
+from .content import fetch_content_data
+from .tag_guide import list_of_sites
 from flask import Flask, jsonify, request
 from flask_migrate import Migrate
-from .models import db, WebsiteFetch 
+from .models import db, WebsiteFetch, Cybersecurity_Reports
 
 def create_app(test_config=None):
     # create and configure the app 
@@ -30,9 +38,13 @@ def create_app(test_config=None):
 
 
     # --- SIMPLE ROUTE FOR TESTING ---
-    @app.route('/hello')
+    @app.route('/db')
     def hello():
-        return 'Hello, World!'
+        reports = Cybersecurity_Reports().query.all()
+
+        meta_data = [a.to_dict() for a in reports]
+        return jsonify({"success": True, "article": meta_data})
+
 
     # Helper function (Updated to use ORM)
     def get_paginated_articles(page: int, limit: int):
@@ -43,12 +55,13 @@ def create_app(test_config=None):
         articles_data = [item.to_dict() for item in pagination.items]
         return articles_data, pagination.pages
 
+
     # --- API ROUTES --- Site Home Page 
     @app.route("/api/home", methods=["POST", "GET"])
     def home():
         welcome_message = "👨‍💻⚒️ Welcome to CyberMag!"
         page = int(request.args.get("page", 1))
-        limit = int(request.args.get("limit", 10))
+        limit = int(request.args.get("limit", 9))
 
         try:
             paginated_articles, total_pages = get_paginated_articles(page, limit)
@@ -101,6 +114,137 @@ def create_app(test_config=None):
             # Handle ImportError if models.py is not found or has issues
             print(f"❌ Error fetching report: {e}")
             return jsonify({"success": False, "error": str(e)}), 500
- 
+    
 
+    # --- Calling content.py ---
+    @app.route("/api/scraper", methods=["GET"])
+    def backend_scraper_caller():
+        LIMIT = 15  # set a limit of site for request
+        for site in list_of_sites:
+            site_name = site.get("name", "Unknown")
+            url = site.get("url")
+            selectors = site.get("selectors")
+            if url and selectors:
+                soup = get_response(url)
+                if soup:
+                    data = fetch_data(soup, selectors, limit=LIMIT)
+                    if data.get("title"):
+                        save_articles_to_db(data, name=site_name)
+                    else:
+                        print(f"❌ No data found for {site_name}")
+            else:
+                print(f"⚠️ Skipping {site_name} — missing URL or selectors.")
+
+        result = data
+        print(f"🏁 Scraper finished. {result}")
+
+        return result
+
+    # --- Calling content.py ---
+    @app.route("/api/scraper_content", methods=["GET"])
+    def backend_content_caller():
+        LIMIT = 1 # set a limit of site for request 
+
+        # Query all website_fetch name, url and title 
+        db_articles = WebsiteFetch.query.all()
+        
+        if not db_articles:
+            print("No areticle found in the db query")     
+        # Print db_articles len 
+        print(f"\n Fetched {len(db_articles)} articles from the database for processing.")
+
+        # Build a quick lookup dictionary from list_of_sites
+        site_lookup = {site["name"]: site for site in list_of_sites}
+
+        # Define limit for testing (Process specific slice, e.g., 2nd item only)
+        # Change to db_articles[:] to process all
+        batch_to_process = db_articles[0:1]
+
+        # --- Main Loop ---
+        for i, row in enumerate(batch_to_process, start=1):
+            
+            # Access attributes and assign site_name, title, and url  
+            name = row.site_name
+            title = row.title
+            url = row.url
+
+            # Debugging and visual structure
+            print(f"\n{'=' * 50}")
+            print(f"⭐ Site name: {name}")
+            print(f"📄 Processing article {i}/{len(batch_to_process)}")
+            print(f"Titles: {title}")
+            print(f"🔗 URL: {url}")
+
+            # --- Selector Lookup ---
+            site_config = site_lookup.get(name)
+            if not site_config:
+                print(f"❌ No configuration found for site '{name}' in tag_guide.")
+                continue
+            
+            selectors = site_config.get("selectors", {})
+            if not selectors:
+                print(f"❌ No selectors defined for '{name}'")
+                continue
+
+            # --- Fetch HTML (Soup) ---
+            soup = get_response(url.strip())
+            if not soup:
+                print(f"❌ Could not get HTML soup for {url}")
+                continue
+            
+            print(f"✅ HTML fetched successfully.")
+
+            # --- Extract Content ---
+            # assuming fetch_content_data is defined elsewhere
+            content_data = fetch_content_data(soup, selector_map=selectors, limit=LIMIT)
+            
+            if not content_data:
+                print("❌ No content extracted from HTML.")
+                continue
+
+            print(f"✅ Content extraction successful.")
+
+            # --- Prepare for AI Agent ---
+            try:
+                # Structure the data cleanly for the AI prompt function
+                # We combine the DB data with the Scraped data
+                combined_data = {
+                    "site_name": name,
+                    "title": title,
+                    "url": url,
+                    "scraped_content": content_data,
+                }
+            except Exception as e:
+                print(f"❌ Error preparing data for AI: {e}")
+                traceback.print_exc()
+            # Assign combined_data to file_open and store it into prompt_result 
+            prompt_result = file_open(datas=combined_data)
+        
+        return prompt_result
+    
+    
+    # --- Calling content.py ---
+    @app.route("/api/llm_response", methods=["GET"])
+    def llm_caller():
+        PROMPT = backend_content_caller() 
+        try:
+            # call deepseek
+            deepseek_response = deepseek_cyber_analyst(prompt=PROMPT)
+            # call llama
+            llama_response = llama_cyber_analyst(prompt=PROMPT)
+            
+            # call gemma
+            gemma_response = gemma_cyber_analyst(prompt=PROMPT)
+
+            # Call gemmaVerifyier
+            return jsonify({
+                "success": True, 
+                "deepseek_response": str(deepseek_response),
+                "llama_response": str(llama_response),
+                "gemma_response": str(gemma_response),
+                }), 200
+        except Exception as e:
+            return jsonify({"success": False, "error": str(e)}), 500
+        
+    
     return app

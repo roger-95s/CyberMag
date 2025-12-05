@@ -22,7 +22,7 @@ def file_open(datas):
     with open(prompt_path, encoding="utf-8") as f:
         prompt_template = json.load(f)
         # print(f"Json info load: {prompt_template}")
-        content_prompt =f"{prompt_template['description']}\n\nArticle:\n{datas}\n\nInstructions:\n{json.dumps(prompt_template['instructions'], indent=2, ensure_ascii=False)}"
-    
+        content_prompt =f"{prompt_template['description']}Article:{datas}Instructions:{json.dumps(prompt_template['instructions'], indent=2, ensure_ascii=False)}"
+        # print(f"content prompt: {content_prompt}")
     return content_prompt
 

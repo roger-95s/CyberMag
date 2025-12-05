@@ -1,14 +1,9 @@
 """Scraper Module to fetch articles from various websites and store them in the database."""
 import requests
 from bs4 import BeautifulSoup
-
-# --- IMPORTS FROM YOUR APP ---
-from .tag_guide import list_of_sites
+# --- IMPORTS FROM THE APP ---
 from .models import WebsiteFetch, db
-from . import create_app  # Import your app factory
 
-
-LIMIT = 10  # set a limit of site for request
 
 # Function to get the HTML content of a page
 headers = {
@@ -30,6 +25,7 @@ def get_response(page_url: str) -> BeautifulSoup | None:
         print(f"❌ Failed to get {page_url}: {e}")
         return None
 
+# Fetch function that scrape the areticles' meta data url, title  
 def fetch_data(soup_obj: BeautifulSoup, selectors_map: dict, limit: int) -> dict:
     """Extract article titles and URLs using the provided selectors."""
     try:
@@ -57,6 +53,7 @@ def fetch_data(soup_obj: BeautifulSoup, selectors_map: dict, limit: int) -> dict
         print(f"❌ Error during fetching: {e}")
         return {"title": [], "url": []}
 
+# Function to save scraper article meta data 
 def save_articles_to_db(articles_data, name: str) -> int:
     """Save extracted articles to the database."""
     
@@ -110,29 +107,3 @@ def save_articles_to_db(articles_data, name: str) -> int:
 
     return saved_count
 
-# --- MAIN EXECUTION BLOCK ---
-if __name__ == "__main__":
-    # 1. Initialize the App
-    app = create_app()
-
-    # 2. Create the Context (The "Bridge" to the DB)
-    with app.app_context():
-        print("🚀 Starting Scraper...")
-        
-        for site in list_of_sites:
-            site_name = site.get("name", "Unknown")
-            url = site.get("url")
-            selectors = site.get("selectors")
-
-            if url and selectors:
-                soup = get_response(url)
-                if soup:
-                    data = fetch_data(soup, selectors, limit=LIMIT)
-                    if data.get("title"):
-                        save_articles_to_db(data, name=site_name)
-                    else:
-                        print(f"❌ No data found for {site_name}")
-            else:
-                print(f"⚠️ Skipping {site_name} — missing URL or selectors.")
-        
-        print("🏁 Scraper finished.")
