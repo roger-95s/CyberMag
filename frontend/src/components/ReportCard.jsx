@@ -1,7 +1,14 @@
 // "use client"; // Note: This directive should typically be at the very top of the file.
 
 import { useState, useEffect } from "react";
-import { ShieldCheck, Lock, Globe, BrainCircuit, Bug, Loader2 } from "lucide-react";
+import {
+  ShieldCheck,
+  Lock,
+  Globe,
+  BrainCircuit,
+  Bug,
+  Loader2,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { HoverBorderGradient } from "./ui/HoverBorderGradiente"; // Assuming this is a local component
 
@@ -26,10 +33,14 @@ const riskColors = {
   unknown: "bg-gray-500",
   // Tooltip colors are kept as before for rich text
   critical_tooltip: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
-  high_tooltip: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300",
-  medium_tooltip: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
-  low_tooltip: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
-  unknown_tooltip: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400",
+  high_tooltip:
+    "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300",
+  medium_tooltip:
+    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+  low_tooltip:
+    "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  unknown_tooltip:
+    "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400",
 };
 
 // --- Individual Report Card Component ---
@@ -43,21 +54,24 @@ export function ReportCardItem({ article }) {
   const icon = iconMap[article.icon] || iconMap.unknown;
   const risk = article.risk_level?.toLowerCase() || "unknown";
   const riskColorDot = riskColors[risk] || riskColors.unknown;
-  const riskColorClass = riskColors[`${risk}_tooltip`] || riskColors.unknown_tooltip;
+  const riskColorClass =
+    riskColors[`${risk}_tooltip`] || riskColors.unknown_tooltip;
 
   // Use article.id for the dynamic link, fallback to a unique key if needed
-  const articleId = article.id || article.title.replace(/\s/g, '-').toLowerCase();
+  const articleId =
+    article.id || article.title.replace(/\s/g, "-").toLowerCase();
 
   return (
     // Wrapper HoverBorderGradient for the entire card
     <HoverBorderGradient
       as="div"
       containerClassName="relative w-full max-w-[500px]"
-      className={`
-                rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700
-                shadow-sm p-6 transition-all duration-400 ease-out
-                hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(0,255,255,0.2)]
-            `}
+      className="
+    h-full flex flex-col
+    rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700
+    shadow-sm p-6 transition-all duration-400 ease-out
+    hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(0,255,255,0.2)]
+  "
     >
       {/* Header: Icon + title + risk indicator */}
       <div className="flex justify-between items-start mb-6">
@@ -67,7 +81,7 @@ export function ReportCardItem({ article }) {
 
           <div className="flex flex-col">
             {/* Note: The backend data doesn't provide a 'date', so I'm removing the date element
-                         * for now, or you could add a fallback date if necessary. */}
+             * for now, or you could add a fallback date if necessary. */}
             {/* {article.date && (
                             <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">
                                 {article.date}
@@ -241,4 +255,3 @@ export function ReportCardList() {
     </div>
   );
 }
-

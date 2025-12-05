@@ -12,6 +12,18 @@ function HomePage() {
   const [error, setError] = useState(null);
 
   const articlesPerPage = 6;
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+
+    // Evitar que suba hacia arriba
+    const el = document.getElementById("pagination-controls");
+    if (el) {
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -38,7 +50,10 @@ function HomePage() {
   }, []);
 
   const startIndex = (currentPage - 1) * articlesPerPage;
-  const visibleArticles = allArticles.slice(startIndex, startIndex + articlesPerPage);
+  const visibleArticles = allArticles.slice(
+    startIndex,
+    startIndex + articlesPerPage
+  );
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0a0f1a] text-gray-900 dark:text-gray-100 transition-colors duration-500">
@@ -56,11 +71,16 @@ function HomePage() {
             </h1>
 
             {visibleArticles.length === 0 ? (
-              <p className="text-center text-gray-600 dark:text-gray-400">No articles found.</p>
+              <p className="text-center text-gray-600 dark:text-gray-400">
+                No articles found.
+              </p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {visibleArticles.map((article) => (
-                    <ReportCardItem key={article.id ?? article.title} article={article} />
+                  <ReportCardItem
+                    key={article.id ?? article.title}
+                    article={article}
+                  />
                 ))}
               </div>
             )}
@@ -70,11 +90,7 @@ function HomePage() {
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
-              onPageChange={(page) => {
-                const p = Math.max(1, Math.min(page, totalPages));
-                setCurrentPage(p);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
+              onPageChange={handlePageChange}
             />
           </div>
         </>
