@@ -75,7 +75,6 @@ def reports(meta_data):
     try:
         new_report = Cybersecurity_Reports(
             agent_name = ai_name,
-            url = url,
             site_name = name,
             title = title,
             publication_date = None,  # Optional unless AI provides it
