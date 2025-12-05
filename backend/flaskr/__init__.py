@@ -1,6 +1,7 @@
 import os
 import traceback
 from .aiPromp import file_open
+from .AIResponsesSave import ai_responses_save, extract_clean_json
 from .AgentGemma import gemma_cyber_analyst
 from .AgentLlama import llama_cyber_analyst
 from .AgentDeepseek import deepseek_cyber_analyst
@@ -226,22 +227,61 @@ def create_app(test_config=None):
     # --- Calling content.py ---
     @app.route("/api/llm_response", methods=["GET"])
     def llm_caller():
-        PROMPT = backend_content_caller() 
+        PROMPT = PROMPT = f"""
+                            You are a cybersecurity analysis engine.
+                            
+                            Your ONLY output must be a valid JSON object.
+                            Do NOT include:
+                            - markdown code fences (```json)
+                            - explanations
+                            - text before or after the JSON
+                            - comments
+                            - reasoning
+                            
+                            Your response MUST be ONLY a JSON object matching EXACTLY this structure:
+                            
+                            {{
+                              "site_name": "",
+                              "title": "",
+                              "publication_date": "",
+                              "article_type": "",
+                              "risk_level": "",
+                              "summary": "",
+                              "url": "",
+                              "analysis": {{}}
+                            }}
+                            
+                            Fill in all fields.
+                            Use empty strings "" ONLY if you absolutely cannot determine a field.
+                            Make sure the JSON is valid and properly formatted.
+                            
+                            Now analyze the following article and produce the JSON:
+                            {backend_content_caller()}
+                            """
+ 
         try:
             # call deepseek
-            deepseek_response = deepseek_cyber_analyst(prompt=PROMPT)
+            # deepseek_response = deepseek_cyber_analyst(prompt=PROMPT)
+            
             # call llama
             llama_response = llama_cyber_analyst(prompt=PROMPT)
             
             # call gemma
-            gemma_response = gemma_cyber_analyst(prompt=PROMPT)
+            # gemma_response = gemma_cyber_analyst(prompt=PROMPT)
+            parsed = extract_clean_json(llama_response)
+            print(parsed)
+
+            if not parsed:
+                return jsonify({"error": "LLM did not return valid JSON"}), 400
+
+            ai_responses_save(parsed)
 
             # Call gemmaVerifyier
             return jsonify({
                 "success": True, 
-                "deepseek_response": str(deepseek_response),
-                "llama_response": str(llama_response),
-                "gemma_response": str(gemma_response),
+                # "deepseek_response": str(deepseek_response),
+                "llama_response": llama_response,
+                # "gemma_response": str(gemma_response),
                 }), 200
         except Exception as e:
             return jsonify({"success": False, "error": str(e)}), 500
