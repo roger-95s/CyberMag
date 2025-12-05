@@ -63,10 +63,7 @@ const Hero = () => {
         We empower digital defenders with timely cyber threat intelligence and AI-driven insights
         </p>
 
-        {/* Icon */}
-        <div className="flex justify-center mb-8">
-          <ShieldCheck  data-testid="shield-icon"  className="w-12 h-12 text-cyan-500 animate-pulse" />
-        </div>
+      
 
         {/* Terminal Block */}
         <div className="mt-4 max-w-2xl mx-auto bg-black text-green-400 font-mono text-sm rounded-lg overflow-hidden shadow-lg border border-gray-700">
