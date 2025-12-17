@@ -1,4 +1,5 @@
-{
+prompt = [
+    {
   "description": "Perform a comprehensive cybersecurity analysis of the provided article, regardless of whether it describes a cyberattack, vulnerability, policy change, trend, or tool discovery.",
   "instructions": {
     "role": "cybersecurity_analyst",
@@ -7,15 +8,16 @@
     "input": "Full text or summary of the cybersecurity article.",
     "output_format": "JSON",
     "sections": {
+      "ai_agent_name": "",
       "article_metadata": {
-        "url": "",
+        "article_url": "",
         "title": "",
-        "site_name": "",
+        "source": "",
         "risk_level": "",
         "publication_date": "",
         "article_type": "Detect the type: 'cyberattack', 'vulnerability', 'data breach', 'ransomware', 'malware analysis', 'policy', 'trend', or 'tool release'."
       },
-      "executive_summary": "Summarize the main points in 3-6 sentences. Describe what happened, who or what is affected, and why it matters to the cybersecurity community.",
+      "executive_summary": "Summarize the main points in 3–5 sentences. Describe what happened, who or what is affected, and why it matters to the cybersecurity community.",
       "key_findings": [
         "Highlight the most important takeaways or insights from the article."
       ],
@@ -102,9 +104,10 @@
   "example_usage": {
     "input_article": "Paste the text or URL of any cybersecurity article here (attack, vulnerability, policy, or trend).",
     "expected_output": {
+      "ai_agent_name": "eg,. Gemma3 / Llama / Deekseep / etc",
       "article_metadata": {
         "title": "New Critical Cisco IOS XE Vulnerability Allows Remote Code Execution",
-        "site_name": "The Hacker News",
+        "source": "The Hacker News",
         "publication_date": "2025-04-15",
         "risk_level": "Low / Moderate / High",
         "article_type": "vulnerability"
@@ -117,3 +120,4 @@
     }
   }
 }
+]

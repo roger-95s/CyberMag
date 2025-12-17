@@ -1,7 +1,7 @@
 import os
 import traceback
 from .aiPromp import file_open
-from .AIResponsesSave import ai_responses_save, extract_clean_json
+# from .AIResponsesSave import ai_responses_save, extract_clean_json
 from .AgentGemma import gemma_cyber_analyst
 from .AgentLlama import llama_cyber_analyst
 from .AgentDeepseek import deepseek_cyber_analyst
@@ -48,9 +48,12 @@ def create_app(test_config=None):
 
 
     # Helper function (Updated to use ORM)
+    # --- API ROUTES --- Site Pagination function
     def get_paginated_articles(page: int, limit: int):
         # Use SQLAlchemy query
         pagination = WebsiteFetch.query.paginate(page=page, per_page=limit, error_out=False)
+        # Test and change how to query the report_card 
+        # pagination = reports_card.query.paginate(page=page, per_page=limit, error_out=False)
         
         # Convert objects to dicts using the helper we made in models.py
         articles_data = [item.to_dict() for item in pagination.items]
@@ -77,7 +80,7 @@ def create_app(test_config=None):
                 "message": welcome_message,
                 "total_pages": total_pages,
                 "current_page": page,
-                "articles": paginated_articles
+                "articles": paginated_articles 
             }), 200
 
         except Exception as e:
@@ -199,6 +202,7 @@ def create_app(test_config=None):
             # assuming fetch_content_data is defined elsewhere
             content_data = fetch_content_data(soup, selector_map=selectors, limit=LIMIT)
             
+            #  
             if not content_data:
                 print("❌ No content extracted from HTML.")
                 continue
@@ -213,76 +217,71 @@ def create_app(test_config=None):
                     "site_name": name,
                     "title": title,
                     "url": url,
-                    "scraped_content": content_data,
+                    "scraped_content": content_data.get('content'), # find a way to pass content from it source so no extra key is created
                 }
+                print()
+                # print(f"Combined_data: {combined_data}")
+                # return combined_data
             except Exception as e:
                 print(f"❌ Error preparing data for AI: {e}")
                 traceback.print_exc()
+           
             # Assign combined_data to file_open and store it into prompt_result 
-            prompt_result = file_open(datas=combined_data)
-        
-        return prompt_result
+            PROMPT = file_open(datas=combined_data)
+            
+            # Debug prompt_result
+            print()
+            # print (f'prompt_result: {prompt_result}')
+        return PROMPT
     
     
     # --- Calling content.py ---
     @app.route("/api/llm_response", methods=["GET"])
     def llm_caller():
-        PROMPT = PROMPT = f"""
-                            You are a cybersecurity analysis engine.
-                            
-                            Your ONLY output must be a valid JSON object.
-                            Do NOT include:
-                            - markdown code fences (```json)
-                            - explanations
-                            - text before or after the JSON
-                            - comments
-                            - reasoning
-                            
-                            Your response MUST be ONLY a JSON object matching EXACTLY this structure:
-                            
-                            {{
-                              "site_name": "",
-                              "title": "",
-                              "publication_date": "",
-                              "article_type": "",
-                              "risk_level": "",
-                              "summary": "",
-                              "url": "",
-                              "analysis": {{}}
-                            }}
-                            
-                            Fill in all fields.
-                            Use empty strings "" ONLY if you absolutely cannot determine a field.
-                            Make sure the JSON is valid and properly formatted.
-                            
-                            Now analyze the following article and produce the JSON:
-                            {backend_content_caller()}
-                            """
- 
+        import json
+        PROMPT = backend_content_caller()
+        # Debug PROMPT
+        print() 
+        # print(f"Testing prompt passing from backend_content_caller(): {PROMPT}")
+
         try:
             # call deepseek
-            # deepseek_response = deepseek_cyber_analyst(prompt=PROMPT)
-            
+            deepseek_response = deepseek_cyber_analyst(prompt=PROMPT)
+            # # debug reponses form
+            print() 
+            # print(f"deepseek_response and type: {type(deepseek_response)}: {deepseek_response}")
+
+            # call gemma
+            gemma_response = gemma_cyber_analyst(prompt=PROMPT)
+            # # debug reponses form 
+            print()
+            # print(f"gemma_response and type: {type(gemma_response)}: {gemma_response}")
+
             # call llama
             llama_response = llama_cyber_analyst(prompt=PROMPT)
+            # debug reponses form 
+            print()
+            # print(f"llama_response and type: {type(llama_response)}: {llama_response}")
             
-            # call gemma
-            # gemma_response = gemma_cyber_analyst(prompt=PROMPT)
-            parsed = extract_clean_json(llama_response)
-            print(parsed)
 
-            if not parsed:
-                return jsonify({"error": "LLM did not return valid JSON"}), 400
+            all_agents_response = {
+                "gemma" : gemma_response,
+                "deepseek" : deepseek_response,
+                "llama" : llama_response,
+            }
 
-            ai_responses_save(parsed)
-
+            # debug responses data type
+            print()
+            # print(f"{type(all_agents_response)}, {all_agents_response}")
+             
             # Call gemmaVerifyier
-            return jsonify({
+            return {
                 "success": True, 
-                # "deepseek_response": str(deepseek_response),
-                "llama_response": llama_response,
-                # "gemma_response": str(gemma_response),
-                }), 200
+                "responses": all_agents_response
+                # "gemma_responses": all_agents_response.get('gemma'),
+                # "llama_resonses": all_agents_response.get('llama'),
+                # "deepseek_response": all_agents_response.get('deepseek')
+                }, 200
         except Exception as e:
             return jsonify({"success": False, "error": str(e)}), 500
         

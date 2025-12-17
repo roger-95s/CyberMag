@@ -1,21 +1,29 @@
-from ollama import generate
+from ollama import chat
+from .modelsbase import ReportsFormat
+
 
 # Function that handle ai work
-def deepseek_cyber_analyst(prompt, max_chunks=None):
+def deepseek_cyber_analyst(prompt):
 
-    response_text = ""
-
+    # report_card = {}
     try:
         print()
         print("==== Deepseek Generating Analysis ====")
-        for i, chunk in enumerate(generate("deepseek-r1:1.5b", prompt, stream=True)):
-            response_text += chunk.get("response", "")
-            # print(chunk.get("response", ""), end="", flush=True)
-            if max_chunks and (i + 1) >= max_chunks:
-                break
+        response = chat(
+            messages=[
+                    {
+                        'role': 'user',
+                        'content': str(prompt), 
+                    }
+                    ],
+            model='deepseek-r1:1.5b',
+            format=ReportsFormat.model_json_schema(),
+            )
+        report_card = ReportsFormat.model_validate_json(response.message.content)
+        print(report_card)
     except Exception as e:
         print(f"Error generating analysis: {e}")
         return None
 
-    return response_text
+    return report_card.__dict__
 

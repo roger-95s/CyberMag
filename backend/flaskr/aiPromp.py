@@ -19,10 +19,15 @@ def file_open(datas):
     else:
         print(f"{os.path.basename(prompt_path)} does not exist.")
 
-    with open(prompt_path, encoding="utf-8") as f:
+    with open(prompt_path) as f:
         prompt_template = json.load(f)
-        # print(f"Json info load: {prompt_template}")
-        content_prompt =f"{prompt_template['description']}Article:{datas}Instructions:{json.dumps(prompt_template['instructions'], indent=2, ensure_ascii=False)}"
-        # print(f"content prompt: {content_prompt}")
+        content_prompt = f""" \n
+        description: {prompt_template['description']} \n
+        Instructions: {prompt_template.get('instructions')} \n 
+        article data content: {datas}
+        """
+
+        # print(f"content prompt: {type(content_prompt)}: {content_prompt}")
     return content_prompt
+    
 

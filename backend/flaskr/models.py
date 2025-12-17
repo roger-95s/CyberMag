@@ -24,7 +24,7 @@ class Cybersecurity_Reports(db.Model):
     url: Mapped[str] = mapped_column(String(500), nullable=False, unique=True)
     site_name: Mapped[str] = mapped_column(String(100), index=True)
     title: Mapped[str] = mapped_column(Text, nullable=False)
-    publication_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+    publication_date: Mapped[str] = mapped_column(String(50), nullable=True)
     article_type: Mapped[str] = mapped_column(String(100), nullable=True)
     risk_level: Mapped[str] = mapped_column(String(50), nullable=True)
     summary: Mapped[str] = mapped_column(Text, nullable=True)
@@ -44,7 +44,7 @@ class Cybersecurity_Reports(db.Model):
             "id": self.id,
             "site_name": self.site_name,
             "title": self.title,
-            "url": self.url
+            "url": self.url, 
         } 
 
 
