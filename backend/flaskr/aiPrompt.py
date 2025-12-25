@@ -31,3 +31,9 @@ def file_open(datas):
     return content_prompt
     
 
+"""
+"site_name": {datas['site_name']}, \n 
+        "title": {datas['title']}, \n 
+        "url": {datas['site_name']}, \n 
+        "content": {datas['content']}, \n   
+"""

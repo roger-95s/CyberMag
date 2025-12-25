@@ -45,6 +45,7 @@ class Cybersecurity_Reports(db.Model):
             "site_name": self.site_name,
             "title": self.title,
             "url": self.url, 
+            'summary': self.summary,
         } 
 
 

@@ -1,5 +1,5 @@
 from ollama import chat
-from .modelsbase import ReportsFormat
+from .LlmReportsFormat import ReportsFormat
 
 
 # Function that handle ai work
@@ -19,13 +19,14 @@ def llama_cyber_analyst(prompt):
             model='llama3.2:3b',
             format=ReportsFormat.model_json_schema(),
             )
+        if response.message.content is None:
+            print("Error: Received None content from AI response")
+            return None
         report_card = ReportsFormat.model_validate_json(response.message.content)
-        print(report_card)
+        # print(report_card)
     except Exception as e:
         print(f"Error generating analysis: {e}")
         return None
-    result = report_card.__dict__
-    print(type(result)) 
 
-    return result
+    return report_card.__dict__
 
