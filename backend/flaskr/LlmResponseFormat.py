@@ -69,8 +69,8 @@ def normalize_report(agent_name: str, raw: dict):
         "publication_date": raw.get("publication_date", ""),
         "article_type": raw.get("article_type", ""),
         "risk_level": raw.get("risk_level", "unknown"),
-        "main_summary": (
-            raw.get("main_summary")
+        "summary": (
+            raw.get("summary")
             or raw.get("executive_summary")
             or ""
         ),

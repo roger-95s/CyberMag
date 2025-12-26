@@ -15,7 +15,7 @@
         "publication_date": "",
         "article_type": "Detect the type: 'cyberattack', 'vulnerability', 'data breach', 'ransomware', 'malware analysis', 'policy', 'trend', or 'tool release'."
       },
-      "main_summary": "Summarize the main points in 3-6 sentences. Describe what happened, who or what is affected, and why it matters to the cybersecurity community.",
+      "summary": "Summarize the main points in 2-3 sentences. Describe what happened, who or what is affected, and why it matters to the cybersecurity community.",
       "key_findings": [
         "Highlight the most important takeaways or insights from the article."
       ],
@@ -109,7 +109,7 @@
         "risk_level": "Low / Moderate / High",
         "article_type": "vulnerability"
       },
-      "main_summary": "Cisco disclosed a critical vulnerability in IOS XE allowing remote code execution. Attackers could exploit it via HTTP interface to gain full administrative access.",
+      "summary": "Cisco disclosed a critical vulnerability in IOS XE allowing remote code execution. Attackers could exploit it via HTTP interface to gain full administrative access.",
       "key_findings": [
         "CVE-2025-XXXX impacts multiple IOS XE devices.",
         "Public exploit code has been observed in the wild."

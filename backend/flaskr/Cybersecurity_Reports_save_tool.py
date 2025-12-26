@@ -27,11 +27,11 @@ def cybersecurity_reports_save_tool(report_data: dict):
         analysis_payload = json.dumps({})
     
     # Convert main_summary to string if it's a list
-    main_summary = report_data.get("main_summary")
-    if isinstance(main_summary, list):
-        main_summary = "\n".join(str(item) for item in main_summary if item)
-    elif main_summary is None:
-        main_summary = ""
+    summary = report_data.get("summary")
+    if isinstance(summary, list):
+        summary = "\n".join(str(item) for item in summary if item)
+    elif summary is None:
+        summary = ""
     
     new_report = Cybersecurity_Reports(
         agent_name=report_data["agent_name"],
@@ -41,7 +41,7 @@ def cybersecurity_reports_save_tool(report_data: dict):
         publication_date=report_data.get("publication_date") or None,
         article_type=report_data.get("article_type") or None,
         risk_level=report_data.get("risk_level") or "unknown",
-        summary=main_summary,
+        summary=summary,
         analysis_payload=analysis_payload,
         created_at=datetime.now(timezone.utc)  # Set UTC timestamp
     )

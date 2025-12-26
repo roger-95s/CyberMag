@@ -8,7 +8,7 @@ class ReportsFormat(BaseModel):
     publication_date: str   
     article_type: str  
     risk_level: str  
-    executive_summary: list[str]
+    summary: list[str]
     sections: list[dict]
      
 
