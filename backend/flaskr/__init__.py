@@ -75,7 +75,7 @@ def create_app(test_config=None):
     def home():
         welcome_message = "👨‍💻⚒️ Welcome to CyberMag!"
         page = int(request.args.get("page", 1))
-        limit = int(request.args.get("limit", 9))
+        limit = int(request.args.get("limit", 20))
 
         try:
             paginated_articles, total_pages = get_paginated_articles(page, limit)

@@ -15,16 +15,15 @@ function HomePage() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
 
-    // Evitar que suba hacia arriba
-    const el = document.getElementById("pagination-controls");
-    if (el) {
-      el.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
+    // Scrolls down after re-rendering
+    // Prevents the scroll bar from scrolling up when changing pages
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.body.scrollHeight, // Go to the end of the content
+        behavior: "smooth", // Smooth animation
       });
-    }
+    }, 0);
   };
-
   useEffect(() => {
     setLoading(true);
     setError(null);
