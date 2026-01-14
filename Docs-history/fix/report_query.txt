@@ -38,3 +38,8 @@ paginate()
 limit()/offset()
 
 filtered queries
+
+# Solution: 
+
+previews: articles = Cybersecurity_Reports.query.all() query all 
+Newer: articles = Cybersecurity_Reports.query.limit(50) Apply a ``LIMIT`` to the query and return the newly resulting
