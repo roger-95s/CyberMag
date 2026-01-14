@@ -4,21 +4,14 @@ import { Link } from "react-router-dom";
 function NavLinks() {
   return (
     <nav className="flex gap-6 text-sm font-medium">
-
-
       <Link
         to="/about"
         className="rounded-md px-3 py-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition"
       >
         About us
       </Link>
-   
-      <Link
-        to="/pricing"
-        className="rounded-md px-3 py-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition"
-      >
-        Pricing & Plans
-      </Link>
+
+
       <Link
         to="/contact"
         className="rounded-md px-3 py-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition"
