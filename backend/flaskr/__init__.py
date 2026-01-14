@@ -102,7 +102,10 @@ def create_app(test_config=None):
     def reports_card():
         try:
             # Fetch all records via ORM
-            articles = Cybersecurity_Reports.query.all()
+            articles = Cybersecurity_Reports.query.all() # replace for  
+            """paginate()
+                limit()/offset()
+                filtered queries"""
             articles_data = [a.to_dict() for a in articles]
             
             return jsonify({
@@ -117,7 +120,10 @@ def create_app(test_config=None):
     @app.route("/api/post/<int:post_id>", methods=["GET"])
     def get_single_report(post_id):
         try:
-            articles = Cybersecurity_Reports.query.all()
+            articles = Cybersecurity_Reports.query.all() # replace for  
+            """paginate()
+                limit()/offset()
+                filtered queries"""
             article = next((a for a in articles if a.id == post_id), None)
             if article:
                 return jsonify({"success": True, "article": article.to_dict()}), 200
