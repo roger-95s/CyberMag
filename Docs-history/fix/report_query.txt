@@ -1,0 +1,40 @@
+Check the way we are querying from report table
+
+
+How many time & where are we querying all data from report table
+
+1. def get_paginated_articles(page: int, limit: int):
+2. def reports_card():
+3. def get_single_report(post_id):
+
+There are Tree funtion in __Init__.py that query individualy from report 
+
+Note: remove 
+
+# Recommended best practices for your project
+
+Use pagination everywhere for user-facing article lists
+
+Avoid .all() in request handlers
+
+Cache frequently accessed article lists
+
+Precompute report cards and store results
+
+Add database indexes on fields used in filters/search
+
+Consider SQL query logging in development to detect over-querying
+
+Practical rule you can follow
+
+OK in development and admin tools:
+
+Model.query.all()
+
+Preferred in APIs or UI lists:
+
+paginate()
+
+limit()/offset()
+
+filtered queries
