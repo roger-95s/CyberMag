@@ -52,7 +52,7 @@ function About() {
                         <div className="bg-white/60 dark:bg-[#101726] border border-gray-200 dark:border-gray-700 rounded-xl shadow-md p-6 hover:shadow-xl transition-all duration-300">
                             <h3 className="text-xl font-semibold mb-1">Roger Campo</h3>
                             <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
-                                Software & Cloud Engineer · Co-Founder
+                                Software & Cloud Engineer · Founder
                             </p>
                             <p className="text-md mb-4 leading-relaxed">
                                 Software & Cloud Engineer with experience in IT support, security, AWS, Python, JavaScript, C, and SQL.
@@ -60,12 +60,21 @@ function About() {
                                 Passionate about secure development, problem-solving, and building meaningful technology.
                             </p>
                             <a
-                                href="www.linkedin.com/in/roger-campo-cordova"
+                                href="https://www.linkedin.com/in/roger-campo-cordova"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-blue-500 hover:underline font-medium"
                             >
                                 LinkedIn Profile →
+                            </a>
+                            <div></div>
+                            <a
+                                href="https://roger-95s.github.io/Roger_Campo/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-500 hover:underline font-medium"
+                            >
+                                Portfolio Website →
                             </a>
                         </div>
 
@@ -93,9 +102,13 @@ function About() {
                     </div>
 
                     {/* Closing Message */}
-                    <p className="text-center text-lg mt-10">
-                        Thank you for visiting CyberMag. Where open-source innovation meets cybersecurity intelligence.
-                    </p>
+                    <div>
+                        <footer>
+                            <p className="text-center text-lg mt-10">
+                                Thank you for visiting CyberMag. Where open-source innovation meets cybersecurity intelligence.
+                            </p>
+                        </footer>
+                    </div>
                 </div>
             </div>
         </>
